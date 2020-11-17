@@ -1,27 +1,26 @@
-// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; indent-tabs-mode: nil; -*-
+// -*- mode: C++; c-indent-level: 2; c-basic-offset: 2; indent-tabs-mode: nil;
+// -*-
 
 #include <RcppEigen.h>
 // [[Rcpp::depends(RcppEigen)]]
 
 /* -------------------------------------------------------------------------- */
-typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic> MatrixXc;
+typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic>
+    MatrixXc;
 
-MatrixXc matricesToMatrixXc(
-  const Eigen::MatrixXd & Re, const Eigen::MatrixXd & Im 
-){
+MatrixXc matricesToMatrixXc(const Eigen::MatrixXd& Re,
+                            const Eigen::MatrixXd& Im) {
   return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
 }
 
-Rcpp::List cplxMatrixToList(
-  const MatrixXc & M
-) {
+Rcpp::List cplxMatrixToList(const MatrixXc& M) {
   Eigen::MatrixXd realPart(M.rows(), M.cols());
   Eigen::MatrixXd imagPart(M.rows(), M.cols());
   for(auto i = 0; i < M.rows(); i++) {
     for(auto j = 0; j < M.cols(); j++) {
       const std::complex<double> z = M.coeff(i, j);
-      realPart(i,j) = real(z);
-      imagPart(i,j) = imag(z);
+      realPart(i, j) = real(z);
+      imagPart(i, j) = imag(z);
     }
   }
   return Rcpp::List::create(Rcpp::Named("real") = realPart,
@@ -31,29 +30,25 @@ Rcpp::List cplxMatrixToList(
 /* determinant -------------------------------------------------------------- */
 template <typename Number>
 Number determinant(
-  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> & M
-){
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   return M.determinant();
 }
 
 // [[Rcpp::export]]
-double EigenR_det_real(const Eigen::MatrixXd & M) {
+double EigenR_det_real(const Eigen::MatrixXd& M) {
   return determinant<double>(M);
 }
 
 // [[Rcpp::export]]
-std::complex<double> EigenR_det_cplx(
-  const Eigen::MatrixXd & Re, const Eigen::MatrixXd & Im 
-) {
+std::complex<double> EigenR_det_cplx(const Eigen::MatrixXd& Re,
+                                     const Eigen::MatrixXd& Im) {
   const MatrixXc M = matricesToMatrixXc(Re, Im);
   return determinant<std::complex<double>>(M);
 }
 
 /* rank --------------------------------------------------------------------- */
 template <typename Number>
-unsigned rank(
-  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> & M
-){
+unsigned rank(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   return M.colPivHouseholderQr().rank();
 }
 
@@ -63,10 +58,42 @@ unsigned EigenR_rank_real(const Eigen::MatrixXd& M) {
 }
 
 // [[Rcpp::export]]
-unsigned EigenR_rank_cplx(
-  const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im
-) {
+unsigned EigenR_rank_cplx(const Eigen::MatrixXd& Re,
+                          const Eigen::MatrixXd& Im) {
   const MatrixXc M = matricesToMatrixXc(Re, Im);
   return rank<std::complex<double>>(M);
 }
 
+/* kernel ------------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_COD(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  // https://stackoverflow.com/a/53598471/1100107
+  Eigen::CompleteOrthogonalDecomposition<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod;
+  cod.compute(M);
+  // Find URV^T
+  unsigned rk = cod.rank();
+  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> P =
+      cod.colsPermutation();
+  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> V =
+      cod.matrixZ().transpose();
+  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Kernel =
+      P * V.block(0, rk, V.rows(), V.cols() - rk);
+  return Kernel;
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_kernel_COD_real(const Eigen::MatrixXd& M) {
+  return kernel_COD<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_kernel_COD_cplx(
+  const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im
+) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  MatrixXc Kernel = kernel_COD<std::complex<double>>(M);
+  return cplxMatrixToList(Kernel);
+}
