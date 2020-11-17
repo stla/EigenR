@@ -3,7 +3,7 @@
 #' @importFrom Rcpp evalCpp
 NULL
 
-#' Determinant
+#' Determinant of a matrix
 #'
 #' @param M a square matrix, real or complex
 #'
@@ -16,5 +16,21 @@ Eigen_det <- function(M){
     EigenR_det_cplx(Re(M), Im(M))
   }else{
     EigenR_det_real(M)
+  }
+}
+
+#' Rank of a matrix
+#'
+#' @param M a matrix, real or complex
+#'
+#' @return The rank of \code{M}.
+#' @export
+Eigen_rank <- function(M){
+  stopifnot(is.matrix(M))
+  stopifnot(is.numeric(M) || is.complex(M))
+  if(is.complex(M)){
+    EigenR_rank_cplx(Re(M), Im(M))
+  }else{
+    EigenR_rank_real(M)
   }
 }

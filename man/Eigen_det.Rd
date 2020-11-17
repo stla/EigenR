@@ -2,7 +2,7 @@
 % Please edit documentation in R/EigenR.R
 \name{Eigen_det}
 \alias{Eigen_det}
-\title{Determinant}
+\title{Determinant of a matrix}
 \usage{
 Eigen_det(M)
 }
@@ -13,5 +13,5 @@ Eigen_det(M)
 The determinant of \code{M}.
 }
 \description{
-Determinant
+Determinant of a matrix
 }
