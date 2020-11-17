@@ -13,5 +13,5 @@ Eigen_det(M)
 The determinant of \code{M}.
 }
 \description{
-Determinant of a matrix
+Determinant of a real or complex matrix.
 }

@@ -37,6 +37,18 @@ Eigen_rank <- function(M){
   }
 }
 
+#' Kernel of a matrix
+#' Kernel (null-space) of a real or complex matrix.
+#'
+#' @param M a matrix, real or complex
+#' @param method one of \code{"COD"} or \code{"LU"}; the faster method depends 
+#'   on the size of the matrix
+#'
+#' @return A basis of the kernel of \code{M}. With \code{method = "COD"}, the 
+#'   basis is orthonormal, while it is not with \code{method = "LU"}.
+#' @export
+#'
+#' @examples xx
 Eigen_kernel <- function(M, method = "COD"){
   stopifnot(is.matrix(M))
   stopifnot(is.numeric(M) || is.complex(M))

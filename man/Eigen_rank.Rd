@@ -13,5 +13,5 @@ Eigen_rank(M)
 The rank of \code{M}.
 }
 \description{
-Rank of a matrix
+Rank of a real or complex matrix.
 }
