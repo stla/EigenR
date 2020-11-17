@@ -118,3 +118,25 @@ Rcpp::List EigenR_kernel_LU_cplx(const Eigen::MatrixXd& Re,
   MatrixXc Kernel = kernel_LU<std::complex<double>>(M);
   return cplxMatrixToList(Kernel);
 }
+
+/* image LU ----------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> image_LU(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  const Eigen::FullPivLU<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+    lu(M);
+  return lu.image(M);
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_image_LU_real(const Eigen::MatrixXd& M) {
+  return image_LU<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_image_LU_cplx(const Eigen::MatrixXd& Re,
+                                 const Eigen::MatrixXd& Im) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  MatrixXc Image = image_LU<std::complex<double>>(M);
+  return cplxMatrixToList(Image);
+}

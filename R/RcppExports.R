@@ -33,3 +33,11 @@ EigenR_kernel_LU_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_kernel_LU_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_image_LU_real <- function(M) {
+    .Call('_EigenR_EigenR_image_LU_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_image_LU_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_image_LU_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
