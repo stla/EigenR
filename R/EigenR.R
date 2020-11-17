@@ -55,11 +55,11 @@ Eigen_kernel <- function(M, method = "COD"){
   method <- match.arg(method, c("COD", "LU"))
   if(is.complex(M)){
     if(method == "COD"){
-      parts <- EigenR_kernel_COD_cplx(M)
+      parts <- EigenR_kernel_COD_cplx(Re(M), Im(M))
     }else{
-      parts <- EigenR_kernel_LU_cplx(M)
+      parts <- EigenR_kernel_LU_cplx(Re(M), Im(M))
     }
-    parts[["real"]] + 1i * parts[["image"]]
+    parts[["real"]] + 1i * parts[["imag"]]
   }else{
     if(method == "COD"){
       EigenR_kernel_COD_real(M)
