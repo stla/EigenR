@@ -41,3 +41,11 @@ EigenR_image_LU_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_image_LU_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_image_QR_real <- function(M) {
+    .Call('_EigenR_EigenR_image_QR_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_image_QR_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_image_QR_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+

@@ -73,27 +73,27 @@ Eigen_kernel <- function(M, method = "COD"){
 #' Range (column-space, image, span) of a real or complex matrix.
 #'
 #' @param M a matrix, real or complex
-#' @param method only \code{"LU"} is currently supported
+#' @param method one of \code{"LU"} or \code{"QR"}
 #'
 #' @return A basis of the range of \code{M}. With \code{method = "LU"}, the 
-#'   basis is not orthonormal.
+#'   basis is not orthonormal, while it is with \code{method = "QR"}.
 #' @export
 #'
 #' @examples xx
-Eigen_range <- function(M, method = "LU"){
+Eigen_range <- function(M, method = "QR"){
   stopifnot(is.matrix(M))
   stopifnot(is.numeric(M) || is.complex(M))
-  method <- match.arg(method, c("LU"))
+  method <- match.arg(method, c("LU", "QR"))
   if(is.complex(M)){
-    if(method == "COD"){
-      # parts <- EigenR_image_COD_cplx(Re(M), Im(M))
+    if(method == "QR"){
+      parts <- EigenR_image_QR_cplx(Re(M), Im(M))
     }else{
       parts <- EigenR_image_LU_cplx(Re(M), Im(M))
     }
     parts[["real"]] + 1i * parts[["imag"]]
   }else{
-    if(method == "COD"){
-      # EigenR_image_COD_real(M)
+    if(method == "QR"){
+      EigenR_image_QR_real(M)
     }else{
       EigenR_image_LU_real(M)
     }

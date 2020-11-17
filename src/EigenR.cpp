@@ -74,13 +74,12 @@ Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_COD(
       cod;
   cod.compute(M);
   // Find URV^T
-  unsigned rk = cod.rank();
   Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> P =
       cod.colsPermutation();
   Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> V =
       cod.matrixZ().transpose();
   Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Kernel =
-      P * V.block(0, rk, V.rows(), V.cols() - rk);
+      P * V.rightCols(V.cols() - cod.rank());
   return Kernel;
 }
 
@@ -124,7 +123,7 @@ template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> image_LU(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   const Eigen::FullPivLU<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
-    lu(M);
+      lu(M);
   return lu.image(M);
 }
 
@@ -135,8 +134,33 @@ Eigen::MatrixXd EigenR_image_LU_real(const Eigen::MatrixXd& M) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_image_LU_cplx(const Eigen::MatrixXd& Re,
-                                 const Eigen::MatrixXd& Im) {
+                                const Eigen::MatrixXd& Im) {
   MatrixXc M = matricesToMatrixXc(Re, Im);
   MatrixXc Image = image_LU<std::complex<double>>(M);
+  return cplxMatrixToList(Image);
+}
+
+/* image QR ----------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> image_QR(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  const Eigen::ColPivHouseholderQR<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      qr = M.colPivHouseholderQr();
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Q =
+      qr.householderQ().setLength(qr.nonzeroPivots());
+  return Q.leftCols(qr.rank());
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_image_QR_real(const Eigen::MatrixXd& M) {
+  return image_QR<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_image_QR_cplx(const Eigen::MatrixXd& Re,
+                                const Eigen::MatrixXd& Im) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  MatrixXc Image = image_QR<std::complex<double>>(M);
   return cplxMatrixToList(Image);
 }
