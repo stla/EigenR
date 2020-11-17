@@ -126,3 +126,23 @@ Eigen_range <- function(M, method = "QR"){
     }
   }
 }
+
+#' QR decomposition of a matrix
+#' QR decomposition of a real or complex matrix.
+#'
+#' @param M a matrix, real or complex
+#'
+#' @return A list with the \code{Q} matrix and the \code{R} matrix.
+#' @export
+#'
+#' @examples xx
+Eigen_QR <- function(M){
+  stopifnot(is.matrix(M))
+  stopifnot(is.numeric(M) || is.complex(M))
+  if(is.complex(M)){
+    QRparts <- EigenR_QR_cplx(Re(M), Im(M))
+    lapply(QRparts, function(parts) parts[["real"]] + 1i * parts[["imag"]])
+  }else{
+    EigenR_QR_real(M)
+  }
+}
