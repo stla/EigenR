@@ -64,7 +64,7 @@ unsigned EigenR_rank_cplx(const Eigen::MatrixXd& Re,
   return rank<std::complex<double>>(M);
 }
 
-/* kernel ------------------------------------------------------------------- */
+/* kernel COD --------------------------------------------------------------- */
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_COD(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
@@ -90,10 +90,31 @@ Eigen::MatrixXd EigenR_kernel_COD_real(const Eigen::MatrixXd& M) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List EigenR_kernel_COD_cplx(
-  const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im
-) {
+Rcpp::List EigenR_kernel_COD_cplx(const Eigen::MatrixXd& Re,
+                                  const Eigen::MatrixXd& Im) {
   MatrixXc M = matricesToMatrixXc(Re, Im);
   MatrixXc Kernel = kernel_COD<std::complex<double>>(M);
+  return cplxMatrixToList(Kernel);
+}
+
+/* kernel LU ---------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_LU(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  const Eigen::FullPivLU<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      lu(M);
+  return lu.kernel();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_kernel_LU_real(const Eigen::MatrixXd& M) {
+  return kernel_LU<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_kernel_LU_cplx(const Eigen::MatrixXd& Re,
+                                 const Eigen::MatrixXd& Im) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  MatrixXc Kernel = kernel_LU<std::complex<double>>(M);
   return cplxMatrixToList(Kernel);
 }
