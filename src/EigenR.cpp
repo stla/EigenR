@@ -64,6 +64,26 @@ unsigned EigenR_rank_cplx(const Eigen::MatrixXd& Re,
   return rank<std::complex<double>>(M);
 }
 
+/* inverse ------------------------------------------------------------------ */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> inverse(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.inverse();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_inverse_real(const Eigen::MatrixXd& M) {
+  return inverse<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_inverse_cplx(const Eigen::MatrixXd& Re,
+                                 const Eigen::MatrixXd& Im) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  MatrixXc Minv = inverse<std::complex<double>>(M);
+  return cplxMatrixToList(Minv);
+}
+
 /* kernel COD --------------------------------------------------------------- */
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_COD(

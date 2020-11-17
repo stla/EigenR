@@ -5,16 +5,17 @@
 \title{Range of a matrix
 Range (column-space, image, span) of a real or complex matrix.}
 \usage{
-Eigen_range(M, method = "LU")
+Eigen_range(M, method = "QR")
 }
 \arguments{
 \item{M}{a matrix, real or complex}
 
-\item{method}{only \code{"LU"} is currently supported}
+\item{method}{one of \code{"LU"} or \code{"QR"}; the \code{"LU"} method is 
+faster}
 }
 \value{
 A basis of the range of \code{M}. With \code{method = "LU"}, the 
-  basis is not orthonormal.
+  basis is not orthonormal, while it is with \code{method = "QR"}.
 }
 \description{
 Range of a matrix

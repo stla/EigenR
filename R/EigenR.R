@@ -37,6 +37,32 @@ Eigen_rank <- function(M){
   }
 }
 
+#' Inverse of a matrix
+#' Inverse of a real or complex matrix.
+#'
+#' @param M an invertible square matrix, real or complex
+#'
+#' @return The inverse matrix of \code{M}.
+#' @export
+#'
+#' @examples xx
+Eigen_inverse <- function(M){
+  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
+  stopifnot(is.numeric(M) || is.complex(M))
+  if(is.complex(M)){
+    parts <- EigenR_inverse_cplx(Re(M), Im(M))
+    Minv <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Minv <- EigenR_inverse_real(M)
+  }
+  if(any(is.infinite(Minv) || is.nan(Minv))){
+    stop(
+      "The matrix is not invertible."
+    )
+  }
+  Minv
+}
+
 #' Kernel of a matrix
 #' Kernel (null-space) of a real or complex matrix.
 #'
@@ -73,7 +99,8 @@ Eigen_kernel <- function(M, method = "COD"){
 #' Range (column-space, image, span) of a real or complex matrix.
 #'
 #' @param M a matrix, real or complex
-#' @param method one of \code{"LU"} or \code{"QR"}
+#' @param method one of \code{"LU"} or \code{"QR"}; the \code{"LU"} method is 
+#'   faster
 #'
 #' @return A basis of the range of \code{M}. With \code{method = "LU"}, the 
 #'   basis is not orthonormal, while it is with \code{method = "QR"}.

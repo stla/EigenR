@@ -17,6 +17,14 @@ EigenR_rank_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_rank_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_inverse_real <- function(M) {
+    .Call('_EigenR_EigenR_inverse_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_inverse_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_inverse_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
 EigenR_kernel_COD_real <- function(M) {
     .Call('_EigenR_EigenR_kernel_COD_real', PACKAGE = 'EigenR', M)
 }
