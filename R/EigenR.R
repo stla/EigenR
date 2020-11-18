@@ -11,12 +11,25 @@ NULL
 #' @return The determinant of \code{M}.
 #' @export
 Eigen_det <- function(M){
-  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
-  stopifnot(is.numeric(M) || is.complex(M))
-  if(is.complex(M)){
-    EigenR_det_cplx(Re(M), Im(M))
+  if(inherits(M, "SparseMatrix")){
+    stopifnot(M[["nrows"]] == M[["ncols"]])
+    if(is.complex(M[["Mij"]])){
+      EigenR_det_sparse_cplx(
+        M[["i"]], M[["j"]], M[["Mij"]], M[["nrows"]], M[["ncols"]]
+      )
+    }else{
+      EigenR_det_sparse_real(
+        M[["i"]], M[["j"]], M[["Mij"]], M[["nrows"]], M[["ncols"]]
+      )
+    }
   }else{
-    EigenR_det_real(M)
+    stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
+    stopifnot(is.numeric(M) || is.complex(M))
+    if(is.complex(M)){
+      EigenR_det_cplx(Re(M), Im(M))
+    }else{
+      EigenR_det_real(M)
+    }
   }
 }
 
