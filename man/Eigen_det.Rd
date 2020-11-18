@@ -15,3 +15,13 @@ The determinant of \code{M}.
 \description{
 Determinant of a real or complex matrix.
 }
+\examples{
+set.seed(666)
+M <- matrix(rpois(25, 1), 5L, 5L)
+Eigen_det(M)
+# determinants of complex matrices are supported:
+Eigen_det(M + 1i * M)
+# as well as determinants of sparse matrices:
+Eigen_det(asSparseMatrix(M))
+Eigen_det(asSparseMatrix(M + 1i * M))
+}

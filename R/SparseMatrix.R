@@ -15,7 +15,9 @@
 #' 
 #' @name SparseMatrix
 #'
-#' @examples xx
+#' @examples set.seed(666)
+#' ( M <- matrix(rpois(50L, 1), 10L, 5L) )
+#' asSparseMatrix(M)
 SparseMatrix <- function(i, j, Mij, nrows, ncols){
   stopifnot(is.atomic(i), is.atomic(j), is.atomic(Mij))
   stopifnot(isStrictPositiveInteger(i), isStrictPositiveInteger(j))

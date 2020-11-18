@@ -10,6 +10,15 @@ NULL
 #'
 #' @return The determinant of \code{M}.
 #' @export
+#' 
+#' @examples set.seed(666)
+#' M <- matrix(rpois(25, 1), 5L, 5L)
+#' Eigen_det(M)
+#' # determinants of complex matrices are supported:
+#' Eigen_det(M + 1i * M)
+#' # as well as determinants of sparse matrices:
+#' Eigen_det(asSparseMatrix(M))
+#' Eigen_det(asSparseMatrix(M + 1i * M))
 Eigen_det <- function(M){
   if(inherits(M, "SparseMatrix")){
     stopifnot(M[["nrows"]] == M[["ncols"]])

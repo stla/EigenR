@@ -33,5 +33,7 @@ A list with the class \code{SparseMatrix}.
 Constructs a sparse matrix, real or complex.
 }
 \examples{
-xx
+set.seed(666)
+( M <- matrix(rpois(50L, 1), 10L, 5L) )
+asSparseMatrix(M)
 }
