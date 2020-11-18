@@ -248,14 +248,19 @@ Rcpp::List UtDU(
     throw Rcpp::exception("Factorization failed.");
   }
   Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U = ldltOfM.matrixU();
-  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> D = ldltOfM.vectorD();
+  Eigen::Matrix<Number, Eigen::Dynamic, 1> D = ldltOfM.vectorD();
   Eigen::Transpositions<Eigen::Dynamic> T = ldltOfM.transpositionsP();
-  Rcpp::IntegerVector P(T.size());
-  for(auto i = 0; i < T.size(); i++) {
-    P(i) = T[i];
-  }
+  Eigen::VectorXi perm;//(T.size());
+  perm = T * perm;
+//  for(auto i = 1; i <= T.size(); i++) {
+//    perm(i) = i;
+//  }
+//  Rcpp::IntegerVector P(T.size());
+//  for(auto i = 0; i < T.size(); i++) {
+//    P(i) = T[i] + 1;
+//  }
   Rcpp::List out = Rcpp::List::create(
-      Rcpp::Named("U") = U, Rcpp::Named("D") = D, Rcpp::Named("P") = P);
+      Rcpp::Named("U") = U, Rcpp::Named("D") = D, Rcpp::Named("perm") = perm);
   return out;
 }
 
@@ -272,7 +277,7 @@ Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
   Rcpp::List out =
       Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
                          Rcpp::Named("D") = cplxMatrixToList(utdu["D"]),
-                         Rcpp::Named("P") = utdu["P"]);
+                         Rcpp::Named("perm") = utdu["perm"]);
   return out;
 }
 

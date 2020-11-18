@@ -26,5 +26,9 @@ x <- matrix(c(1:5, (1:5)^2), 5, 2)
 x <- cbind(x, x[, 1] + 3*x[, 2])
 M <- crossprod(x)
 UtDU <- Eigen_UtDU(M)
-t(U) \%*\% U # this is `M`
+U <- UtDU$U
+D <- UtDU$D
+perm <- UtDU$perm
+UP <- U[, perm]
+t(UP) \%*\% diag(D) \%*\% UP # this is `M`
 }

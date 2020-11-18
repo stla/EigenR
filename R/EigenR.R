@@ -195,7 +195,11 @@ Eigen_chol <- function(M){
 #' x <- cbind(x, x[, 1] + 3*x[, 2])
 #' M <- crossprod(x)
 #' UtDU <- Eigen_UtDU(M)
-#' t(U) %*% U # this is `M`
+#' U <- UtDU$U
+#' D <- UtDU$D
+#' perm <- UtDU$perm
+#' UP <- U[, perm]
+#' t(UP) %*% diag(D) %*% UP # this is `M`
 Eigen_UtDU <- function(M){
   stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
   stopifnot(is.numeric(M) || is.complex(M))
@@ -203,8 +207,9 @@ Eigen_UtDU <- function(M){
     utdu <- EigenR_UtDU_cplx(M)
     utdu[["U"]] <- utdu[["U"]][["real"]] + 1i * utdu[["U"]][["imag"]]
     utdu[["D"]] <- utdu[["D"]][["real"]] + 1i * utdu[["D"]][["imag"]]
-    utdu
   }else{
-    EigenR_UtDU_real(M)
+    utdu <- EigenR_UtDU_real(M)
   }
+  utdu[["perm"]] <- utdu[["perm"]] + 1L
+  utdu
 }
