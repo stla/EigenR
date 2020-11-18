@@ -15,6 +15,11 @@ MatrixXc matricesToMatrixXc(const Eigen::MatrixXd& Re,
   return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
 }
 
+VectorXc vectorsToVectorXc(const Eigen::VectorXd& Re,
+                           const Eigen::VectorXd& Im) {
+  return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
+}
+
 Rcpp::List cplxMatrixToList(const MatrixXc& M) {
   Eigen::MatrixXd realPart(M.rows(), M.cols());
   Eigen::MatrixXd imagPart(M.rows(), M.cols());
@@ -33,9 +38,9 @@ Rcpp::List cplxVectorToList(const VectorXc& V) {
   Eigen::VectorXd realPart(V.size());
   Eigen::VectorXd imagPart(V.size());
   for(auto i = 0; i < V.size(); i++) {
-      const std::complex<double> z = V.coeff(i);
-      realPart(i) = real(z);
-      imagPart(i) = imag(z);
+    const std::complex<double> z = V.coeff(i);
+    realPart(i) = real(z);
+    imagPart(i) = imag(z);
   }
   return Rcpp::List::create(Rcpp::Named("real") = realPart,
                             Rcpp::Named("imag") = imagPart);
@@ -93,8 +98,8 @@ Eigen::MatrixXd EigenR_inverse_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_inverse_cplx(const Eigen::MatrixXd& Re,
                                const Eigen::MatrixXd& Im) {
-  MatrixXc M = matricesToMatrixXc(Re, Im);
-  MatrixXc Minv = inverse<std::complex<double>>(M);
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const MatrixXc Minv = inverse<std::complex<double>>(M);
   return cplxMatrixToList(Minv);
 }
 
@@ -108,11 +113,11 @@ Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_COD(
       cod;
   cod.compute(M);
   // Find URV^T
-  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> P =
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> P =
       cod.colsPermutation();
-  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> V =
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> V =
       cod.matrixZ().transpose();
-  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Kernel =
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Kernel =
       P * V.rightCols(V.cols() - cod.rank());
   return Kernel;
 }
@@ -125,8 +130,8 @@ Eigen::MatrixXd EigenR_kernel_COD_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_kernel_COD_cplx(const Eigen::MatrixXd& Re,
                                   const Eigen::MatrixXd& Im) {
-  MatrixXc M = matricesToMatrixXc(Re, Im);
-  MatrixXc Kernel = kernel_COD<std::complex<double>>(M);
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const MatrixXc Kernel = kernel_COD<std::complex<double>>(M);
   return cplxMatrixToList(Kernel);
 }
 
@@ -147,8 +152,8 @@ Eigen::MatrixXd EigenR_kernel_LU_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_kernel_LU_cplx(const Eigen::MatrixXd& Re,
                                  const Eigen::MatrixXd& Im) {
-  MatrixXc M = matricesToMatrixXc(Re, Im);
-  MatrixXc Kernel = kernel_LU<std::complex<double>>(M);
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const MatrixXc Kernel = kernel_LU<std::complex<double>>(M);
   return cplxMatrixToList(Kernel);
 }
 
@@ -169,8 +174,8 @@ Eigen::MatrixXd EigenR_image_LU_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_image_LU_cplx(const Eigen::MatrixXd& Re,
                                 const Eigen::MatrixXd& Im) {
-  MatrixXc M = matricesToMatrixXc(Re, Im);
-  MatrixXc Image = image_LU<std::complex<double>>(M);
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const MatrixXc Image = image_LU<std::complex<double>>(M);
   return cplxMatrixToList(Image);
 }
 
@@ -233,7 +238,8 @@ Rcpp::List EigenR_QR_cplx(const Eigen::MatrixXd& Re,
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
-  Eigen::LLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> lltOfM(M);
+  const Eigen::LLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      lltOfM(M);
   if(lltOfM.info() != Eigen::Success) {
     throw Rcpp::exception("The matrix is not positive definite.");
   }
@@ -248,8 +254,8 @@ Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
                             const Eigen::MatrixXd& Im) {
-  MatrixXc M = matricesToMatrixXc(Re, Im);
-  MatrixXc U = chol<std::complex<double>>(M);
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const MatrixXc U = chol<std::complex<double>>(M);
   return cplxMatrixToList(U);
 }
 
@@ -257,18 +263,20 @@ Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
 template <typename Number>
 Rcpp::List UtDU(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
-  Eigen::LDLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> ldltOfM(M);
+  const Eigen::LDLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      ldltOfM(M);
   if(ldltOfM.info() != Eigen::Success) {
     throw Rcpp::exception("Factorization failed.");
   }
-  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U = ldltOfM.matrixU();
-  Eigen::Matrix<Number, Eigen::Dynamic, 1> D = ldltOfM.vectorD();
-  Eigen::Transpositions<Eigen::Dynamic> T = ldltOfM.transpositionsP();
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U =
+      ldltOfM.matrixU();
+  const Eigen::Matrix<Number, Eigen::Dynamic, 1> D = ldltOfM.vectorD();
+  const Eigen::Transpositions<Eigen::Dynamic> T = ldltOfM.transpositionsP();
   Eigen::VectorXi perm(T.size());
   for(auto i = 0; i < T.size(); i++) {
     perm(i) = i;
   }
-  Rcpp::List out =
+  const Rcpp::List out =
       Rcpp::List::create(Rcpp::Named("U") = U, Rcpp::Named("D") = D,
                          Rcpp::Named("perm") = T * perm);
   return out;
@@ -282,8 +290,8 @@ Rcpp::List EigenR_UtDU_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
                             const Eigen::MatrixXd& Im) {
-  MatrixXc M = matricesToMatrixXc(Re, Im);
-  Rcpp::List utdu = UtDU<std::complex<double>>(M);
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const Rcpp::List utdu = UtDU<std::complex<double>>(M);
   Rcpp::List out =
       Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
                          Rcpp::Named("D") = cplxVectorToList(utdu["D"]),
@@ -292,3 +300,26 @@ Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
 }
 
 /* Least-squares ------------------------------------------------------------ */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, 1> lsSolve(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A,
+    const Eigen::Matrix<Number, Eigen::Dynamic, 1>& b) {
+  return A.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(b);
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_lsSolve_real(const Eigen::MatrixXd& A,
+                                    const Eigen::VectorXd& b) {
+  return lsSolve<double>(A, b);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA,
+                               const Eigen::MatrixXd& ImA,
+                               const Eigen::VectorXd& Reb,
+                               const Eigen::VectorXd& Imb) {
+  const MatrixXc A = matricesToMatrixXc(ReA, ImA);
+  const VectorXc b = vectorsToVectorXc(Reb, Imb);
+  const VectorXc v = lsSolve<std::complex<double>>(A, b);
+  return cplxVectorToList(v);
+}
