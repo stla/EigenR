@@ -212,3 +212,32 @@ Eigen_UtDU <- function(M){
     EigenR_UtDU_real(M)
   }
 }
+
+#' Inverse of a matrix
+#' 
+#' @description Inverse of a real or complex matrix.
+#'
+#' @param M an invertible square matrix, real or complex
+#'
+#' @return The inverse matrix of \code{M}.
+#' @export
+#'
+#' @examples set.seed(129)
+#' n <- 7; p <- 2
+#' A <- matrix(rnorm(n * p), n, p)
+#' b <- rnorm(n)
+#' lsfit <- Eigen_lsSolve(A, b)
+#' b - lsfit # residuals
+Eigen_lsSolve <- function(A, b){
+  stopifnot(is.matrix(A)) # && (nrow(A) >= ncol(A))
+  stopifnot(is.atomic(b))
+  stopifnot(nrow(A) != length(b))
+  stopifnot(is.numeric(A) || is.complex(A))
+  stopifnot(is.numeric(b) || is.complex(b))
+  if(is.complex(A) || is.complex(b)){
+    parts <- EigenR_lsSolve_cplx(Re(A), Im(A), Re(b), Im(b))
+    parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    EigenR_lsSolve_real(A, b)
+  }
+}
