@@ -21,5 +21,7 @@ Symmetry is not checked; only the lower triangular part of
   \code{M} is used.
 }
 \examples{
-xx
+M <- rbind(c(5,1), c(1,3))
+U <- Eigen_chol(M)
+t(U) \%*\% U # this is `M`
 }

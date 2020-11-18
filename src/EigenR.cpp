@@ -219,7 +219,11 @@ Rcpp::List EigenR_QR_cplx(const Eigen::MatrixXd& Re,
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
-  return M.llt().matrixU();
+  Eigen::LLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> lltOfM(M);
+  if(lltOfM.info() != Eigen::Success) {
+    throw Rcpp::exception("The matrix is not positive definite.");
+  }
+  return lltOfM.matrixU();
 }
 
 // [[Rcpp::export]]

@@ -164,7 +164,9 @@ Eigen_QR <- function(M){
 #' @details Symmetry is not checked; only the lower triangular part of 
 #'   \code{M} is used.
 #'
-#' @examples xx
+#' @examples M <- rbind(c(5,1), c(1,3))
+#' U <- Eigen_chol(M)
+#' t(U) %*% U # this is `M`
 Eigen_chol <- function(M){
   stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
   stopifnot(is.numeric(M) || is.complex(M))
