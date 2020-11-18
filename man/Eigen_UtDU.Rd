@@ -7,15 +7,15 @@
 Eigen_UtDU(M)
 }
 \arguments{
-\item{M}{a square symmetric positive or negative semidefinite matrix, real 
-or complex}
+\item{M}{a square symmetric/Hermitian positive or negative semidefinite 
+matrix, real/complex}
 }
 \value{
 The Cholesky-'UtDU' decomposition of \code{M} in a list 
   (see example).
 }
 \description{
-Cholesky-'UtDU' decomposition of a real or complex matrix.
+Cholesky-'UtDU' decomposition of a symmetric or Hermitian matrix.
 }
 \details{
 Symmetry is not checked; only the lower triangular part of 

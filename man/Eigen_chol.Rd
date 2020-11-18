@@ -7,14 +7,14 @@
 Eigen_chol(M)
 }
 \arguments{
-\item{M}{a square symmetric positive-definite matrix, real or complex}
+\item{M}{a square symmetric/Hermitian positive-definite matrix, real/complex}
 }
 \value{
 The upper triangular factor of the Cholesky decomposition of 
   \code{M}.
 }
 \description{
-Cholesky decomposition of a real or complex matrix.
+Cholesky decomposition of a symmetric or Hermitian matrix.
 }
 \details{
 Symmetry is not checked; only the lower triangular part of 

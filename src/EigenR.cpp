@@ -8,6 +8,8 @@
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic>
     MatrixXc;
 
+typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, 1> VectorXc;
+
 MatrixXc matricesToMatrixXc(const Eigen::MatrixXd& Re,
                             const Eigen::MatrixXd& Im) {
   return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
@@ -22,6 +24,18 @@ Rcpp::List cplxMatrixToList(const MatrixXc& M) {
       realPart(i, j) = real(z);
       imagPart(i, j) = imag(z);
     }
+  }
+  return Rcpp::List::create(Rcpp::Named("real") = realPart,
+                            Rcpp::Named("imag") = imagPart);
+}
+
+Rcpp::List cplxVectorToList(const VectorXc& V) {
+  Eigen::VectorXd realPart(V.size());
+  Eigen::VectorXd imagPart(V.size());
+  for(auto i = 0; i < V.size(); i++) {
+      const std::complex<double> z = V.coeff(i);
+      realPart(i) = real(z);
+      imagPart(i) = imag(z);
   }
   return Rcpp::List::create(Rcpp::Named("real") = realPart,
                             Rcpp::Named("imag") = imagPart);
@@ -272,7 +286,7 @@ Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
   Rcpp::List utdu = UtDU<std::complex<double>>(M);
   Rcpp::List out =
       Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
-                         Rcpp::Named("D") = cplxMatrixToList(utdu["D"]),
+                         Rcpp::Named("D") = cplxVectorToList(utdu["D"]),
                          Rcpp::Named("perm") = utdu["perm"]);
   return out;
 }

@@ -153,9 +153,9 @@ Eigen_QR <- function(M){
 
 #' Cholesky decomposition of a matrix
 #' 
-#' @description Cholesky decomposition of a real or complex matrix.
+#' @description Cholesky decomposition of a symmetric or Hermitian matrix.
 #'
-#' @param M a square symmetric positive-definite matrix, real or complex
+#' @param M a square symmetric/Hermitian positive-definite matrix, real/complex
 #'
 #' @return The upper triangular factor of the Cholesky decomposition of 
 #'   \code{M}.
@@ -171,7 +171,7 @@ Eigen_chol <- function(M){
   stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
   stopifnot(is.numeric(M) || is.complex(M))
   if(is.complex(M)){
-    EigenR_chol_cplx(M)
+    EigenR_chol_cplx(Re(M), Im(M))
   }else{
     EigenR_chol_real(M)
   }
@@ -179,10 +179,10 @@ Eigen_chol <- function(M){
 
 #' 'UtDU' decomposition of a matrix
 #' 
-#' @description Cholesky-'UtDU' decomposition of a real or complex matrix.
+#' @description Cholesky-'UtDU' decomposition of a symmetric or Hermitian matrix.
 #'
-#' @param M a square symmetric positive or negative semidefinite matrix, real 
-#'   or complex
+#' @param M a square symmetric/Hermitian positive or negative semidefinite 
+#'   matrix, real/complex
 #'
 #' @return The Cholesky-'UtDU' decomposition of \code{M} in a list 
 #'   (see example).
@@ -204,12 +204,11 @@ Eigen_UtDU <- function(M){
   stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
   stopifnot(is.numeric(M) || is.complex(M))
   if(is.complex(M)){
-    utdu <- EigenR_UtDU_cplx(M)
+    utdu <- EigenR_UtDU_cplx(Re(M), Im(M))
     utdu[["U"]] <- utdu[["U"]][["real"]] + 1i * utdu[["U"]][["imag"]]
     utdu[["D"]] <- utdu[["D"]][["real"]] + 1i * utdu[["D"]][["imag"]]
+    utdu
   }else{
-    utdu <- EigenR_UtDU_real(M)
+    EigenR_UtDU_real(M)
   }
-  utdu[["perm"]] <- utdu[["perm"]] + 1L
-  utdu
 }
