@@ -8,6 +8,7 @@
 #' @param nrows,ncols dimensions of the matrix
 #' @param x a \code{SparseMatrix} object
 #' @param ... ignored
+#' @param M a matrix, real or complex
 #'
 #' @return A list with the class \code{SparseMatrix}.
 #' @export
@@ -39,4 +40,13 @@ print.SparseMatrix <- function(x, ...){
   Mij <- formatC(x$Mij)
   M[cbind(x$i+1L, x$j+1L)] <- Mij
   print(M, quote = FALSE)
+}
+
+#' @rdname SparseMatrix
+#' @export
+asSparseMatrix <- function(M){
+  ij <- which(M != 0, arr.ind = TRUE)
+  SparseMatrix(
+    i = ij[,1], j = ij[,2], Mij = M[ij], nrows = nrow(M), ncol = ncol(M)
+  )
 }

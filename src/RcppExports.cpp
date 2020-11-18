@@ -29,6 +29,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EigenR_det_sparse_real
+double EigenR_det_sparse_real(const std::vector<size_t>& i, const std::vector<size_t>& j, const std::vector<double>& Mij, const size_t nrows, const size_t ncols);
+RcppExport SEXP _EigenR_EigenR_det_sparse_real(SEXP iSEXP, SEXP jSEXP, SEXP MijSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type Mij(MijSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type nrows(nrowsSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type ncols(ncolsSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_det_sparse_real(i, j, Mij, nrows, ncols));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_det_sparse_cplx
+std::complex<double> EigenR_det_sparse_cplx(const std::vector<size_t>& i, const std::vector<size_t>& j, const std::vector<std::complex<double>>& Mij, const size_t nrows, const size_t ncols);
+RcppExport SEXP _EigenR_EigenR_det_sparse_cplx(SEXP iSEXP, SEXP jSEXP, SEXP MijSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const std::vector<size_t>& >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::complex<double>>& >::type Mij(MijSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type nrows(nrowsSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type ncols(ncolsSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_det_sparse_cplx(i, j, Mij, nrows, ncols));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EigenR_rank_real
 unsigned EigenR_rank_real(const Eigen::MatrixXd& M);
 RcppExport SEXP _EigenR_EigenR_rank_real(SEXP MSEXP) {
@@ -289,6 +319,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_det_real", (DL_FUNC) &_EigenR_EigenR_det_real, 1},
     {"_EigenR_EigenR_det_cplx", (DL_FUNC) &_EigenR_EigenR_det_cplx, 2},
+    {"_EigenR_EigenR_det_sparse_real", (DL_FUNC) &_EigenR_EigenR_det_sparse_real, 5},
+    {"_EigenR_EigenR_det_sparse_cplx", (DL_FUNC) &_EigenR_EigenR_det_sparse_cplx, 5},
     {"_EigenR_EigenR_rank_real", (DL_FUNC) &_EigenR_EigenR_rank_real, 1},
     {"_EigenR_EigenR_rank_cplx", (DL_FUNC) &_EigenR_EigenR_rank_cplx, 2},
     {"_EigenR_EigenR_inverse_real", (DL_FUNC) &_EigenR_EigenR_inverse_real, 1},

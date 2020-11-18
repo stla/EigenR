@@ -3,11 +3,14 @@
 \name{SparseMatrix}
 \alias{SparseMatrix}
 \alias{print.SparseMatrix}
+\alias{asSparseMatrix}
 \title{Sparse matrix}
 \usage{
 SparseMatrix(i, j, Mij, nrows, ncols)
 
 \method{print}{SparseMatrix}(x, ...)
+
+asSparseMatrix(M)
 }
 \arguments{
 \item{i, j}{indices of the non-zero coefficients}
@@ -20,6 +23,8 @@ length as \code{i} and \code{j} or a single number which will be recycled}
 \item{x}{a \code{SparseMatrix} object}
 
 \item{...}{ignored}
+
+\item{M}{a matrix, real or complex}
 }
 \value{
 A list with the class \code{SparseMatrix}.

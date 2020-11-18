@@ -84,8 +84,7 @@ Number determinant(
 }
 
 template <typename Number>
-Number determinant_sparse(
-    const Eigen::SparseMatrix<Number>& M) {
+Number determinant_sparse(Eigen::SparseMatrix<Number>& M) {
   Eigen::SparseLU<Eigen::SparseMatrix<Number>> solver;
   M.makeCompressed();
   solver.analyzePattern(M);
@@ -108,24 +107,25 @@ std::complex<double> EigenR_det_cplx(const Eigen::MatrixXd& Re,
   return determinant<std::complex<double>>(M);
 }
 
+// [[Rcpp::export]]
 double EigenR_det_sparse_real(
     const std::vector<size_t>& i, 
     const std::vector<size_t>& j, 
     const std::vector<double>& Mij,
     const size_t nrows, const size_t ncols
 ){
-  const Eigen::SparseMatrix<double> M = 
-    realSparseMatrix(i, j, Mij, nrows, ncols);
+  Eigen::SparseMatrix<double> M = realSparseMatrix(i, j, Mij, nrows, ncols);
   return determinant_sparse<double>(M);
 }
 
+// [[Rcpp::export]]
 std::complex<double> EigenR_det_sparse_cplx(
     const std::vector<size_t>& i, 
     const std::vector<size_t>& j, 
     const std::vector<std::complex<double>>& Mij,
     const size_t nrows, const size_t ncols
 ){
-  const Eigen::SparseMatrix<std::complex<double>> M = 
+  Eigen::SparseMatrix<std::complex<double>> M = 
     cplxSparseMatrix(i, j, Mij, nrows, ncols);
   return determinant_sparse<std::complex<double>>(M);
 }
