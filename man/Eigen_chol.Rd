@@ -24,4 +24,9 @@ Symmetry is not checked; only the lower triangular part of
 M <- rbind(c(5,1), c(1,3))
 U <- Eigen_chol(M)
 t(U) \%*\% U # this is `M`
+# a Hermitian example:
+A <- rbind(c(1,1i), c(1i,2))
+( M <- A \%*\% t(Conj(A)) )
+U <- Eigen_chol(M) 
+t(Conj(U)) \%*\% U # this is `M`
 }

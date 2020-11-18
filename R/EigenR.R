@@ -194,11 +194,17 @@ Eigen_QR <- function(M){
 #' @examples M <- rbind(c(5,1), c(1,3))
 #' U <- Eigen_chol(M)
 #' t(U) %*% U # this is `M`
+#' # a Hermitian example:
+#' A <- rbind(c(1,1i), c(1i,2))
+#' ( M <- A %*% t(Conj(A)) )
+#' U <- Eigen_chol(M) 
+#' t(Conj(U)) %*% U # this is `M`
 Eigen_chol <- function(M){
   stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
   stopifnot(is.numeric(M) || is.complex(M))
   if(is.complex(M)){
-    EigenR_chol_cplx(Re(M), Im(M))
+    parts <- EigenR_chol_cplx(Re(M), Im(M))
+    parts[["real"]] + 1i * parts[["imag"]]
   }else{
     EigenR_chol_real(M)
   }
