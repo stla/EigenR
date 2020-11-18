@@ -9,12 +9,13 @@ Eigen_range(M, method = "QR")
 \arguments{
 \item{M}{a matrix, real or complex}
 
-\item{method}{one of \code{"LU"} or \code{"QR"}; the \code{"LU"} method is 
-faster}
+\item{method}{one of \code{"LU"}, \code{"QR"}, or \code{"COD"}; the 
+\code{"LU"} method is faster}
 }
 \value{
 A basis of the range of \code{M}. With \code{method = "LU"}, the 
-  basis is not orthonormal, while it is with \code{method = "QR"}.
+  basis is not orthonormal, while it is with \code{method = "QR"} and 
+  \code{method = "COD"}.
 }
 \description{
 Range (column-space, image, span) of a real or complex matrix.

@@ -167,6 +167,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EigenR_image_COD_real
+Eigen::MatrixXd EigenR_image_COD_real(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_image_COD_real(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_image_COD_real(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_image_COD_cplx
+Rcpp::List EigenR_image_COD_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
+RcppExport SEXP _EigenR_EigenR_image_COD_cplx(SEXP ReSEXP, SEXP ImSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Re(ReSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Im(ImSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_image_COD_cplx(Re, Im));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EigenR_QR_real
 Rcpp::List EigenR_QR_real(const Eigen::MatrixXd& M);
 RcppExport SEXP _EigenR_EigenR_QR_real(SEXP MSEXP) {
@@ -278,6 +301,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_image_LU_cplx", (DL_FUNC) &_EigenR_EigenR_image_LU_cplx, 2},
     {"_EigenR_EigenR_image_QR_real", (DL_FUNC) &_EigenR_EigenR_image_QR_real, 1},
     {"_EigenR_EigenR_image_QR_cplx", (DL_FUNC) &_EigenR_EigenR_image_QR_cplx, 2},
+    {"_EigenR_EigenR_image_COD_real", (DL_FUNC) &_EigenR_EigenR_image_COD_real, 1},
+    {"_EigenR_EigenR_image_COD_cplx", (DL_FUNC) &_EigenR_EigenR_image_COD_cplx, 2},
     {"_EigenR_EigenR_QR_real", (DL_FUNC) &_EigenR_EigenR_QR_real, 1},
     {"_EigenR_EigenR_QR_cplx", (DL_FUNC) &_EigenR_EigenR_QR_cplx, 2},
     {"_EigenR_EigenR_chol_real", (DL_FUNC) &_EigenR_EigenR_chol_real, 1},

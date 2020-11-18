@@ -204,6 +204,31 @@ Rcpp::List EigenR_image_QR_cplx(const Eigen::MatrixXd& Re,
   return cplxMatrixToList(Image);
 }
 
+/* image COD ---------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> image_COD(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  Eigen::CompleteOrthogonalDecomposition<
+    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+    cod(M);
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Q =
+    cod.householderQ();
+  return Q.leftCols(cod.rank());
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_image_COD_real(const Eigen::MatrixXd& M) {
+  return image_COD<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_image_COD_cplx(const Eigen::MatrixXd& Re,
+                                  const Eigen::MatrixXd& Im) {
+  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const MatrixXc Image = image_COD<std::complex<double>>(M);
+  return cplxMatrixToList(Image);
+}
+
 /* QR ----------------------------------------------------------------------- */
 template <typename Number>
 std::vector<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> QR(
