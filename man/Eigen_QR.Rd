@@ -2,8 +2,7 @@
 % Please edit documentation in R/EigenR.R
 \name{Eigen_QR}
 \alias{Eigen_QR}
-\title{QR decomposition of a matrix
-QR decomposition of a real or complex matrix.}
+\title{QR decomposition of a matrix}
 \usage{
 Eigen_QR(M)
 }
@@ -14,7 +13,6 @@ Eigen_QR(M)
 A list with the \code{Q} matrix and the \code{R} matrix.
 }
 \description{
-QR decomposition of a matrix
 QR decomposition of a real or complex matrix.
 }
 \examples{

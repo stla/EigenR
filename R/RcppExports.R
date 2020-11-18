@@ -65,3 +65,11 @@ EigenR_QR_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_QR_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_chol_real <- function(M) {
+    .Call('_EigenR_EigenR_chol_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_chol_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_chol_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+

@@ -2,8 +2,7 @@
 % Please edit documentation in R/EigenR.R
 \name{Eigen_range}
 \alias{Eigen_range}
-\title{Range of a matrix
-Range (column-space, image, span) of a real or complex matrix.}
+\title{Range of a matrix}
 \usage{
 Eigen_range(M, method = "QR")
 }
@@ -18,7 +17,6 @@ A basis of the range of \code{M}. With \code{method = "LU"}, the
   basis is not orthonormal, while it is with \code{method = "QR"}.
 }
 \description{
-Range of a matrix
 Range (column-space, image, span) of a real or complex matrix.
 }
 \examples{

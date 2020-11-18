@@ -2,8 +2,7 @@
 % Please edit documentation in R/EigenR.R
 \name{Eigen_kernel}
 \alias{Eigen_kernel}
-\title{Kernel of a matrix
-Kernel (null-space) of a real or complex matrix.}
+\title{Kernel of a matrix}
 \usage{
 Eigen_kernel(M, method = "COD")
 }
@@ -18,7 +17,6 @@ A basis of the kernel of \code{M}. With \code{method = "COD"}, the
   basis is orthonormal, while it is not with \code{method = "LU"}.
 }
 \description{
-Kernel of a matrix
 Kernel (null-space) of a real or complex matrix.
 }
 \examples{

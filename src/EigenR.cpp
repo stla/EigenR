@@ -216,5 +216,23 @@ Rcpp::List EigenR_QR_cplx(const Eigen::MatrixXd& Re,
 }
 
 /* Cholesky ----------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.llt().matrixU();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
+  return chol<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
+                                 const Eigen::MatrixXd& Im) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  MatrixXc U = chol<std::complex<double>>(M);
+  return cplxMatrixToList(U);
+}
 
 /* Least-squares ------------------------------------------------------------ */

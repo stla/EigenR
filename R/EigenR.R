@@ -38,7 +38,8 @@ Eigen_rank <- function(M){
 }
 
 #' Inverse of a matrix
-#' Inverse of a real or complex matrix.
+#' 
+#' @description Inverse of a real or complex matrix.
 #'
 #' @param M an invertible square matrix, real or complex
 #'
@@ -64,7 +65,8 @@ Eigen_inverse <- function(M){
 }
 
 #' Kernel of a matrix
-#' Kernel (null-space) of a real or complex matrix.
+#' 
+#' @description Kernel (null-space) of a real or complex matrix.
 #'
 #' @param M a matrix, real or complex
 #' @param method one of \code{"COD"} or \code{"LU"}; the faster method depends 
@@ -96,7 +98,8 @@ Eigen_kernel <- function(M, method = "COD"){
 }
 
 #' Range of a matrix
-#' Range (column-space, image, span) of a real or complex matrix.
+#' 
+#' @description Range (column-space, image, span) of a real or complex matrix.
 #'
 #' @param M a matrix, real or complex
 #' @param method one of \code{"LU"} or \code{"QR"}; the \code{"LU"} method is 
@@ -128,7 +131,8 @@ Eigen_range <- function(M, method = "QR"){
 }
 
 #' QR decomposition of a matrix
-#' QR decomposition of a real or complex matrix.
+#' 
+#' @description QR decomposition of a real or complex matrix.
 #'
 #' @param M a matrix, real or complex
 #'
@@ -144,5 +148,29 @@ Eigen_QR <- function(M){
     lapply(QRparts, function(parts) parts[["real"]] + 1i * parts[["imag"]])
   }else{
     EigenR_QR_real(M)
+  }
+}
+
+#' Cholesky decomposition of a matrix
+#' 
+#' @description Cholesky decomposition of a real or complex matrix.
+#'
+#' @param M a square symmetric positive-definite matrix, real or complex
+#'
+#' @return The upper triangular factor of the Cholesky decomposition of 
+#'   \code{M}.
+#' @export
+#' 
+#' @details Symmetry is not checked; only the lower triangular part of 
+#'   \code{M} is used.
+#'
+#' @examples xx
+Eigen_chol <- function(M){
+  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
+  stopifnot(is.numeric(M) || is.complex(M))
+  if(is.complex(M)){
+    EigenR_chol_cplx(M)
+  }else{
+    EigenR_chol_real(M)
   }
 }

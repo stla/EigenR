@@ -2,8 +2,7 @@
 % Please edit documentation in R/EigenR.R
 \name{Eigen_inverse}
 \alias{Eigen_inverse}
-\title{Inverse of a matrix
-Inverse of a real or complex matrix.}
+\title{Inverse of a matrix}
 \usage{
 Eigen_inverse(M)
 }
@@ -14,7 +13,6 @@ Eigen_inverse(M)
 The inverse matrix of \code{M}.
 }
 \description{
-Inverse of a matrix
 Inverse of a real or complex matrix.
 }
 \examples{
