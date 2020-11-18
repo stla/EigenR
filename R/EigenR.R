@@ -213,13 +213,15 @@ Eigen_UtDU <- function(M){
   }
 }
 
-#' Inverse of a matrix
+#' Linear least-squares problems
 #' 
-#' @description Inverse of a real or complex matrix.
+#' @description Solves a linear least-squares problem.
 #'
-#' @param M an invertible square matrix, real or complex
+#' @param A a \code{n * p} matrix, real or complex
+#' @param b a vector of length \code{n}, real or complex
 #'
-#' @return The inverse matrix of \code{M}.
+#' @return The solution \code{x} of the least-squares problem \code{Ax = b} 
+#'   (similar to \code{lm.fit(A, b)$fitted.values}).
 #' @export
 #'
 #' @examples set.seed(129)
