@@ -176,3 +176,35 @@ Eigen_chol <- function(M){
     EigenR_chol_real(M)
   }
 }
+
+#' 'UtDU' decomposition of a matrix
+#' 
+#' @description Cholesky-'UtDU' decomposition of a real or complex matrix.
+#'
+#' @param M a square symmetric positive or negative semidefinite matrix, real 
+#'   or complex
+#'
+#' @return The Cholesky-'UtDU' decomposition of \code{M} in a list 
+#'   (see example).
+#' @export
+#' 
+#' @details Symmetry is not checked; only the lower triangular part of 
+#'   \code{M} is used.
+#'
+#' @examples x <- matrix(c(1:5, (1:5)^2), 5, 2)
+#' x <- cbind(x, x[, 1] + 3*x[, 2])
+#' M <- crossprod(x)
+#' UtDU <- Eigen_UtDU(M)
+#' t(U) %*% U # this is `M`
+Eigen_UtDU <- function(M){
+  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
+  stopifnot(is.numeric(M) || is.complex(M))
+  if(is.complex(M)){
+    utdu <- EigenR_UtDU_cplx(M)
+    utdu[["U"]] <- utdu[["U"]][["real"]] + 1i * utdu[["U"]][["imag"]]
+    utdu[["D"]] <- utdu[["D"]][["real"]] + 1i * utdu[["D"]][["imag"]]
+    utdu
+  }else{
+    EigenR_UtDU_real(M)
+  }
+}

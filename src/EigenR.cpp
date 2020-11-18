@@ -233,10 +233,47 @@ Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
-                                 const Eigen::MatrixXd& Im) {
+                            const Eigen::MatrixXd& Im) {
   MatrixXc M = matricesToMatrixXc(Re, Im);
   MatrixXc U = chol<std::complex<double>>(M);
   return cplxMatrixToList(U);
+}
+
+/* UtDU --------------------------------------------------------------------- */
+template <typename Number>
+Rcpp::List UtDU(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  Eigen::LDLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> ldltOfM(M);
+  if(ldltOfM.info() != Eigen::Success) {
+    throw Rcpp::exception("Factorization failed.");
+  }
+  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U = ldltOfM.matrixU();
+  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> D = ldltOfM.vectorD();
+  Eigen::Transpositions<Eigen::Dynamic> T = ldltOfM.transpositionsP();
+  Rcpp::IntegerVector P(T.size());
+  for(auto i = 0; i < T.size(); i++) {
+    P(i) = T[i];
+  }
+  Rcpp::List out = Rcpp::List::create(
+      Rcpp::Named("U") = U, Rcpp::Named("D") = D, Rcpp::Named("P") = P);
+  return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_UtDU_real(const Eigen::MatrixXd& M) {
+  return UtDU<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
+                            const Eigen::MatrixXd& Im) {
+  MatrixXc M = matricesToMatrixXc(Re, Im);
+  Rcpp::List utdu = UtDU<std::complex<double>>(M);
+  Rcpp::List out =
+      Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
+                         Rcpp::Named("D") = cplxMatrixToList(utdu["D"]),
+                         Rcpp::Named("P") = utdu["P"]);
+  return out;
 }
 
 /* Least-squares ------------------------------------------------------------ */

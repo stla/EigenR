@@ -73,3 +73,11 @@ EigenR_chol_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_chol_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_UtDU_real <- function(M) {
+    .Call('_EigenR_EigenR_UtDU_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_UtDU_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_UtDU_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
