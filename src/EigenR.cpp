@@ -250,17 +250,13 @@ Rcpp::List UtDU(
   Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U = ldltOfM.matrixU();
   Eigen::Matrix<Number, Eigen::Dynamic, 1> D = ldltOfM.vectorD();
   Eigen::Transpositions<Eigen::Dynamic> T = ldltOfM.transpositionsP();
-  Eigen::VectorXi perm;//(T.size());
-  perm = T * perm;
-//  for(auto i = 1; i <= T.size(); i++) {
-//    perm(i) = i;
-//  }
-//  Rcpp::IntegerVector P(T.size());
-//  for(auto i = 0; i < T.size(); i++) {
-//    P(i) = T[i] + 1;
-//  }
-  Rcpp::List out = Rcpp::List::create(
-      Rcpp::Named("U") = U, Rcpp::Named("D") = D, Rcpp::Named("perm") = perm);
+  Eigen::VectorXi perm(T.size());
+  for(auto i = 0; i < T.size(); i++) {
+    perm(i) = i;
+  }
+  Rcpp::List out =
+      Rcpp::List::create(Rcpp::Named("U") = U, Rcpp::Named("D") = D,
+                         Rcpp::Named("perm") = T * perm);
   return out;
 }
 
