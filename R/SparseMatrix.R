@@ -27,7 +27,7 @@ SparseMatrix <- function(i, j, Mij, nrows, ncols){
   if(length(Mij) == 1L){
     Mij <- rep(Mij, times = length(i))
   }
-  out <- list(i = i, j = j, Mij = Mij, nrows = nrows, ncols = ncols)
+  out <- list(i = i-1L, j = j-1L, Mij = Mij, nrows = nrows, ncols = ncols)
   class(out) <- "SparseMatrix"
   out
 }
@@ -37,6 +37,6 @@ SparseMatrix <- function(i, j, Mij, nrows, ncols){
 print.SparseMatrix <- function(x, ...){
   M <- matrix(".", nrow = x$nrows, ncol = x$ncols)
   Mij <- formatC(x$Mij)
-  M[cbind(x$i,x$j)] <- Mij
+  M[cbind(x$i+1L, x$j+1L)] <- Mij
   print(M, quote = FALSE)
 }
