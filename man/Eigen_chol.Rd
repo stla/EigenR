@@ -7,7 +7,8 @@
 Eigen_chol(M)
 }
 \arguments{
-\item{M}{a square symmetric/Hermitian positive-definite matrix, real/complex}
+\item{M}{a square symmetric/Hermitian positive-definite matrix or 
+\code{\link{SparseMatrix}}, real/complex}
 }
 \value{
 The upper triangular factor of the Cholesky decomposition of 
@@ -27,6 +28,10 @@ t(U) \%*\% U # this is `M`
 # a Hermitian example:
 A <- rbind(c(1,1i), c(1i,2))
 ( M <- A \%*\% t(Conj(A)) )
+try(chol(M)) # fails
 U <- Eigen_chol(M) 
 t(Conj(U)) \%*\% U # this is `M`
+# a sparse example
+M <- asSparseMatrix(diag(1:5))
+Eigen_chol(M)
 }

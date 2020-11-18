@@ -16,5 +16,5 @@ A list with the \code{Q} matrix and the \code{R} matrix.
 QR decomposition of a real or complex matrix.
 }
 \examples{
-xx
+xx TODO: reconstruction
 }

@@ -20,5 +20,11 @@ A basis of the kernel of \code{M}. With \code{method = "COD"}, the
 Kernel (null-space) of a real or complex matrix.
 }
 \examples{
-xx
+set.seed(666)
+M <- matrix(rgamma(30L, 12, 1), 10L, 3L)
+M <- cbind(M, M[,1]+M[,2], M[,2]+2*M[,3])
+# basis of the kernel of `M`:
+Eigen_kernel(M, method = "LU")
+# orthonormal basis of the kernel of `M`:
+Eigen_kernel(M, method = "COD")
 }

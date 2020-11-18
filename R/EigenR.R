@@ -6,7 +6,7 @@ NULL
 #' Determinant of a matrix
 #' @description Determinant of a real or complex matrix.
 #' 
-#' @param M a square matrix, real or complex
+#' @param M a square matrix or \code{\link{SparseMatrix}}, real or complex
 #'
 #' @return The determinant of \code{M}.
 #' @export
@@ -67,8 +67,6 @@ Eigen_rank <- function(M){
 #'
 #' @return The inverse matrix of \code{M}.
 #' @export
-#'
-#' @examples xx
 Eigen_inverse <- function(M){
   stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
   stopifnot(is.numeric(M) || is.complex(M))
@@ -98,7 +96,13 @@ Eigen_inverse <- function(M){
 #'   basis is orthonormal, while it is not with \code{method = "LU"}.
 #' @export
 #'
-#' @examples xx
+#' @examples set.seed(666)
+#' M <- matrix(rgamma(30L, 12, 1), 10L, 3L)
+#' M <- cbind(M, M[,1]+M[,2], M[,2]+2*M[,3])
+#' # basis of the kernel of `M`:
+#' Eigen_kernel(M, method = "LU")
+#' # orthonormal basis of the kernel of `M`:
+#' Eigen_kernel(M, method = "COD")
 Eigen_kernel <- function(M, method = "COD"){
   stopifnot(is.matrix(M))
   stopifnot(is.numeric(M) || is.complex(M))
@@ -131,8 +135,6 @@ Eigen_kernel <- function(M, method = "COD"){
 #'   basis is not orthonormal, while it is with \code{method = "QR"} and 
 #'   \code{method = "COD"}.
 #' @export
-#'
-#' @examples xx
 Eigen_range <- function(M, method = "QR"){
   stopifnot(is.matrix(M))
   stopifnot(is.numeric(M) || is.complex(M))
@@ -166,7 +168,7 @@ Eigen_range <- function(M, method = "QR"){
 #' @return A list with the \code{Q} matrix and the \code{R} matrix.
 #' @export
 #'
-#' @examples xx
+#' @examples xx TODO: reconstruction
 Eigen_QR <- function(M){
   stopifnot(is.matrix(M))
   stopifnot(is.numeric(M) || is.complex(M))
@@ -182,7 +184,8 @@ Eigen_QR <- function(M){
 #' 
 #' @description Cholesky decomposition of a symmetric or Hermitian matrix.
 #'
-#' @param M a square symmetric/Hermitian positive-definite matrix, real/complex
+#' @param M a square symmetric/Hermitian positive-definite matrix or 
+#'   \code{\link{SparseMatrix}}, real/complex
 #'
 #' @return The upper triangular factor of the Cholesky decomposition of 
 #'   \code{M}.
@@ -197,16 +200,34 @@ Eigen_QR <- function(M){
 #' # a Hermitian example:
 #' A <- rbind(c(1,1i), c(1i,2))
 #' ( M <- A %*% t(Conj(A)) )
+#' try(chol(M)) # fails
 #' U <- Eigen_chol(M) 
 #' t(Conj(U)) %*% U # this is `M`
+#' # a sparse example
+#' M <- asSparseMatrix(diag(1:5))
+#' Eigen_chol(M)
 Eigen_chol <- function(M){
-  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
-  stopifnot(is.numeric(M) || is.complex(M))
-  if(is.complex(M)){
-    parts <- EigenR_chol_cplx(Re(M), Im(M))
-    parts[["real"]] + 1i * parts[["imag"]]
+  if(inherits(M, "SparseMatrix")){
+    stopifnot(M[["nrows"]] == M[["ncols"]])
+    if(is.complex(M[["Mij"]])){
+      parts <- EigenR_chol_sparse_cplx(
+        M[["i"]], M[["j"]], M[["Mij"]], M[["nrows"]], M[["ncols"]]
+      )
+      parts[["real"]] + 1i * parts[["imag"]]
+    }else{
+      EigenR_chol_sparse_real(
+        M[["i"]], M[["j"]], M[["Mij"]], M[["nrows"]], M[["ncols"]]
+      )
+    }
   }else{
-    EigenR_chol_real(M)
+    stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
+    stopifnot(is.numeric(M) || is.complex(M))
+    if(is.complex(M)){
+      parts <- EigenR_chol_cplx(Re(M), Im(M))
+      parts[["real"]] + 1i * parts[["imag"]]
+    }else{
+      EigenR_chol_real(M)
+    }
   }
 }
 

@@ -7,7 +7,7 @@
 Eigen_det(M)
 }
 \arguments{
-\item{M}{a square matrix, real or complex}
+\item{M}{a square matrix or \code{\link{SparseMatrix}}, real or complex}
 }
 \value{
 The determinant of \code{M}.

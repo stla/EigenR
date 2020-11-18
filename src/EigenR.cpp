@@ -48,12 +48,11 @@ Rcpp::List cplxVectorToList(const VectorXc& V) {
 }
 
 /* Sparse stuff ------------------------------------------------------------- */
-Eigen::SparseMatrix<double> realSparseMatrix(
-  const std::vector<size_t>& i, 
-  const std::vector<size_t>& j, 
-  const std::vector<double>& Mij,
-  const size_t nrows, const size_t ncols
-){
+Eigen::SparseMatrix<double> realSparseMatrix(const std::vector<size_t>& i,
+                                             const std::vector<size_t>& j,
+                                             const std::vector<double>& Mij,
+                                             const size_t nrows,
+                                             const size_t ncols) {
   Eigen::SparseMatrix<double> out(nrows, ncols);
   out.reserve(Mij.size());
   for(auto k = 0; k < i.size(); k++) {
@@ -63,11 +62,11 @@ Eigen::SparseMatrix<double> realSparseMatrix(
 }
 
 Eigen::SparseMatrix<std::complex<double>> cplxSparseMatrix(
-    const std::vector<size_t>& i, 
-    const std::vector<size_t>& j, 
+    const std::vector<size_t>& i,
+    const std::vector<size_t>& j,
     const std::vector<std::complex<double>>& Mij,
-    const size_t nrows, const size_t ncols
-){
+    const size_t nrows,
+    const size_t ncols) {
   Eigen::SparseMatrix<std::complex<double>> out(nrows, ncols);
   out.reserve(Mij.size());
   for(auto k = 0; k < i.size(); k++) {
@@ -108,25 +107,24 @@ std::complex<double> EigenR_det_cplx(const Eigen::MatrixXd& Re,
 }
 
 // [[Rcpp::export]]
-double EigenR_det_sparse_real(
-    const std::vector<size_t>& i, 
-    const std::vector<size_t>& j, 
-    const std::vector<double>& Mij,
-    const size_t nrows, const size_t ncols
-){
+double EigenR_det_sparse_real(const std::vector<size_t>& i,
+                              const std::vector<size_t>& j,
+                              const std::vector<double>& Mij,
+                              const size_t nrows,
+                              const size_t ncols) {
   Eigen::SparseMatrix<double> M = realSparseMatrix(i, j, Mij, nrows, ncols);
   return determinant_sparse<double>(M);
 }
 
 // [[Rcpp::export]]
 std::complex<double> EigenR_det_sparse_cplx(
-    const std::vector<size_t>& i, 
-    const std::vector<size_t>& j, 
+    const std::vector<size_t>& i,
+    const std::vector<size_t>& j,
     const std::vector<std::complex<double>>& Mij,
-    const size_t nrows, const size_t ncols
-){
-  Eigen::SparseMatrix<std::complex<double>> M = 
-    cplxSparseMatrix(i, j, Mij, nrows, ncols);
+    const size_t nrows,
+    const size_t ncols) {
+  Eigen::SparseMatrix<std::complex<double>> M =
+      cplxSparseMatrix(i, j, Mij, nrows, ncols);
   return determinant_sparse<std::complex<double>>(M);
 }
 
@@ -175,9 +173,7 @@ Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> kernel_COD(
   // https://stackoverflow.com/a/53598471/1100107
   Eigen::CompleteOrthogonalDecomposition<
       Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
-      cod;
-  cod.compute(M);
-  // Find URV^T
+      cod(M);
   const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> P =
       cod.colsPermutation();
   const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> V =
@@ -274,10 +270,10 @@ template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> image_COD(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   Eigen::CompleteOrthogonalDecomposition<
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
-    cod(M);
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(M);
   const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> Q =
-    cod.householderQ();
+      cod.householderQ();
   return Q.leftCols(cod.rank());
 }
 
@@ -288,7 +284,7 @@ Eigen::MatrixXd EigenR_image_COD_real(const Eigen::MatrixXd& M) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_image_COD_cplx(const Eigen::MatrixXd& Re,
-                                  const Eigen::MatrixXd& Im) {
+                                 const Eigen::MatrixXd& Im) {
   const MatrixXc M = matricesToMatrixXc(Re, Im);
   const MatrixXc Image = image_COD<std::complex<double>>(M);
   return cplxMatrixToList(Image);
@@ -336,6 +332,19 @@ Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
   return lltOfM.matrixU();
 }
 
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol_sparse(
+    Eigen::SparseMatrix<Number>& M) {
+  Eigen::SimplicialLLT<Eigen::SparseMatrix<Number>> solver;
+  M.makeCompressed();
+  solver.analyzePattern(M);
+  solver.factorize(M);
+  if(solver.info() != Eigen::Success) {
+    throw Rcpp::exception("LU factorization has failed.");
+  }
+  return solver.matrixU();
+}
+
 // [[Rcpp::export]]
 Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
   return chol<double>(M);
@@ -346,6 +355,28 @@ Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
                             const Eigen::MatrixXd& Im) {
   const MatrixXc M = matricesToMatrixXc(Re, Im);
   const MatrixXc U = chol<std::complex<double>>(M);
+  return cplxMatrixToList(U);
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_chol_sparse_real(const std::vector<size_t>& i,
+                                        const std::vector<size_t>& j,
+                                        const std::vector<double>& Mij,
+                                        const size_t nrows,
+                                        const size_t ncols) {
+  Eigen::SparseMatrix<double> M = realSparseMatrix(i, j, Mij, nrows, ncols);
+  return chol_sparse<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_chol_sparse_cplx(const std::vector<size_t>& i,
+                                   const std::vector<size_t>& j,
+                                   const std::vector<std::complex<double>>& Mij,
+                                   const size_t nrows,
+                                   const size_t ncols) {
+  Eigen::SparseMatrix<std::complex<double>> M =
+      cplxSparseMatrix(i, j, Mij, nrows, ncols);
+  const MatrixXc U = chol_sparse<std::complex<double>>(M);
   return cplxMatrixToList(U);
 }
 

@@ -15,6 +15,3 @@ The inverse matrix of \code{M}.
 \description{
 Inverse of a real or complex matrix.
 }
-\examples{
-xx
-}

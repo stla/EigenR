@@ -89,6 +89,14 @@ EigenR_chol_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_chol_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_chol_sparse_real <- function(i, j, Mij, nrows, ncols) {
+    .Call('_EigenR_EigenR_chol_sparse_real', PACKAGE = 'EigenR', i, j, Mij, nrows, ncols)
+}
+
+EigenR_chol_sparse_cplx <- function(i, j, Mij, nrows, ncols) {
+    .Call('_EigenR_EigenR_chol_sparse_cplx', PACKAGE = 'EigenR', i, j, Mij, nrows, ncols)
+}
+
 EigenR_UtDU_real <- function(M) {
     .Call('_EigenR_EigenR_UtDU_real', PACKAGE = 'EigenR', M)
 }

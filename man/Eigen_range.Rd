@@ -20,6 +20,3 @@ A basis of the range of \code{M}. With \code{method = "LU"}, the
 \description{
 Range (column-space, image, span) of a real or complex matrix.
 }
-\examples{
-xx
-}
