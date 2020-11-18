@@ -308,7 +308,7 @@ Eigen::Matrix<Number, Eigen::Dynamic, 1> lsSolve(
 }
 
 // [[Rcpp::export]]
-Eigen::MatrixXd EigenR_lsSolve_real(const Eigen::MatrixXd& A,
+Eigen::VectorXd EigenR_lsSolve_real(const Eigen::MatrixXd& A,
                                     const Eigen::VectorXd& b) {
   return lsSolve<double>(A, b);
 }

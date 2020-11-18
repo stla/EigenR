@@ -217,11 +217,11 @@ Eigen_UtDU <- function(M){
 #' 
 #' @description Solves a linear least-squares problem.
 #'
-#' @param A a \code{n * p} matrix, real or complex
+#' @param A a \code{n*p} matrix, real or complex
 #' @param b a vector of length \code{n}, real or complex
 #'
 #' @return The solution \code{x} of the least-squares problem \code{Ax = b} 
-#'   (similar to \code{lm.fit(A, b)$fitted.values}).
+#'   (similar to \code{lm.fit(A, b)$coefficients}).
 #' @export
 #'
 #' @examples set.seed(129)
@@ -229,11 +229,11 @@ Eigen_UtDU <- function(M){
 #' A <- matrix(rnorm(n * p), n, p)
 #' b <- rnorm(n)
 #' lsfit <- Eigen_lsSolve(A, b)
-#' b - lsfit # residuals
+#' b - A %*% lsfit # residuals
 Eigen_lsSolve <- function(A, b){
-  stopifnot(is.matrix(A)) # && (nrow(A) >= ncol(A))
+  stopifnot(is.matrix(A)) 
   stopifnot(is.atomic(b))
-  stopifnot(nrow(A) != length(b))
+  stopifnot(nrow(A) == length(b))
   stopifnot(is.numeric(A) || is.complex(A))
   stopifnot(is.numeric(b) || is.complex(b))
   if(is.complex(A) || is.complex(b)){

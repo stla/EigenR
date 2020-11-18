@@ -81,3 +81,11 @@ EigenR_UtDU_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_UtDU_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_lsSolve_real <- function(A, b) {
+    .Call('_EigenR_EigenR_lsSolve_real', PACKAGE = 'EigenR', A, b)
+}
+
+EigenR_lsSolve_cplx <- function(ReA, ImA, Reb, Imb) {
+    .Call('_EigenR_EigenR_lsSolve_cplx', PACKAGE = 'EigenR', ReA, ImA, Reb, Imb)
+}
+
