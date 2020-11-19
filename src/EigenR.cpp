@@ -64,25 +64,26 @@ Rcpp::List cplxVectorToList(const VectorXc& V) {
                             Rcpp::Named("imag") = imagPart);
 }
 
-Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd & M){
+Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd& M) {
   Eigen::MatrixXd Mreal = M.real();
   Eigen::MatrixXd Mimag = M.imag();
   SEXP MrealS = Rcpp::wrap(Mreal);
   SEXP MimagS = Rcpp::wrap(Mimag);
-  Rcpp::NumericMatrix outReal(MrealS); 
-  Rcpp::NumericMatrix outImag(MimagS); 
-  Rcpp::ComplexMatrix outRealCplx(outReal); 
+  Rcpp::NumericMatrix outReal(MrealS);
+  Rcpp::NumericMatrix outImag(MimagS);
+  Rcpp::ComplexMatrix outRealCplx(outReal);
   Rcpp::ComplexMatrix outImagCplx(outImag);
   Rcomplex I;
-  I.r = 0.0; I.i = 1.0;
+  I.r = 0.0;
+  I.i = 1.0;
   Rcpp::ComplexVector out = outRealCplx + I * outImagCplx;
   out.attr("dim") = Rcpp::Dimension(M.rows(), M.cols());
   return out;
 }
 
-Rcpp::NumericMatrix dblMatrixToRcpp(const Eigen::MatrixXd & M){
+Rcpp::NumericMatrix dblMatrixToRcpp(const Eigen::MatrixXd& M) {
   SEXP Ms = Rcpp::wrap(M);
-  Rcpp::NumericMatrix out(Ms); 
+  Rcpp::NumericMatrix out(Ms);
   return out;
 }
 
@@ -361,6 +362,12 @@ Rcpp::List EigenR_QR_cplx(const Eigen::MatrixXd& Re,
 
 /* Cholesky ----------------------------------------------------------------- */
 template <typename Number>
+struct Cholesky {
+  Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U;
+  Number determinant;
+};
+
+template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   const Eigen::LLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
@@ -382,8 +389,8 @@ Matrix chol_sparse(
   if(solver.info() != Eigen::Success) {
     throw Rcpp::exception("LU factorization has failed.");
   }
-  //Matrix U; 
-  
+  //Matrix U;
+
   if(std::is_same<Number, std::complex<double>>::value) {
     Rcomplex I;
     I.r = 0.0; I.i = 1.0;
@@ -401,8 +408,23 @@ Matrix chol_sparse(
 }
 */
 
-Rcpp::NumericMatrix chol_sparse_real(
-    Eigen::SparseMatrix<double>& M) {
+template <typename Number>
+Cholesky<Number> chol_sparse(Eigen::SparseMatrix<Number>& M) {
+  Eigen::SimplicialLLT<Eigen::SparseMatrix<Number>> solver;
+  M.makeCompressed();
+  solver.analyzePattern(M);
+  solver.factorize(M);
+  if(solver.info() != Eigen::Success) {
+    throw Rcpp::exception("LU factorization has failed.");
+  }
+  Cholesky<Number> out;
+  out.U = solver.matrixU();
+  out.determinant = solver.determinant();
+  return out;
+}
+
+/*
+Rcpp::NumericMatrix chol_sparse_real(Eigen::SparseMatrix<double>& M) {
   Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> solver;
   M.makeCompressed();
   solver.analyzePattern(M);
@@ -431,9 +453,9 @@ Rcpp::ComplexVector chol_sparse_cplx(
   Eigen::MatrixXd Uimag = U.imag();
   SEXP UrealS = Rcpp::wrap(Ureal);
   SEXP UimagS = Rcpp::wrap(Uimag);
-  Rcpp::NumericMatrix outReal(UrealS); 
-  Rcpp::NumericMatrix outImag(UimagS); 
-  Rcpp::ComplexMatrix outRealCplx(outReal); 
+  Rcpp::NumericMatrix outReal(UrealS);
+  Rcpp::NumericMatrix outImag(UimagS);
+  Rcpp::ComplexMatrix outRealCplx(outReal);
   Rcpp::ComplexMatrix outImagCplx(outImag);
   Rcomplex I;
   I.r = 0.0; I.i = 1.0;
@@ -442,7 +464,7 @@ Rcpp::ComplexVector chol_sparse_cplx(
   out.attr("determinant") = solver.determinant();
   return out;
 }
-
+*/
 
 // [[Rcpp::export]]
 Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
@@ -459,23 +481,31 @@ Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix EigenR_chol_sparse_real(const std::vector<size_t>& i,
-                                        const std::vector<size_t>& j,
-                                        const std::vector<double>& Mij,
-                                        const size_t nrows,
-                                        const size_t ncols) {
+                                            const std::vector<size_t>& j,
+                                            const std::vector<double>& Mij,
+                                            const size_t nrows,
+                                            const size_t ncols) {
   Eigen::SparseMatrix<double> M = realSparseMatrix(i, j, Mij, nrows, ncols);
-  return chol_sparse_real(M);
+  Cholesky<double> cholesky = chol_sparse<double>(M);
+  Rcpp::NumericMatrix U = dblMatrixToRcpp(cholesky.U);
+  U.attr("determinant") = cholesky.determinant;
+  return U;
 }
 
 // [[Rcpp::export]]
-Rcpp::ComplexVector EigenR_chol_sparse_cplx(const std::vector<size_t>& i,
-                                   const std::vector<size_t>& j,
-                                   const std::vector<std::complex<double>>& Mij,
-                                   const size_t nrows,
-                                   const size_t ncols) {
+Rcpp::ComplexVector EigenR_chol_sparse_cplx(
+    const std::vector<size_t>& i,
+    const std::vector<size_t>& j,
+    const std::vector<std::complex<double>>& Mij,
+    const size_t nrows,
+    const size_t ncols) {
   Eigen::SparseMatrix<std::complex<double>> M =
       cplxSparseMatrix(i, j, Mij, nrows, ncols);
-  return chol_sparse_cplx(M);
+  Cholesky<std::complex<double>> cholesky =
+      chol_sparse<std::complex<double>>(M);
+  Rcpp::ComplexVector U = cplxMatrixToRcpp(cholesky.U);
+  U.attr("determinant") = cholesky.determinant;
+  return U;
 }
 
 /* UtDU --------------------------------------------------------------------- */
