@@ -244,7 +244,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // EigenR_chol_real
-Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M);
+Rcpp::NumericMatrix EigenR_chol_real(const Eigen::MatrixXd& M);
 RcppExport SEXP _EigenR_EigenR_chol_real(SEXP MSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -255,7 +255,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // EigenR_chol_cplx
-Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
+Rcpp::ComplexVector EigenR_chol_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
 RcppExport SEXP _EigenR_EigenR_chol_cplx(SEXP ReSEXP, SEXP ImSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

@@ -50,7 +50,7 @@ Rcpp::List cplxVectorToList(const Eigen::VectorXcd& V) {
                             Rcpp::Named("imag") = imagPart);
 }
 
-Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::Eigen::MatrixXcdd& M) {
+Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd& M) {
   Eigen::MatrixXd Mreal = M.real();
   Eigen::MatrixXd Mimag = M.imag();
   SEXP MrealS = Rcpp::wrap(Mreal);
@@ -361,9 +361,11 @@ Cholesky<Number> chol(
   if(lltOfM.info() != Eigen::Success) {
     throw Rcpp::exception("The matrix is not positive definite.");
   }
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> 
+    U = lltOfM.matrixU();
   Cholesky<Number> out;
-  out.U = lltOfM.matrixU();
-  out.determinant = lltOfM.determinant();
+  out.U = U;
+  out.determinant = pow(U.diagonal().prod(), 2);
   return out;
 }
 
@@ -437,7 +439,7 @@ Rcpp::ComplexVector chol_sparse_cplx(
   if(solver.info() != Eigen::Success) {
     throw Rcpp::exception("LU factorization has failed.");
   }
-  Eigen::Eigen::MatrixXcdd U = solver.matrixU();
+  Eigen::MatrixXcd U = solver.matrixU();
   Eigen::MatrixXd Ureal = U.real();
   Eigen::MatrixXd Uimag = U.imag();
   SEXP UrealS = Rcpp::wrap(Ureal);
