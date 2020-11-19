@@ -272,10 +272,12 @@ Eigen_UtDU <- function(M){
 #' @description Solves a linear least-squares problem.
 #'
 #' @param A a \code{n*p} matrix, real or complex
-#' @param b a vector of length \code{n}, real or complex
+#' @param b a vector of length \code{n} or a matrix with \code{n} rows, 
+#'   real or complex
 #'
-#' @return The solution \code{x} of the least-squares problem \code{Ax = b} 
-#'   (similar to \code{lm.fit(A, b)$coefficients}).
+#' @return The solution \code{X} of the least-squares problem \code{AX ~= b} 
+#'   (similar to \code{lm.fit(A, b)$coefficients}). This is a matrix if 
+#'   \code{b} is a matrix, or a vector if \code{b} is a vector.
 #' @export
 #'
 #' @examples set.seed(129)
@@ -287,13 +289,14 @@ Eigen_UtDU <- function(M){
 Eigen_lsSolve <- function(A, b){
   stopifnot(is.matrix(A)) 
   stopifnot(is.atomic(b))
-  stopifnot(nrow(A) == length(b))
+  b <- cbind(b)
+  stopifnot(nrow(A) == nrow(b))
   stopifnot(is.numeric(A) || is.complex(A))
   stopifnot(is.numeric(b) || is.complex(b))
   if(is.complex(A) || is.complex(b)){
     parts <- EigenR_lsSolve_cplx(Re(A), Im(A), Re(b), Im(b))
-    parts[["real"]] + 1i * parts[["imag"]]
+    parts[["real"]][,] + 1i * parts[["imag"]][,]
   }else{
-    EigenR_lsSolve_real(A, b)
+    EigenR_lsSolve_real(A, b)[,]
   }
 }

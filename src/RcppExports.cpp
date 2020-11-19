@@ -320,27 +320,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // EigenR_lsSolve_real
-Eigen::VectorXd EigenR_lsSolve_real(const Eigen::MatrixXd& A, const Eigen::VectorXd& b);
+Eigen::VectorXd EigenR_lsSolve_real(const Eigen::MatrixXd& A, const Eigen::MatrixXd& b);
 RcppExport SEXP _EigenR_EigenR_lsSolve_real(SEXP ASEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(EigenR_lsSolve_real(A, b));
     return rcpp_result_gen;
 END_RCPP
 }
 // EigenR_lsSolve_cplx
-Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA, const Eigen::MatrixXd& ImA, const Eigen::VectorXd& Reb, const Eigen::VectorXd& Imb);
+Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA, const Eigen::MatrixXd& ImA, const Eigen::MatrixXd& Reb, const Eigen::MatrixXd& Imb);
 RcppExport SEXP _EigenR_EigenR_lsSolve_cplx(SEXP ReASEXP, SEXP ImASEXP, SEXP RebSEXP, SEXP ImbSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type ReA(ReASEXP);
     Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type ImA(ImASEXP);
-    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type Reb(RebSEXP);
-    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type Imb(ImbSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Reb(RebSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Imb(ImbSEXP);
     rcpp_result_gen = Rcpp::wrap(EigenR_lsSolve_cplx(ReA, ImA, Reb, Imb));
     return rcpp_result_gen;
 END_RCPP

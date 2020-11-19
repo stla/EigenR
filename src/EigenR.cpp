@@ -422,25 +422,25 @@ Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
 
 /* Least-squares ------------------------------------------------------------ */
 template <typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, 1> lsSolve(
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> lsSolve(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A,
-    const Eigen::Matrix<Number, Eigen::Dynamic, 1>& b) {
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& b) {
   return A.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(b);
 }
 
 // [[Rcpp::export]]
-Eigen::VectorXd EigenR_lsSolve_real(const Eigen::MatrixXd& A,
-                                    const Eigen::VectorXd& b) {
+Eigen::MatrixXd EigenR_lsSolve_real(const Eigen::MatrixXd& A,
+                                    const Eigen::MatrixXd& b) {
   return lsSolve<double>(A, b);
 }
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA,
                                const Eigen::MatrixXd& ImA,
-                               const Eigen::VectorXd& Reb,
-                               const Eigen::VectorXd& Imb) {
+                               const Eigen::MatrixXd& Reb,
+                               const Eigen::MatrixXd& Imb) {
   const MatrixXc A = matricesToMatrixXc(ReA, ImA);
-  const VectorXc b = vectorsToVectorXc(Reb, Imb);
-  const VectorXc v = lsSolve<std::complex<double>>(A, b);
-  return cplxVectorToList(v);
+  const MatrixXc b = matricesToMatrixXc(Reb, Imb);
+  const MatrixXc X = lsSolve<std::complex<double>>(A, b);
+  return cplxMatrixToList(X);
 }
