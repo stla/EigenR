@@ -5,35 +5,21 @@
 // [[Rcpp::depends(RcppEigen)]]
 
 /* -------------------------------------------------------------------------- */
-typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic>
-    MatrixXc; // = Eigen::MatrixXcd !!
-
-typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, 1> VectorXc;
 
 /* -------------------------------------------------------------------------- */
-MatrixXc matricesToMatrixXc(const Eigen::MatrixXd& Re,
-                            const Eigen::MatrixXd& Im) {
+Eigen::MatrixXcd matricesToMatrixXcd(const Eigen::MatrixXd& Re,
+                                     const Eigen::MatrixXd& Im) {
   return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
 }
 
-VectorXc vectorsToVectorXc(const Eigen::VectorXd& Re,
-                           const Eigen::VectorXd& Im) {
+Eigen::VectorXcd vectorsToVectorXcd(const Eigen::VectorXd& Re,
+                                    const Eigen::VectorXd& Im) {
   return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
 }
 
-Rcpp::List cplxMatrixToList(const MatrixXc& M) {
-  // TODO: use .real() and .imag()
-  Eigen::MatrixXd realPart(M.rows(), M.cols());
-  Eigen::MatrixXd imagPart(M.rows(), M.cols());
-  for(auto i = 0; i < M.rows(); i++) {
-    for(auto j = 0; j < M.cols(); j++) {
-      const std::complex<double> z = M.coeff(i, j);
-      realPart(i, j) = real(z);
-      imagPart(i, j) = imag(z);
-    }
-  }
-  return Rcpp::List::create(Rcpp::Named("real") = realPart,
-                            Rcpp::Named("imag") = imagPart);
+Rcpp::List cplxMatrixToList(const Eigen::MatrixXcd& M) {
+  return Rcpp::List::create(Rcpp::Named("real") = M.real(),
+                            Rcpp::Named("imag") = M.imag());
 }
 
 /*
@@ -52,7 +38,7 @@ Rcpp::List cplxRcppMatrixToList(const Rcpp::ComplexMatrix M) {
 }
 */
 
-Rcpp::List cplxVectorToList(const VectorXc& V) {
+Rcpp::List cplxVectorToList(const Eigen::VectorXcd& V) {
   Eigen::VectorXd realPart(V.size());
   Eigen::VectorXd imagPart(V.size());
   for(auto i = 0; i < V.size(); i++) {
@@ -64,7 +50,7 @@ Rcpp::List cplxVectorToList(const VectorXc& V) {
                             Rcpp::Named("imag") = imagPart);
 }
 
-Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd& M) {
+Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::Eigen::MatrixXcdd& M) {
   Eigen::MatrixXd Mreal = M.real();
   Eigen::MatrixXd Mimag = M.imag();
   SEXP MrealS = Rcpp::wrap(Mreal);
@@ -142,7 +128,7 @@ double EigenR_det_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 std::complex<double> EigenR_det_cplx(const Eigen::MatrixXd& Re,
                                      const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   return determinant<std::complex<double>>(M);
 }
 
@@ -182,7 +168,7 @@ unsigned EigenR_rank_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 unsigned EigenR_rank_cplx(const Eigen::MatrixXd& Re,
                           const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   return rank<std::complex<double>>(M);
 }
 
@@ -201,8 +187,8 @@ Eigen::MatrixXd EigenR_inverse_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_inverse_cplx(const Eigen::MatrixXd& Re,
                                const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc Minv = inverse<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Minv = inverse<std::complex<double>>(M);
   return cplxMatrixToList(Minv);
 }
 
@@ -231,8 +217,8 @@ Eigen::MatrixXd EigenR_kernel_COD_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_kernel_COD_cplx(const Eigen::MatrixXd& Re,
                                   const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc Kernel = kernel_COD<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Kernel = kernel_COD<std::complex<double>>(M);
   return cplxMatrixToList(Kernel);
 }
 
@@ -253,8 +239,8 @@ Eigen::MatrixXd EigenR_kernel_LU_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_kernel_LU_cplx(const Eigen::MatrixXd& Re,
                                  const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc Kernel = kernel_LU<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Kernel = kernel_LU<std::complex<double>>(M);
   return cplxMatrixToList(Kernel);
 }
 
@@ -275,8 +261,8 @@ Eigen::MatrixXd EigenR_image_LU_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_image_LU_cplx(const Eigen::MatrixXd& Re,
                                 const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc Image = image_LU<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Image = image_LU<std::complex<double>>(M);
   return cplxMatrixToList(Image);
 }
 
@@ -300,8 +286,8 @@ Eigen::MatrixXd EigenR_image_QR_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_image_QR_cplx(const Eigen::MatrixXd& Re,
                                 const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc Image = image_QR<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Image = image_QR<std::complex<double>>(M);
   return cplxMatrixToList(Image);
 }
 
@@ -325,8 +311,8 @@ Eigen::MatrixXd EigenR_image_COD_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_image_COD_cplx(const Eigen::MatrixXd& Re,
                                  const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc Image = image_COD<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Image = image_COD<std::complex<double>>(M);
   return cplxMatrixToList(Image);
 }
 
@@ -354,8 +340,8 @@ Rcpp::List EigenR_QR_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_QR_cplx(const Eigen::MatrixXd& Re,
                           const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const std::vector<MatrixXc> QRdecomp = QR<std::complex<double>>(M);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const std::vector<Eigen::MatrixXcd> QRdecomp = QR<std::complex<double>>(M);
   return Rcpp::List::create(Rcpp::Named("Q") = cplxMatrixToList(QRdecomp[0]),
                             Rcpp::Named("R") = cplxMatrixToList(QRdecomp[1]));
 }
@@ -451,7 +437,7 @@ Rcpp::ComplexVector chol_sparse_cplx(
   if(solver.info() != Eigen::Success) {
     throw Rcpp::exception("LU factorization has failed.");
   }
-  Eigen::MatrixXcd U = solver.matrixU();
+  Eigen::Eigen::MatrixXcdd U = solver.matrixU();
   Eigen::MatrixXd Ureal = U.real();
   Eigen::MatrixXd Uimag = U.imag();
   SEXP UrealS = Rcpp::wrap(Ureal);
@@ -480,7 +466,7 @@ Rcpp::NumericMatrix EigenR_chol_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::ComplexVector EigenR_chol_cplx(const Eigen::MatrixXd& Re,
                                      const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   Cholesky<std::complex<double>> cholesky = chol<std::complex<double>>(M);
   Rcpp::ComplexVector U = cplxMatrixToRcpp(cholesky.U);
   U.attr("determinant") = cholesky.determinant;
@@ -573,7 +559,7 @@ Rcpp::List EigenR_UtDU_real(const Eigen::MatrixXd& M) {
 // [[Rcpp::export]]
 Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
                             const Eigen::MatrixXd& Im) {
-  const MatrixXc M = matricesToMatrixXc(Re, Im);
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   const Rcpp::List utdu = UtDU<std::complex<double>>(M);
   Rcpp::List out =
       Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
@@ -629,8 +615,8 @@ Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA,
                                const Eigen::MatrixXd& ImA,
                                const Eigen::MatrixXd& Reb,
                                const Eigen::MatrixXd& Imb) {
-  const MatrixXc A = matricesToMatrixXc(ReA, ImA);
-  const MatrixXc b = matricesToMatrixXc(Reb, Imb);
-  const MatrixXc X = lsSolve<std::complex<double>>(A, b);
+  const Eigen::MatrixXcd A = matricesToMatrixXcd(ReA, ImA);
+  const Eigen::MatrixXcd b = matricesToMatrixXcd(Reb, Imb);
+  const Eigen::MatrixXcd X = lsSolve<std::complex<double>>(A, b);
   return cplxMatrixToList(X);
 }
