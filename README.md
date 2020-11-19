@@ -20,10 +20,10 @@ microbenchmark(
   times = 200L
 )
 ## Unit: milliseconds
-##           expr      min        lq      mean    median        uq      max neval
-##           base 2.325018  2.606910  3.851104  3.177992  3.879467 13.89208   200
-##         EigenR 3.560423  6.757584  7.601636  7.120388  7.747838 17.32185   200
-##  EigenR_sparse 6.318647 12.694837 13.865138 13.080720 13.771776 24.00013   200
+##           expr       min        lq      mean    median        uq      max neval
+##           base  2.303390  2.556973  3.691258  2.944695  3.749370 14.04845   200
+##         EigenR  3.287136  6.601224  7.150831  7.018299  7.438121 12.15553   200
+##  EigenR_sparse 11.120235 12.330039 13.044584 12.715541 13.244792 23.46231   200
 ##  cld
 ##  a  
 ##   b 
@@ -44,9 +44,9 @@ microbenchmark(
   times = 500L
 )
 ## Unit: microseconds
-##    expr     min       lq     mean  median       uq      max neval cld
-##    base 144.756 155.2175 350.0837 166.133 215.9040 6743.635   500   a
-##  EigenR 162.359 324.2405 357.6519 329.014 340.4125 6888.029   500   a
+##    expr     min       lq     mean   median       uq       max neval cld
+##    base 144.696 155.6465 362.2259 166.5185 201.3765 12887.677   500   a
+##  EigenR 161.502 324.0675 354.6938 328.8125 338.6975  9421.688   500   a
 ```
 
 Cholesky decomposition of complex matrices is supported.
@@ -67,9 +67,9 @@ microbenchmark(
 )
 ## Unit: milliseconds
 ##        expr      min       lq     mean   median       uq      max neval cld
-##        MASS 4.852772 5.129205 5.508211 5.290449 5.598714 8.693911   100  b 
-##   EigenR_LU 2.210166 2.378106 2.604436 2.482603 2.613480 5.466532   100 a  
-##  EigenR_COD 5.398932 5.667117 6.074435 5.896511 6.261531 9.272335   100   c
+##        MASS 4.800403 5.068113 5.407869 5.191852 5.528975 9.353463   100  b 
+##   EigenR_LU 2.233529 2.357797 2.568849 2.443474 2.599349 5.727903   100 a  
+##  EigenR_COD 5.302908 5.559947 5.924981 5.787556 6.021780 9.626854   100   c
 ```
 
 ## Linear least-squares problems
@@ -85,7 +85,9 @@ microbenchmark(
   times = 10L
 )
 ## Unit: milliseconds
-##     expr      min       lq     mean   median       uq      max neval cld
-##    stats 15.29396 15.90042 16.18114 16.20677 16.48451 16.84350    10  a 
-##  Eigen_R 78.01373 78.39762 79.67060 79.55024 80.70331 81.91639    10   b
+##     expr      min       lq     mean   median      uq      max neval cld
+##    stats 15.05648 15.17506 15.63534 15.50915 15.7935 16.62512    10  a 
+##  Eigen_R 77.36481 78.50575 79.28756 78.75564 80.9617 81.92589    10   b
 ```
+
+Complex matrices `A` and `b` are supported.

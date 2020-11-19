@@ -76,3 +76,4 @@ microbenchmark(
 )
 ```
 
+Complex matrices `A` and `b` are supported.
