@@ -267,7 +267,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // EigenR_chol_sparse_real
-Eigen::MatrixXd EigenR_chol_sparse_real(const std::vector<size_t>& i, const std::vector<size_t>& j, const std::vector<double>& Mij, const size_t nrows, const size_t ncols);
+Rcpp::NumericMatrix EigenR_chol_sparse_real(const std::vector<size_t>& i, const std::vector<size_t>& j, const std::vector<double>& Mij, const size_t nrows, const size_t ncols);
 RcppExport SEXP _EigenR_EigenR_chol_sparse_real(SEXP iSEXP, SEXP jSEXP, SEXP MijSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -282,7 +282,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // EigenR_chol_sparse_cplx
-Rcpp::List EigenR_chol_sparse_cplx(const std::vector<size_t>& i, const std::vector<size_t>& j, const std::vector<std::complex<double>>& Mij, const size_t nrows, const size_t ncols);
+Rcpp::ComplexVector EigenR_chol_sparse_cplx(const std::vector<size_t>& i, const std::vector<size_t>& j, const std::vector<std::complex<double>>& Mij, const size_t nrows, const size_t ncols);
 RcppExport SEXP _EigenR_EigenR_chol_sparse_cplx(SEXP iSEXP, SEXP jSEXP, SEXP MijSEXP, SEXP nrowsSEXP, SEXP ncolsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -320,7 +320,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // EigenR_lsSolve_real
-Eigen::VectorXd EigenR_lsSolve_real(const Eigen::MatrixXd& A, const Eigen::MatrixXd& b);
+Eigen::MatrixXd EigenR_lsSolve_real(const Eigen::MatrixXd& A, const Eigen::MatrixXd& b);
 RcppExport SEXP _EigenR_EigenR_lsSolve_real(SEXP ASEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

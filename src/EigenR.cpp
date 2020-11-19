@@ -22,6 +22,7 @@ VectorXc vectorsToVectorXc(const Eigen::VectorXd& Re,
 }
 
 Rcpp::List cplxMatrixToList(const MatrixXc& M) {
+  // TODO: use .real() and .imag()
   Eigen::MatrixXd realPart(M.rows(), M.cols());
   Eigen::MatrixXd imagPart(M.rows(), M.cols());
   for(auto i = 0; i < M.rows(); i++) {
@@ -34,6 +35,22 @@ Rcpp::List cplxMatrixToList(const MatrixXc& M) {
   return Rcpp::List::create(Rcpp::Named("real") = realPart,
                             Rcpp::Named("imag") = imagPart);
 }
+
+/*
+Rcpp::List cplxRcppMatrixToList(const Rcpp::ComplexMatrix M) {
+  Rcpp::NumericMatrix realPart(M.nrow(), M.ncol());
+  Rcpp::NumericMatrix imagPart(M.nrow(), M.ncol());
+  for(auto i = 0; i < M.nrow(); i++) {
+    for(auto j = 0; j < M.ncol(); j++) {
+      const std::complex<double> z = M(i, j);
+      realPart(i, j) = real(z);
+      imagPart(i, j) = imag(z);
+    }
+  }
+  return Rcpp::List::create(Rcpp::Named("real") = realPart,
+                            Rcpp::Named("imag") = imagPart);
+}
+*/
 
 Rcpp::List cplxVectorToList(const VectorXc& V) {
   Eigen::VectorXd realPart(V.size());
@@ -332,8 +349,9 @@ Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
   return lltOfM.matrixU();
 }
 
-template <typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol_sparse(
+/*
+template <typename Matrix, typename Number>
+Matrix chol_sparse(
     Eigen::SparseMatrix<Number>& M) {
   Eigen::SimplicialLLT<Eigen::SparseMatrix<Number>> solver;
   M.makeCompressed();
@@ -342,8 +360,62 @@ Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol_sparse(
   if(solver.info() != Eigen::Success) {
     throw Rcpp::exception("LU factorization has failed.");
   }
-  return solver.matrixU();
+  //Matrix U; 
+  
+  if(std::is_same<Number, std::complex<double>>::value) {
+    Rcomplex I;
+    I.r = 0.0; I.i = 1.0;
+    Rcpp::NumericMatrix Ureal0 = Rcpp::wrap(solver.matrixU().real());
+    Rcpp::NumericMatrix Uimag0 = Rcpp::wrap(solver.matrixU().imag());
+    Matrix Ureal(Ureal0); Matrix Uimag(Uimag0);
+    Matrix U(Ureal + I * Uimag);
+    return U;
+  }else {
+    Matrix U = Rcpp::wrap(solver.matrixU());
+    return U;
+  }
+  U.attr("determinant") = solver.determinant();
+  return U;
 }
+*/
+
+Rcpp::NumericMatrix chol_sparse_real(
+    Eigen::SparseMatrix<double>& M) {
+  Eigen::SimplicialLLT<Eigen::SparseMatrix<double>> solver;
+  M.makeCompressed();
+  solver.analyzePattern(M);
+  solver.factorize(M);
+  if(solver.info() != Eigen::Success) {
+    throw Rcpp::exception("LU factorization has failed.");
+  }
+  Eigen::MatrixXd U = solver.matrixU();
+  SEXP s = Rcpp::wrap(U);
+  Rcpp::NumericMatrix out(s);
+  out.attr("determinant") = solver.determinant();
+  return out;
+}
+
+Rcpp::ComplexVector chol_sparse_cplx(
+    Eigen::SparseMatrix<std::complex<double>>& M) {
+  Eigen::SimplicialLLT<Eigen::SparseMatrix<std::complex<double>>> solver;
+  M.makeCompressed();
+  solver.analyzePattern(M);
+  solver.factorize(M);
+  if(solver.info() != Eigen::Success) {
+    throw Rcpp::exception("LU factorization has failed.");
+  }
+  Rcomplex I;
+  I.r = 0.0; I.i = 1.0;
+  Rcpp::NumericMatrix Ureal0 = Rcpp::wrap(solver.matrixU().real());
+  Rcpp::NumericMatrix Uimag0 = Rcpp::wrap(solver.matrixU().imag());
+  Rcpp::ComplexMatrix Ureal(Ureal0); 
+  Rcpp::ComplexMatrix Uimag(Uimag0);
+  Rcpp::ComplexVector U = Ureal + I * Uimag;
+  U.attr("dim") = Rcpp::Dimension(Ureal.nrow(), Ureal.ncol());
+  U.attr("determinant") = solver.determinant();
+  return U;
+}
+
 
 // [[Rcpp::export]]
 Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
@@ -359,25 +431,24 @@ Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
 }
 
 // [[Rcpp::export]]
-Eigen::MatrixXd EigenR_chol_sparse_real(const std::vector<size_t>& i,
+Rcpp::NumericMatrix EigenR_chol_sparse_real(const std::vector<size_t>& i,
                                         const std::vector<size_t>& j,
                                         const std::vector<double>& Mij,
                                         const size_t nrows,
                                         const size_t ncols) {
   Eigen::SparseMatrix<double> M = realSparseMatrix(i, j, Mij, nrows, ncols);
-  return chol_sparse<double>(M);
+  return chol_sparse_real(M);
 }
 
 // [[Rcpp::export]]
-Rcpp::List EigenR_chol_sparse_cplx(const std::vector<size_t>& i,
+Rcpp::ComplexVector EigenR_chol_sparse_cplx(const std::vector<size_t>& i,
                                    const std::vector<size_t>& j,
                                    const std::vector<std::complex<double>>& Mij,
                                    const size_t nrows,
                                    const size_t ncols) {
   Eigen::SparseMatrix<std::complex<double>> M =
       cplxSparseMatrix(i, j, Mij, nrows, ncols);
-  const MatrixXc U = chol_sparse<std::complex<double>>(M);
-  return cplxMatrixToList(U);
+  return chol_sparse_cplx(M);
 }
 
 /* UtDU --------------------------------------------------------------------- */
@@ -403,6 +474,32 @@ Rcpp::List UtDU(
   return out;
 }
 
+/*
+template <typename Number>
+Rcpp::List UtDU_sparse(
+    Eigen::SparseMatrix<Number>& M) {
+  Eigen::SimplicialLDLT<Eigen::SparseMatrix<Number>> ldltOfM;
+  M.makeCompressed();
+  ldltOfM.analyzePattern(M);
+  ldltOfM.factorize(M);
+  if(ldltOfM.info() != Eigen::Success) {
+    throw Rcpp::exception("Factorization has failed.");
+  }
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U =
+    ldltOfM.matrixU();
+  const Eigen::Matrix<Number, Eigen::Dynamic, 1> D = ldltOfM.vectorD();
+  const Eigen::Transpositions<Eigen::Dynamic> T = ldltOfM.transpositionsP();
+  Eigen::VectorXi perm(T.size());
+  for(auto i = 0; i < T.size(); i++) {
+    perm(i) = i;
+  }
+  const Rcpp::List out =
+    Rcpp::List::create(Rcpp::Named("U") = U, Rcpp::Named("D") = D,
+                       Rcpp::Named("perm") = T * perm);
+  return out;
+}
+*/
+
 // [[Rcpp::export]]
 Rcpp::List EigenR_UtDU_real(const Eigen::MatrixXd& M) {
   return UtDU<double>(M);
@@ -419,6 +516,34 @@ Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
                          Rcpp::Named("perm") = utdu["perm"]);
   return out;
 }
+
+/*
+// [[Rcpp::export]]
+Rcpp::List EigenR_UtDU_sparse_real(const std::vector<size_t>& i,
+                                   const std::vector<size_t>& j,
+                                   const std::vector<double>& Mij,
+                                   const size_t nrows,
+                                   const size_t ncols) {
+  Eigen::SparseMatrix<double> M = realSparseMatrix(i, j, Mij, nrows, ncols);
+  return UtDU_sparse<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_UtDU_sparse_cplx(const std::vector<size_t>& i,
+                                   const std::vector<size_t>& j,
+                                   const std::vector<std::complex<double>>& Mij,
+                                   const size_t nrows,
+                                   const size_t ncols) {
+  Eigen::SparseMatrix<std::complex<double>> M =
+    cplxSparseMatrix(i, j, Mij, nrows, ncols);
+  const Rcpp::List utdu = UtDU_sparse<std::complex<double>>(M);
+  Rcpp::List out =
+    Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
+                       Rcpp::Named("D") = cplxVectorToList(utdu["D"]),
+                       Rcpp::Named("perm") = utdu["perm"]);
+  return out;
+}
+*/
 
 /* Least-squares ------------------------------------------------------------ */
 template <typename Number>
