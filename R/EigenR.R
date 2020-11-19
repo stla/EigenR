@@ -210,10 +210,9 @@ Eigen_chol <- function(M){
   if(inherits(M, "SparseMatrix")){
     stopifnot(M[["nrows"]] == M[["ncols"]])
     if(is.complex(M[["Mij"]])){
-      parts <- EigenR_chol_sparse_cplx(
+      EigenR_chol_sparse_cplx(
         M[["i"]], M[["j"]], M[["Mij"]], M[["nrows"]], M[["ncols"]]
       )
-      parts[["real"]] + 1i * parts[["imag"]]
     }else{
       EigenR_chol_sparse_real(
         M[["i"]], M[["j"]], M[["Mij"]], M[["nrows"]], M[["ncols"]]
