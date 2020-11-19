@@ -6,7 +6,7 @@
 
 /* -------------------------------------------------------------------------- */
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, Eigen::Dynamic>
-    MatrixXc;
+    MatrixXc; // = Eigen::MatrixXcd !!
 
 typedef Eigen::Matrix<std::complex<double>, Eigen::Dynamic, 1> VectorXc;
 
@@ -368,14 +368,17 @@ struct Cholesky {
 };
 
 template <typename Number>
-Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> chol(
+Cholesky<Number> chol(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   const Eigen::LLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
       lltOfM(M);
   if(lltOfM.info() != Eigen::Success) {
     throw Rcpp::exception("The matrix is not positive definite.");
   }
-  return lltOfM.matrixU();
+  Cholesky<Number> out;
+  out.U = lltOfM.matrixU();
+  out.determinant = lltOfM.determinant();
+  return out;
 }
 
 /*
@@ -467,16 +470,21 @@ Rcpp::ComplexVector chol_sparse_cplx(
 */
 
 // [[Rcpp::export]]
-Eigen::MatrixXd EigenR_chol_real(const Eigen::MatrixXd& M) {
-  return chol<double>(M);
+Rcpp::NumericMatrix EigenR_chol_real(const Eigen::MatrixXd& M) {
+  Cholesky<double> cholesky = chol<double>(M);
+  Rcpp::NumericMatrix U = dblMatrixToRcpp(cholesky.U);
+  U.attr("determinant") = cholesky.determinant;
+  return U;
 }
 
 // [[Rcpp::export]]
-Rcpp::List EigenR_chol_cplx(const Eigen::MatrixXd& Re,
-                            const Eigen::MatrixXd& Im) {
+Rcpp::ComplexVector EigenR_chol_cplx(const Eigen::MatrixXd& Re,
+                                     const Eigen::MatrixXd& Im) {
   const MatrixXc M = matricesToMatrixXc(Re, Im);
-  const MatrixXc U = chol<std::complex<double>>(M);
-  return cplxMatrixToList(U);
+  Cholesky<std::complex<double>> cholesky = chol<std::complex<double>>(M);
+  Rcpp::ComplexVector U = cplxMatrixToRcpp(cholesky.U);
+  U.attr("determinant") = cholesky.determinant;
+  return U;
 }
 
 // [[Rcpp::export]]

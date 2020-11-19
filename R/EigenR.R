@@ -222,8 +222,7 @@ Eigen_chol <- function(M){
     stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
     stopifnot(is.numeric(M) || is.complex(M))
     if(is.complex(M)){
-      parts <- EigenR_chol_cplx(Re(M), Im(M))
-      parts[["real"]] + 1i * parts[["imag"]]
+      EigenR_chol_cplx(Re(M), Im(M))
     }else{
       EigenR_chol_real(M)
     }
