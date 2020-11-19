@@ -1,0 +1,78 @@
+---
+title: "EigenR"
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+```
+
+```{r packages}
+library(EigenR)
+library(microbenchmark)
+```
+
+## Determinant
+
+```{r det_benchmark}
+set.seed(666L)
+M <- matrix(rnorm(300L*300L, mean = 1), 300L, 300L)
+M[sample.int(300L*300L, 300L*270L)] <- 0 # 90% of zeros
+Ms <- asSparseMatrix(M)
+microbenchmark(
+  base          = det(M),
+  EigenR        = Eigen_det(M),
+  EigenR_sparse = Eigen_det(Ms), # :-(
+  times = 200L
+)
+```
+
+Determinants of complex matrices are supported.
+
+## Cholesky decomposition
+
+```{r chol_benchmark}
+set.seed(666L)
+M <- matrix(rpois(10000L, 25), 100L, 100L)
+A <- crossprod(M)
+microbenchmark(
+  base   = chol(A),
+  EigenR = Eigen_chol(A), # :-(
+  times = 500L
+)
+```
+
+Cholesky decomposition of complex matrices is supported.
+
+## Kernel
+
+```{r kernel_benchmark}
+set.seed(666L)
+M <- matrix(rpois(10000L, 25), 100L, 100L)
+A <- cbind(M, M)
+At <- t(A)
+library(MASS)
+microbenchmark(
+  MASS       = Null(At),
+  EigenR_LU  = Eigen_kernel(A, method = "LU"),
+  EigenR_COD = Eigen_kernel(A, method = "COD"), # :-(
+  times = 100L
+)
+```
+
+## Linear least-squares problems
+
+```{r lsSolve_benchmark}
+set.seed(666L)
+n <- 700L; p <- 200L
+A <- matrix(rnorm(n * p), n, p)
+b <- rnorm(n)
+microbenchmark(
+  stats   = lm.fit(A, b),
+  Eigen_R = Eigen_lsSolve(A, b), # :-(
+  times = 10L
+)
+```
+
