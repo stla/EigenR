@@ -64,6 +64,28 @@ Rcpp::List cplxVectorToList(const VectorXc& V) {
                             Rcpp::Named("imag") = imagPart);
 }
 
+Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd & M){
+  Eigen::MatrixXd Mreal = M.real();
+  Eigen::MatrixXd Mimag = M.imag();
+  SEXP MrealS = Rcpp::wrap(Mreal);
+  SEXP MimagS = Rcpp::wrap(Mimag);
+  Rcpp::NumericMatrix outReal(MrealS); 
+  Rcpp::NumericMatrix outImag(MimagS); 
+  Rcpp::ComplexMatrix outRealCplx(outReal); 
+  Rcpp::ComplexMatrix outImagCplx(outImag);
+  Rcomplex I;
+  I.r = 0.0; I.i = 1.0;
+  Rcpp::ComplexVector out = outRealCplx + I * outImagCplx;
+  out.attr("dim") = Rcpp::Dimension(M.rows(), M.cols());
+  return out;
+}
+
+Rcpp::NumericMatrix dblMatrixToRcpp(const Eigen::MatrixXd & M){
+  SEXP Ms = Rcpp::wrap(M);
+  Rcpp::NumericMatrix out(Ms); 
+  return out;
+}
+
 /* Sparse stuff ------------------------------------------------------------- */
 Eigen::SparseMatrix<double> realSparseMatrix(const std::vector<size_t>& i,
                                              const std::vector<size_t>& j,
@@ -404,16 +426,21 @@ Rcpp::ComplexVector chol_sparse_cplx(
   if(solver.info() != Eigen::Success) {
     throw Rcpp::exception("LU factorization has failed.");
   }
+  Eigen::MatrixXcd U = solver.matrixU();
+  Eigen::MatrixXd Ureal = U.real();
+  Eigen::MatrixXd Uimag = U.imag();
+  SEXP UrealS = Rcpp::wrap(Ureal);
+  SEXP UimagS = Rcpp::wrap(Uimag);
+  Rcpp::NumericMatrix outReal(UrealS); 
+  Rcpp::NumericMatrix outImag(UimagS); 
+  Rcpp::ComplexMatrix outRealCplx(outReal); 
+  Rcpp::ComplexMatrix outImagCplx(outImag);
   Rcomplex I;
   I.r = 0.0; I.i = 1.0;
-  Rcpp::NumericMatrix Ureal0 = Rcpp::wrap(solver.matrixU().real());
-  Rcpp::NumericMatrix Uimag0 = Rcpp::wrap(solver.matrixU().imag());
-  Rcpp::ComplexMatrix Ureal(Ureal0); 
-  Rcpp::ComplexMatrix Uimag(Uimag0);
-  Rcpp::ComplexVector U = Ureal + I * Uimag;
-  U.attr("dim") = Rcpp::Dimension(Ureal.nrow(), Ureal.ncol());
-  U.attr("determinant") = solver.determinant();
-  return U;
+  Rcpp::ComplexVector out = outRealCplx + I * outImagCplx;
+  out.attr("dim") = Rcpp::Dimension(U.rows(), U.cols());
+  out.attr("determinant") = solver.determinant();
+  return out;
 }
 
 
