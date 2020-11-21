@@ -9,11 +9,13 @@ Eigen_lsSolve(A, b)
 \arguments{
 \item{A}{a \code{n*p} matrix, real or complex}
 
-\item{b}{a vector of length \code{n}, real or complex}
+\item{b}{a vector of length \code{n} or a matrix with \code{n} rows, 
+real or complex}
 }
 \value{
-The solution \code{x} of the least-squares problem \code{Ax = b} 
-  (similar to \code{lm.fit(A, b)$coefficients}).
+The solution \code{X} of the least-squares problem \code{AX ~= b} 
+  (similar to \code{lm.fit(A, b)$coefficients}). This is a matrix if 
+  \code{b} is a matrix, or a vector if \code{b} is a vector.
 }
 \description{
 Solves a linear least-squares problem.

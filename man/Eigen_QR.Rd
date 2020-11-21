@@ -16,5 +16,7 @@ A list with the \code{Q} matrix and the \code{R} matrix.
 QR decomposition of a real or complex matrix.
 }
 \examples{
-xx TODO: reconstruction
+M <- cbind(c(1,2,3), c(4,5,6))
+x <- Eigen_QR(M)
+x$Q \%*\% x$R
 }

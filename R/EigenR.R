@@ -168,7 +168,9 @@ Eigen_range <- function(M, method = "QR"){
 #' @return A list with the \code{Q} matrix and the \code{R} matrix.
 #' @export
 #'
-#' @examples xx TODO: reconstruction
+#' @examples M <- cbind(c(1,2,3), c(4,5,6))
+#' x <- Eigen_QR(M)
+#' x$Q %*% x$R
 Eigen_QR <- function(M){
   stopifnot(is.matrix(M))
   stopifnot(is.numeric(M) || is.complex(M))
