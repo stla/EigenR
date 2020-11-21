@@ -29,7 +29,20 @@ microbenchmark(
 )
 ```
 
-Determinants of complex matrices are supported.
+Determinants of complex matrices are supported:
+
+```{r det_cplx_benchmark}
+set.seed(666L)
+Mr <- matrix(rnorm(300L*300L, mean = 1), 300L, 300L)
+Mi <- matrix(rnorm(300L*300L, mean = 1), 300L, 300L)
+M <- Mr + 1i * Mi
+library(complexplus)
+microbenchmark(
+  EigenR      = Eigen_det(M),
+  complexplus = Det(M), # :-(
+  times = 10L
+)
+```
 
 ## Cholesky decomposition
 
