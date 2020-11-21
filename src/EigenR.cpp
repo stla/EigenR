@@ -5,8 +5,6 @@
 // [[Rcpp::depends(RcppEigen)]]
 
 /* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 Eigen::MatrixXcd matricesToMatrixXcd(const Eigen::MatrixXd& Re,
                                      const Eigen::MatrixXd& Im) {
   return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
@@ -22,6 +20,12 @@ Rcpp::List cplxMatrixToList(const Eigen::MatrixXcd& M) {
                             Rcpp::Named("imag") = M.imag());
 }
 
+Rcpp::List cplxVectorToList(const Eigen::VectorXcd& V) {
+  return Rcpp::List::create(Rcpp::Named("real") = V.real(),
+                            Rcpp::Named("imag") = V.imag());
+}
+
+/* -------------------------------------------------------------------------- */
 /*
 Rcpp::List cplxRcppMatrixToList(const Rcpp::ComplexMatrix M) {
   Rcpp::NumericMatrix realPart(M.nrow(), M.ncol());
@@ -38,18 +42,6 @@ Rcpp::List cplxRcppMatrixToList(const Rcpp::ComplexMatrix M) {
 }
 */
 
-Rcpp::List cplxVectorToList(const Eigen::VectorXcd& V) {
-  Eigen::VectorXd realPart(V.size());
-  Eigen::VectorXd imagPart(V.size());
-  for(auto i = 0; i < V.size(); i++) {
-    const std::complex<double> z = V.coeff(i);
-    realPart(i) = real(z);
-    imagPart(i) = imag(z);
-  }
-  return Rcpp::List::create(Rcpp::Named("real") = realPart,
-                            Rcpp::Named("imag") = imagPart);
-}
-
 Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd& M) {
   Eigen::MatrixXd Mreal = M.real();
   Eigen::MatrixXd Mimag = M.imag();
@@ -59,9 +51,7 @@ Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd& M) {
   Rcpp::NumericMatrix outImag(MimagS);
   Rcpp::ComplexMatrix outRealCplx(outReal);
   Rcpp::ComplexMatrix outImagCplx(outImag);
-  Rcomplex I;
-  I.r = 0.0;
-  I.i = 1.0;
+  Rcomplex I; I.r = 0.0; I.i = 1.0;
   Rcpp::ComplexVector out = outRealCplx + I * outImagCplx;
   out.attr("dim") = Rcpp::Dimension(M.rows(), M.cols());
   return out;
@@ -511,7 +501,7 @@ Rcpp::List UtDU(
   const Eigen::LDLT<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
       ldltOfM(M);
   if(ldltOfM.info() != Eigen::Success) {
-    throw Rcpp::exception("Factorization failed.");
+    throw Rcpp::exception("Factorization has failed.");
   }
   const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U =
       ldltOfM.matrixU();
@@ -521,9 +511,13 @@ Rcpp::List UtDU(
   for(auto i = 0; i < T.size(); i++) {
     perm(i) = i;
   }
-  const Rcpp::List out =
+  Rcpp::List out =
       Rcpp::List::create(Rcpp::Named("U") = U, Rcpp::Named("D") = D,
                          Rcpp::Named("perm") = T * perm);
+  bool positive = ldltOfM.isPositive();
+  double rcond = ldltOfM.rcond();
+  out.attr("positive") = positive;
+  out.attr("rcond") = rcond;
   return out;
 }
 
@@ -567,6 +561,8 @@ Rcpp::List EigenR_UtDU_cplx(const Eigen::MatrixXd& Re,
       Rcpp::List::create(Rcpp::Named("U") = cplxMatrixToList(utdu["U"]),
                          Rcpp::Named("D") = cplxVectorToList(utdu["D"]),
                          Rcpp::Named("perm") = utdu["perm"]);
+  out.attr("positive") = utdu.attr("positive");
+  out.attr("rcond") = utdu.attr("rcond");
   return out;
 }
 
