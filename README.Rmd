@@ -9,6 +9,12 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
 ```
 
+Originally, I entitled this package *Fast Matrix Algebra with 'Eigen'*, because 
+I expected it to be faster than R base. But this is not the case. So I entitled 
+it *Complex Matrix Algebra with 'Eigen'*, because it supports some operations 
+on complex matrices which are not supported by R base: determinant, Cholesky 
+decomposition, and linear least-squares problems.
+
 ```{r packages}
 library(EigenR)
 library(microbenchmark)
@@ -38,8 +44,8 @@ Mi <- matrix(rnorm(300L*300L, mean = 1), 300L, 300L)
 M <- Mr + 1i * Mi
 library(complexplus)
 microbenchmark(
-  EigenR      = Eigen_det(M),
-  complexplus = Det(M), # :-(
+  EigenR      = Eigen_det(M), # :-)
+  complexplus = Det(M), 
   times = 10L
 )
 ```
@@ -52,12 +58,28 @@ M <- matrix(rpois(10000L, 25), 100L, 100L)
 A <- crossprod(M)
 microbenchmark(
   base   = chol(A),
-  EigenR = Eigen_chol(A), # :-(
+  EigenR = Eigen_chol(A), # :-|
   times = 500L
 )
 ```
 
 Cholesky decomposition of complex matrices is supported.
+
+## Pivoted Cholesky decomposition
+
+```{r UtDU_benchmark, warning=FALSE}
+set.seed(666L)
+M <- matrix(rgamma(202L*199L, 10), 202L, 199L)
+M <- cbind(M, M[, 1L] + 3*M[, 2L])
+A <- crossprod(M)
+microbenchmark(
+  base   = chol(A, pivot = TRUE),
+  EigenR = Eigen_UtDU(A), # :-|
+  times = 500L
+)
+```
+
+Pivoted Cholesky decomposition of complex matrices is supported.
 
 ## Kernel
 
