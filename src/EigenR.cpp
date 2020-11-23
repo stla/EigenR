@@ -7,12 +7,14 @@
 /* -------------------------------------------------------------------------- */
 Eigen::MatrixXcd matricesToMatrixXcd(const Eigen::MatrixXd& Re,
                                      const Eigen::MatrixXd& Im) {
-  return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
+  const std::complex<double> I_ {0.0, 1.0};
+  return Re.cast<std::complex<double>>() + I_ * Im.cast<std::complex<double>>();
 }
 
 Eigen::VectorXcd vectorsToVectorXcd(const Eigen::VectorXd& Re,
                                     const Eigen::VectorXd& Im) {
-  return Re.cast<std::complex<double>>() + 1i * Im.cast<std::complex<double>>();
+  const std::complex<double> I_ {0.0, 1.0};
+  return Re.cast<std::complex<double>>() + I_ * Im.cast<std::complex<double>>();
 }
 
 Rcpp::List cplxMatrixToList(const Eigen::MatrixXcd& M) {

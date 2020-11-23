@@ -3,3 +3,4 @@
 ^inst/benchmarks$
 ^README\.Rmd$
 ^cran-comments\.md$
+^CRAN-RELEASE$
