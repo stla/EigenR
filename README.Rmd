@@ -39,14 +39,14 @@ Determinants of complex matrices are supported:
 
 ```{r det_cplx_benchmark}
 set.seed(666L)
-Mr <- matrix(rnorm(300L*300L, mean = 1), 300L, 300L)
-Mi <- matrix(rnorm(300L*300L, mean = 1), 300L, 300L)
+Mr <- matrix(rnorm(100L*100L, mean = 1), 100L, 100L)
+Mi <- matrix(rnorm(100L*100L, mean = 1), 100L, 100L)
 M <- Mr + 1i * Mi
 library(complexplus)
 microbenchmark(
   EigenR      = Eigen_det(M), # :-)
   complexplus = Det(M), 
-  times = 10L
+  times = 30L
 )
 ```
 
@@ -58,8 +58,8 @@ M <- matrix(rpois(10000L, 25), 100L, 100L)
 A <- crossprod(M)
 microbenchmark(
   base   = chol(A),
-  EigenR = Eigen_chol(A), # :-|
-  times = 500L
+  EigenR = Eigen_chol(A), # :-(
+  times = 1000L
 )
 ```
 
@@ -74,8 +74,8 @@ M <- cbind(M, M[, 1L] + 3*M[, 2L])
 A <- crossprod(M)
 microbenchmark(
   base   = chol(A, pivot = TRUE),
-  EigenR = Eigen_UtDU(A), # :-|
-  times = 500L
+  EigenR = Eigen_UtDU(A), # :-(
+  times = 1000L
 )
 ```
 
@@ -107,7 +107,7 @@ b <- rnorm(n)
 microbenchmark(
   stats   = lm.fit(A, b),
   Eigen_R = Eigen_lsSolve(A, b), # :-(
-  times = 10L
+  times = 20L
 )
 ```
 
