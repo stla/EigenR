@@ -49,6 +49,6 @@ print.SparseMatrix <- function(x, ...){
 asSparseMatrix <- function(M){
   ij <- which(M != 0, arr.ind = TRUE)
   SparseMatrix(
-    i = ij[,1], j = ij[,2], Mij = M[ij], nrows = nrow(M), ncol = ncol(M)
+    i = ij[,1L], j = ij[,2L], Mij = M[ij], nrows = nrow(M), ncols = ncol(M)
   )
 }
