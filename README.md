@@ -27,14 +27,14 @@ microbenchmark(
   times = 200L
 )
 ## Unit: milliseconds
-##           expr      min        lq      mean    median        uq      max neval
-##           base 2.295802  3.216064  9.310243  5.653305 11.682343 78.60175   200
-##         EigenR 3.254337  6.265068  7.024137  6.708800  7.247874 18.33710   200
-##  EigenR_sparse 8.546355 11.727958 13.677009 12.496962 13.192315 36.37084   200
+##           expr      min        lq      mean    median        uq       max neval
+##           base 2.348464  4.842405 31.934640  8.706389 29.089927 249.68330   200
+##         EigenR 3.587675  6.706318  8.785941  7.363495  9.025337  26.93790   200
+##  EigenR_sparse 9.570377 12.717644 15.615663 13.922106 15.723067  42.66454   200
 ##  cld
-##   b 
-##  a  
-##    c
+##    b
+##   a 
+##   a
 ```
 
 Determinants of complex matrices are supported:
@@ -51,9 +51,9 @@ microbenchmark(
   times = 10L
 )
 ## Unit: milliseconds
-##         expr       min        lq      mean    median        uq       max neval
-##       EigenR  24.46205  52.61349  53.81241  55.55755  59.23399  65.54072    10
-##  complexplus 639.46520 801.67035 835.61555 853.51478 882.21947 956.18605    10
+##         expr       min        lq      mean    median        uq        max neval
+##       EigenR  29.13314  45.90238  57.99029  54.97324  72.55315   87.81947    10
+##  complexplus 616.27011 682.67422 850.77522 848.73617 997.65058 1130.64936    10
 ##  cld
 ##   a 
 ##    b
@@ -71,9 +71,9 @@ microbenchmark(
   times = 500L
 )
 ## Unit: microseconds
-##    expr     min       lq     mean   median       uq       max neval cld
-##    base 149.803 168.2005 666.4576 191.9505 225.3335 24211.285   500   b
-##  EigenR 150.218 315.1445 330.0574 331.0205 347.1055   621.644   500  a
+##    expr     min      lq     mean   median       uq       max neval cld
+##    base 199.183 261.304 889.3098 322.1920 654.8255 33523.410   500   b
+##  EigenR 162.540 367.595 442.7996 388.7965 475.6985  3355.604   500  a
 ```
 
 Cholesky decomposition of complex matrices is supported.
@@ -90,10 +90,10 @@ microbenchmark(
   EigenR = Eigen_UtDU(A), # :-|
   times = 500L
 )
-## Unit: microseconds
+## Unit: milliseconds
 ##    expr      min       lq     mean   median       uq      max neval cld
-##    base  800.678 1269.482 3267.925 1540.066 4094.699 19141.01   500   b
-##  EigenR 1005.404 1910.888 2486.643 2021.510 2530.508 13963.72   500  a
+##    base 1.107769 1.326954 3.515281 1.782150 3.592810 38.48691   500   b
+##  EigenR 1.426556 1.952104 2.608765 2.119216 2.454293 25.39490   500  a
 ```
 
 Pivoted Cholesky decomposition of complex matrices is supported.
@@ -108,15 +108,15 @@ At <- t(A)
 library(MASS)
 microbenchmark(
   MASS       = Null(At),
-  EigenR_LU  = Eigen_kernel(A, method = "LU"),
-  EigenR_COD = Eigen_kernel(A, method = "COD"), # :-(
+  EigenR_LU  = Eigen_kernel(A, method = "LU"),  # :-)
+  EigenR_COD = Eigen_kernel(A, method = "COD"), 
   times = 100L
 )
 ## Unit: milliseconds
 ##        expr      min       lq     mean   median       uq        max neval cld
-##        MASS 4.625058 5.109697 6.704468 5.280767 5.767802 124.878257   100   b
-##   EigenR_LU 2.192517 2.373585 2.570679 2.479659 2.700899   5.248459   100  a 
-##  EigenR_COD 5.286845 5.591827 6.037580 5.786849 6.332180   8.450543   100   b
+##        MASS 5.098672 5.392457 7.114541 5.669072 6.084231 126.900039   100   b
+##   EigenR_LU 2.385806 2.511427 2.677017 2.588909 2.692103   5.659926   100  a 
+##  EigenR_COD 5.642747 5.977678 6.459983 6.233274 6.695495   9.042926   100   b
 ```
 
 ## Linear least-squares problems
@@ -133,8 +133,8 @@ microbenchmark(
 )
 ## Unit: milliseconds
 ##     expr      min       lq     mean   median       uq      max neval cld
-##    stats 15.26072 15.65720 16.13600 15.98812 16.66596 17.50740    10  a 
-##  Eigen_R 78.71971 80.71122 81.22111 81.37661 82.11088 82.68067    10   b
+##    stats 15.82585 15.96568 16.84272 16.49552 17.65445 18.53197    10  a 
+##  Eigen_R 82.10392 82.64413 84.44043 84.15784 86.39429 87.31093    10   b
 ```
 
 Complex matrices `A` and `b` are supported.
