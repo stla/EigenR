@@ -1,7 +1,7 @@
 Package: EigenR
 Type: Package
 Title: Complex Matrix Algebra with 'Eigen'
-Version: 0.1.0
+Version: 1.0.0
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
 Description: Matrix algebra using the 'Eigen' C++ library: determinant, rank, inversion, kernel and image, QR decomposition, Cholesky decomposition, linear least-squares problems. Complex matrices are supported.
