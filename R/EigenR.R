@@ -1,5 +1,4 @@
 #' @useDynLib EigenR
-#' @import RcppEigen
 #' @importFrom Rcpp evalCpp
 NULL
 
