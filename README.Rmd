@@ -50,6 +50,18 @@ microbenchmark(
 )
 ```
 
+## Inverse matrix
+
+```{r inverse_benchmark}
+set.seed(666L)
+M <- matrix(rnorm(100L*100L), 100L, 100L)
+microbenchmark(
+  base   = solve(M),
+  EigenR = Eigen_inverse(M), # :-(
+  times = 500L
+)
+```
+
 ## Cholesky decomposition
 
 ```{r chol_benchmark}
