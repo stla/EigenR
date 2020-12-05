@@ -75,11 +75,6 @@ Eigen_inverse <- function(M){
   }else{
     Minv <- EigenR_inverse_real(M)
   }
-  if(any(is.infinite(Minv) || is.nan(Minv))){
-    stop(
-      "The matrix is not invertible."
-    )
-  }
   Minv
 }
 

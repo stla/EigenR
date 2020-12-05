@@ -168,7 +168,13 @@ unsigned EigenR_rank_cplx(const Eigen::MatrixXd& Re,
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> inverse(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
-  return M.inverse();
+  const Eigen::FullPivLU<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> 
+    lu(M);
+  if(lu.isInvertible()) {
+    return lu.inverse();
+  } else {
+    throw Rcpp::exception("The matrix is not invertible.");
+  }
 }
 
 // [[Rcpp::export]]
