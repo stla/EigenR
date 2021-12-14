@@ -748,3 +748,45 @@ Rcpp::List EigenR_sinh_cplx(const Eigen::MatrixXd& Re,
   return cplxMatrixToList(Msinh);
 }
 
+/* power -------------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> powm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M, 
+    const Number& p) {
+  return M.pow(p);
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_pow_real(const Eigen::MatrixXd& M, const double& p) {
+  return powm<double>(M, p);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_pow_cplx(const Eigen::MatrixXd& Re,
+                            const Eigen::MatrixXd& Im,
+                            const std::complex<double>& p) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Mpow = powm<std::complex<double>>(M, p);
+  return cplxMatrixToList(Mpow);
+}
+
+/* square root -------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> sqrtm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.sqrt();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_sqrt_real(const Eigen::MatrixXd& M) {
+  return sqrtm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_sqrt_cplx(const Eigen::MatrixXd& Re,
+                            const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Msqrt = sqrtm<std::complex<double>>(M);
+  return cplxMatrixToList(Msqrt);
+}
+

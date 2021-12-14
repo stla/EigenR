@@ -488,6 +488,54 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EigenR_pow_real
+Eigen::MatrixXd EigenR_pow_real(const Eigen::MatrixXd& M, const double& p);
+RcppExport SEXP _EigenR_EigenR_pow_real(SEXP MSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    Rcpp::traits::input_parameter< const double& >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_pow_real(M, p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_pow_cplx
+Rcpp::List EigenR_pow_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im, const std::complex<double>& p);
+RcppExport SEXP _EigenR_EigenR_pow_cplx(SEXP ReSEXP, SEXP ImSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Re(ReSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Im(ImSEXP);
+    Rcpp::traits::input_parameter< const std::complex<double>& >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_pow_cplx(Re, Im, p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_sqrt_real
+Eigen::MatrixXd EigenR_sqrt_real(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_sqrt_real(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_sqrt_real(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_sqrt_cplx
+Rcpp::List EigenR_sqrt_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
+RcppExport SEXP _EigenR_EigenR_sqrt_cplx(SEXP ReSEXP, SEXP ImSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Re(ReSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Im(ImSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_sqrt_cplx(Re, Im));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_det_real", (DL_FUNC) &_EigenR_EigenR_det_real, 1},
@@ -530,6 +578,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_cosh_cplx", (DL_FUNC) &_EigenR_EigenR_cosh_cplx, 2},
     {"_EigenR_EigenR_sinh_real", (DL_FUNC) &_EigenR_EigenR_sinh_real, 1},
     {"_EigenR_EigenR_sinh_cplx", (DL_FUNC) &_EigenR_EigenR_sinh_cplx, 2},
+    {"_EigenR_EigenR_pow_real", (DL_FUNC) &_EigenR_EigenR_pow_real, 2},
+    {"_EigenR_EigenR_pow_cplx", (DL_FUNC) &_EigenR_EigenR_pow_cplx, 3},
+    {"_EigenR_EigenR_sqrt_real", (DL_FUNC) &_EigenR_EigenR_sqrt_real, 1},
+    {"_EigenR_EigenR_sqrt_cplx", (DL_FUNC) &_EigenR_EigenR_sqrt_cplx, 2},
     {NULL, NULL, 0}
 };
 

@@ -430,3 +430,59 @@ Eigen_sinh <- function(M){
   Msinh
 }
 
+#' Matricial power
+#' 
+#' @description Matricial power of a real or complex square matrix, when possible.
+#'
+#' @param M a square matrix, real or complex
+#' @param p a number, real or complex, the power exponent
+#'
+#' @return The matrix \code{M} raised at the power \code{p}.
+#' @details The power is defined with the help of the exponential and the 
+#'   logarithm. See \href{https://eigen.tuxfamily.org/dox/unsupported/group__MatrixFunctions__Module.html#title8}{matrix power}.
+#' @export
+Eigen_pow <- function(M, p){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  stopifnot(isRealOrComplexScalar(p))
+  if(is.complex(p) && !is.complex(M)){
+    Zeros <- matrix(0, nrow = nrow(M), ncol = ncol(M))
+    parts <- EigenR_pow_cplx(Re(M), Zeros, p)
+    Mpow <- parts[["real"]] + 1i * parts[["imag"]]
+  }else if(is.complex(M) && !is.complex(p)){
+    p <- as.complex(p)
+  }
+  if(is.complex(M) && is.complex(p)){
+    parts <- EigenR_pow_cplx(Re(M), Im(M), p)
+    Mpow <- parts[["real"]] + 1i * parts[["imag"]]
+  }else if(!is.complex(M) && !is.complex(p)){
+    Mpow <- EigenR_pow_real(M, p)
+  }
+  Mpow
+}
+
+
+#' Square root of a matrix
+#' 
+#' @description Square root of a real or complex square matrix, when possible.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return A square root of \code{M}.
+#' @details See \href{https://eigen.tuxfamily.org/dox/unsupported/group__MatrixFunctions__Module.html#title12}{matrix square root}.
+#' @export
+#' @examples # Rotation matrix over 60 degrees:
+#' M <- cbind(c(cos(pi/3), sin(pi/3)), c(-sin(pi/3), cos(pi/3)))
+#' # Its square root, the rotation matrix over 30 degrees:
+#' Eigen_sqrt(M)
+Eigen_sqrt <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_sqrt_cplx(Re(M), Im(M))
+    Msqrt <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Msqrt <- EigenR_sqrt_real(M)
+  }
+  Msqrt
+}

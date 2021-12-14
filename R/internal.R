@@ -17,3 +17,7 @@ isSquareMatrix <- function(M){
 isRealOrComplex <- function(M){
   is.numeric(M) || is.complex(M)
 }
+
+isRealOrComplexScalar <- function(x){
+  (is.numeric(x) || is.complex(x)) && length(x) == 1L && !is.na(x)
+}

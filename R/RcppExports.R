@@ -161,3 +161,19 @@ EigenR_sinh_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_sinh_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_pow_real <- function(M, p) {
+    .Call('_EigenR_EigenR_pow_real', PACKAGE = 'EigenR', M, p)
+}
+
+EigenR_pow_cplx <- function(Re, Im, p) {
+    .Call('_EigenR_EigenR_pow_cplx', PACKAGE = 'EigenR', Re, Im, p)
+}
+
+EigenR_sqrt_real <- function(M) {
+    .Call('_EigenR_EigenR_sqrt_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_sqrt_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_sqrt_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
