@@ -31,8 +31,8 @@ Eigen_det <- function(M){
       )
     }
   }else{
-    stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
-    stopifnot(is.numeric(M) || is.complex(M))
+    stopifnot(isSquareMatrix(M))
+    stopifnot(isRealOrComplex(M))
     if(is.complex(M)){
       EigenR_det_cplx(Re(M), Im(M))
     }else{
@@ -50,7 +50,7 @@ Eigen_det <- function(M){
 #' @export
 Eigen_rank <- function(M){
   stopifnot(is.matrix(M))
-  stopifnot(is.numeric(M) || is.complex(M))
+  stopifnot(isRealOrComplex(M))
   if(is.complex(M)){
     EigenR_rank_cplx(Re(M), Im(M))
   }else{
@@ -67,8 +67,8 @@ Eigen_rank <- function(M){
 #' @return The inverse matrix of \code{M}.
 #' @export
 Eigen_inverse <- function(M){
-  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
-  stopifnot(is.numeric(M) || is.complex(M))
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
   if(is.complex(M)){
     parts <- EigenR_inverse_cplx(Re(M), Im(M))
     Minv <- parts[["real"]] + 1i * parts[["imag"]]
@@ -99,7 +99,7 @@ Eigen_inverse <- function(M){
 #' Eigen_kernel(M, method = "COD")
 Eigen_kernel <- function(M, method = "COD"){
   stopifnot(is.matrix(M))
-  stopifnot(is.numeric(M) || is.complex(M))
+  stopifnot(isRealOrComplex(M))
   method <- match.arg(method, c("COD", "LU"))
   if(is.complex(M)){
     if(method == "COD"){
@@ -131,7 +131,7 @@ Eigen_kernel <- function(M, method = "COD"){
 #' @export
 Eigen_range <- function(M, method = "QR"){
   stopifnot(is.matrix(M))
-  stopifnot(is.numeric(M) || is.complex(M))
+  stopifnot(isRealOrComplex(M))
   method <- match.arg(method, c("LU", "QR", "COD"))
   if(is.complex(M)){
     if(method == "QR"){
@@ -167,7 +167,7 @@ Eigen_range <- function(M, method = "QR"){
 #' x$Q %*% x$R
 Eigen_QR <- function(M){
   stopifnot(is.matrix(M))
-  stopifnot(is.numeric(M) || is.complex(M))
+  stopifnot(isRealOrComplex(M))
   if(is.complex(M)){
     QRparts <- EigenR_QR_cplx(Re(M), Im(M))
     lapply(QRparts, function(parts) parts[["real"]] + 1i * parts[["imag"]])
@@ -215,8 +215,8 @@ Eigen_chol <- function(M){
       )
     }
   }else{
-    stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
-    stopifnot(is.numeric(M) || is.complex(M))
+    stopifnot(isSquareMatrix(M))
+    stopifnot(isRealOrComplex(M))
     if(is.complex(M)){
       EigenR_chol_cplx(Re(M), Im(M))
     }else{
@@ -249,8 +249,8 @@ Eigen_chol <- function(M){
 #' UP <- U[, perm]
 #' t(UP) %*% diag(D) %*% UP # this is `M`
 Eigen_UtDU <- function(M){
-  stopifnot(is.matrix(M) && (nrow(M) == ncol(M)))
-  stopifnot(is.numeric(M) || is.complex(M))
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
   if(is.complex(M)){
     utdu <- EigenR_UtDU_cplx(Re(M), Im(M))
     utdu[["U"]] <- utdu[["U"]][["real"]] + 1i * utdu[["U"]][["imag"]]
@@ -294,3 +294,126 @@ Eigen_lsSolve <- function(A, b){
     EigenR_lsSolve_real(A, b)[,]
   }
 }
+
+#' Exponential of a matrix
+#' 
+#' @description Exponential of a real or complex square matrix.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return The exponential of \code{M}.
+#' @export
+Eigen_exp <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_exp_cplx(Re(M), Im(M))
+    Mexp <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Mexp <- EigenR_exp_real(M)
+  }
+  Mexp
+}
+
+#' Logarithm of a matrix
+#' 
+#' @description Logarithm of a real or complex square matrix, when possible.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return The logarithm of \code{M}.
+#' @details The logarithm of a matrix does not always exist. 
+#'   See \href{https://eigen.tuxfamily.org/dox/unsupported/group__MatrixFunctions__Module.html#title7}{matrix logarithm}.
+#' @export
+Eigen_log <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_log_cplx(Re(M), Im(M))
+    Mlog <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Mlog <- EigenR_log_real(M)
+  }
+  Mlog
+}
+
+#' Matrix cosine
+#' 
+#' @description Matrix cosine of a real or complex square matrix.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return The matrix cosine of \code{M}.
+#' @export
+Eigen_cos <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_cos_cplx(Re(M), Im(M))
+    Mcos <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Mcos <- EigenR_cos_real(M)
+  }
+  Mcos
+}
+
+#' Matrix sine
+#' 
+#' @description Matrix sine of a real or complex square matrix.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return The matrix sine of \code{M}.
+#' @export
+Eigen_sin <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_sin_cplx(Re(M), Im(M))
+    Msin <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Msin <- EigenR_sin_real(M)
+  }
+  Msin
+}
+
+#' Matrix hyperbolic cosine
+#' 
+#' @description Matrix hyperbolic cosine of a real or complex square matrix.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return The matrix hyperbolic cosine of \code{M}.
+#' @export
+Eigen_cosh <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_cosh_cplx(Re(M), Im(M))
+    Mcosh <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Mcosh <- EigenR_cosh_real(M)
+  }
+  Mcosh
+}
+
+#' Matrix hyperbolic sine
+#' 
+#' @description Matrix hyperbolic sine of a real or complex square matrix.
+#'
+#' @param M a square matrix, real or complex
+#'
+#' @return The matrix hyperbolic sine of \code{M}.
+#' @export
+Eigen_sinh <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_sinh_cplx(Re(M), Im(M))
+    Msinh <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Msinh <- EigenR_sin_real(M)
+  }
+  Msinh
+}
+

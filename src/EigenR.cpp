@@ -2,6 +2,7 @@
 // -*-
 
 #include <RcppEigen.h>
+#include <unsupported/Eigen/MatrixFunctions>
 // [[Rcpp::depends(RcppEigen)]]
 
 /* -------------------------------------------------------------------------- */
@@ -626,3 +627,124 @@ Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA,
   const Eigen::MatrixXcd X = lsSolve<std::complex<double>>(A, b);
   return cplxMatrixToList(X);
 }
+
+/* exponential -------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> expm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.exp();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_exp_real(const Eigen::MatrixXd& M) {
+  return expm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_exp_cplx(const Eigen::MatrixXd& Re,
+                               const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Mexp = expm<std::complex<double>>(M);
+  return cplxMatrixToList(Mexp);
+}
+
+/* logarithm ---------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> logm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.log();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_log_real(const Eigen::MatrixXd& M) {
+  return logm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_log_cplx(const Eigen::MatrixXd& Re,
+                           const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Mlog = logm<std::complex<double>>(M);
+  return cplxMatrixToList(Mlog);
+}
+
+/* cosine ------------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> cosm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.cos();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_cos_real(const Eigen::MatrixXd& M) {
+  return cosm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_cos_cplx(const Eigen::MatrixXd& Re,
+                           const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Mcos = cosm<std::complex<double>>(M);
+  return cplxMatrixToList(Mcos);
+}
+
+/* sine --------------------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> sinm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.sin();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_sin_real(const Eigen::MatrixXd& M) {
+  return sinm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_sin_cplx(const Eigen::MatrixXd& Re,
+                           const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Msin = sinm<std::complex<double>>(M);
+  return cplxMatrixToList(Msin);
+}
+
+/* hyperbolic cosine -------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> coshm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.cosh();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_cosh_real(const Eigen::MatrixXd& M) {
+  return coshm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_cosh_cplx(const Eigen::MatrixXd& Re,
+                           const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Mcosh = coshm<std::complex<double>>(M);
+  return cplxMatrixToList(Mcosh);
+}
+
+/* hyperbolic sine ---------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> sinhm(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  return M.sinh();
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_sinh_real(const Eigen::MatrixXd& M) {
+  return sinhm<double>(M);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_sinh_cplx(const Eigen::MatrixXd& Re,
+                            const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  const Eigen::MatrixXcd Msinh = sinhm<std::complex<double>>(M);
+  return cplxMatrixToList(Msinh);
+}
+

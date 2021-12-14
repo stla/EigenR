@@ -113,3 +113,11 @@ EigenR_lsSolve_cplx <- function(ReA, ImA, Reb, Imb) {
     .Call('_EigenR_EigenR_lsSolve_cplx', PACKAGE = 'EigenR', ReA, ImA, Reb, Imb)
 }
 
+EigenR_exp_real <- function(M) {
+    .Call('_EigenR_EigenR_exp_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_exp_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_exp_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+

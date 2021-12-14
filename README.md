@@ -27,14 +27,10 @@ microbenchmark(
   times = 200L
 )
 ## Unit: milliseconds
-##           expr      min        lq      mean    median        uq       max neval
-##           base 2.280564  2.384481 13.997633  2.773429  3.810345 316.68765   200
-##         EigenR 3.106442  6.631640  7.502237  7.025754  7.595042  19.05179   200
-##  EigenR_sparse 6.250881 12.635205 14.450814 13.095196 14.612821  28.75310   200
-##  cld
-##   ab
-##   a 
-##    b
+##           expr      min       lq      mean    median       uq     max neval
+##           base 8.008401 9.439550 12.360928 11.772001 14.25095 33.3621   200
+##         EigenR 2.948801 4.360351  5.575071  5.634151  6.35175 10.9766   200
+##  EigenR_sparse 6.001900 7.378351  9.051891  8.702951 10.33490 20.7182   200
 ```
 
 Determinants of complex matrices are supported:
@@ -51,12 +47,9 @@ microbenchmark(
   times = 30L
 )
 ## Unit: milliseconds
-##         expr       min        lq     mean    median        uq        max neval
-##       EigenR  2.657419  2.850238  3.37646  3.218996  3.481693   5.176787    30
-##  complexplus 36.334199 38.599482 48.57074 39.790650 44.854627 262.863927    30
-##  cld
-##   a 
-##    b
+##         expr       min        lq      mean    median        uq       max neval
+##       EigenR  1.441501  1.547502  1.928104  1.733801  2.076301  4.014701    30
+##  complexplus 16.981601 18.186601 20.988558 18.945551 21.245501 33.804401    30
 ```
 
 ## Inverse matrix
@@ -70,9 +63,9 @@ microbenchmark(
   times = 500L
 )
 ## Unit: microseconds
-##    expr      min       lq     mean   median        uq      max neval cld
-##    base  624.262  656.725 1001.600  697.907  813.7565 7161.314   500  a 
-##  EigenR 1641.917 2448.156 2468.013 2471.816 2506.2770 2758.072   500   b
+##    expr      min       lq     mean   median       uq       max neval
+##    base 1262.400 1393.401 1696.938 1543.051 1857.151 11106.500   500
+##  EigenR  976.101 1099.951 1408.154 1212.501 1680.851  3836.901   500
 ```
 
 ## Cholesky decomposition
@@ -87,9 +80,9 @@ microbenchmark(
   times = 1000L
 )
 ## Unit: microseconds
-##    expr     min       lq     mean   median       uq      max neval cld
-##    base 142.948 155.6255 288.3603 162.2095 204.4600 7900.534  1000  a 
-##  EigenR 147.082 320.7905 398.7887 341.4415 395.6865 9949.041  1000   b
+##    expr     min       lq     mean   median      uq      max neval
+##    base 173.501 185.1010 246.3900 215.9515 291.451  782.501  1000
+##  EigenR 118.702 131.7515 212.9907 167.4505 245.001 5333.601  1000
 ```
 
 Cholesky decomposition of complex matrices is supported.
@@ -106,10 +99,10 @@ microbenchmark(
   EigenR = Eigen_UtDU(A), # :-(
   times = 1000L
 )
-## Unit: milliseconds
-##    expr      min       lq     mean   median       uq       max neval cld
-##    base 1.092026 1.187069 1.582198 1.268445 1.425253 12.261755  1000  a 
-##  EigenR 1.287782 1.885200 2.080151 1.942995 2.086418  9.553564  1000   b
+## Unit: microseconds
+##    expr      min       lq     mean   median       uq     max neval
+##    base 1441.801 1658.901 2139.929 1940.301 2394.202 11157.9  1000
+##  EigenR  653.102 1014.701 1506.732 1388.051 1820.851 14772.8  1000
 ```
 
 Pivoted Cholesky decomposition of complex matrices is supported.
@@ -129,10 +122,10 @@ microbenchmark(
   times = 100L
 )
 ## Unit: milliseconds
-##        expr      min       lq     mean   median       uq        max neval cld
-##        MASS 4.567780 4.796990 7.320759 4.993532 5.319909 115.105350   100   b
-##   EigenR_LU 2.244941 2.327626 2.481592 2.397051 2.530926   5.318979   100  a 
-##  EigenR_COD 5.011778 5.170457 5.421014 5.327620 5.593926   6.863361   100  ab
+##        expr      min       lq     mean   median        uq       max neval
+##        MASS 7.888201 8.646801 9.705527 9.257001 10.013302 19.889201   100
+##   EigenR_LU 1.810100 2.235001 2.857512 2.587801  3.381900  5.337701   100
+##  EigenR_COD 4.645302 5.082600 6.320570 5.709651  7.366052 16.115100   100
 ```
 
 ## Linear least-squares problems
@@ -148,9 +141,44 @@ microbenchmark(
   times = 20L
 )
 ## Unit: milliseconds
-##     expr      min       lq     mean   median       uq      max neval cld
-##    stats 14.26740 14.47446 14.88505 14.74442 15.02579 16.73055    20  a 
-##  Eigen_R 73.03921 73.84556 74.57334 74.40150 75.18944 76.46069    20   b
+##     expr     min       lq     mean   median       uq     max neval
+##    stats 31.1994 31.68015 34.07953 33.11745 35.75225 41.8597    20
+##  Eigen_R 64.6860 69.21850 71.62660 70.56360 74.16900 80.3629    20
 ```
 
 Complex matrices `A` and `b` are supported.
+
+## Exponential
+
+``` r
+set.seed(666L)
+M <- matrix(rnorm(30L*30L, mean = 1), 30L, 30L)
+microbenchmark(
+  expm   = expm::expm(M),
+  EigenR = Eigen_exp(M), # :-)
+  times = 500L
+)
+## Unit: microseconds
+##    expr     min       lq      mean    median       uq      max neval
+##    expm 555.900 998.7005 1185.3213 1123.3515 1250.501 8260.901   500
+##  EigenR 122.001 215.5015  276.7422  263.8005  295.801 4423.201   500
+```
+
+Exponential of complex matrices is supported:
+
+``` r
+set.seed(666L)
+Mr <- matrix(rnorm(30L*30L, mean = 1), 30L, 30L)
+Mi <- matrix(rnorm(30L*30L, mean = 1), 30L, 30L)
+M <- Mr + 1i * Mi
+library(complexplus)
+microbenchmark(
+  EigenR      = Eigen_exp(M), # :-)
+  complexplus = matexp(M), 
+  times = 500L
+)
+## Unit: microseconds
+##         expr      min       lq      mean    median       uq       max neval
+##       EigenR  575.201  678.850  933.5834  823.7505 1192.001  2036.401   500
+##  complexplus 2650.301 3016.001 4003.7130 3660.4015 4802.751 10809.201   500
+```

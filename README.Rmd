@@ -124,3 +124,31 @@ microbenchmark(
 ```
 
 Complex matrices `A` and `b` are supported.
+
+## Exponential
+
+```{r exp_benchmark}
+set.seed(666L)
+M <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
+microbenchmark(
+  expm   = expm::expm(M),
+  EigenR = Eigen_exp(M), # :-)
+  times = 500L
+)
+```
+
+Exponential of complex matrices is supported:
+
+```{r exp_cplx_benchmark}
+set.seed(666L)
+Mr <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
+Mi <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
+M <- Mr + 1i * Mi
+library(complexplus)
+microbenchmark(
+  EigenR      = Eigen_exp(M), # :-)
+  complexplus = matexp(M), 
+  times = 500L
+)
+```
+
