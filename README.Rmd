@@ -57,7 +57,7 @@ set.seed(666L)
 M <- matrix(rnorm(100L*100L), 100L, 100L)
 microbenchmark(
   base   = solve(M),
-  EigenR = Eigen_inverse(M), # :-(
+  EigenR = Eigen_inverse(M), 
   times = 500L
 )
 ```
@@ -70,7 +70,7 @@ M <- matrix(rpois(10000L, 25), 100L, 100L)
 A <- crossprod(M)
 microbenchmark(
   base   = chol(A),
-  EigenR = Eigen_chol(A), # :-(
+  EigenR = Eigen_chol(A), 
   times = 1000L
 )
 ```

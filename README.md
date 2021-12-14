@@ -27,10 +27,10 @@ microbenchmark(
   times = 200L
 )
 ## Unit: milliseconds
-##           expr      min       lq      mean    median       uq     max neval
-##           base 8.008401 9.439550 12.360928 11.772001 14.25095 33.3621   200
-##         EigenR 2.948801 4.360351  5.575071  5.634151  6.35175 10.9766   200
-##  EigenR_sparse 6.001900 7.378351  9.051891  8.702951 10.33490 20.7182   200
+##           expr      min       lq      mean    median      uq     max neval
+##           base 7.678000 9.133401 11.930930 11.023601 13.8092 57.2875   200
+##         EigenR 3.385101 4.051051  5.470443  5.264401  6.2005 27.8239   200
+##  EigenR_sparse 5.841101 6.773851  8.705014  8.288101 10.1530 21.0749   200
 ```
 
 Determinants of complex matrices are supported:
@@ -47,9 +47,9 @@ microbenchmark(
   times = 30L
 )
 ## Unit: milliseconds
-##         expr       min        lq      mean    median        uq       max neval
-##       EigenR  1.441501  1.547502  1.928104  1.733801  2.076301  4.014701    30
-##  complexplus 16.981601 18.186601 20.988558 18.945551 21.245501 33.804401    30
+##         expr       min        lq      mean   median        uq       max neval
+##       EigenR  1.500201  1.698701  2.091281  2.16685  2.422002  2.614001    30
+##  complexplus 16.929602 17.893801 20.250934 19.15265 21.995201 26.774302    30
 ```
 
 ## Inverse matrix
@@ -59,13 +59,13 @@ set.seed(666L)
 M <- matrix(rnorm(100L*100L), 100L, 100L)
 microbenchmark(
   base   = solve(M),
-  EigenR = Eigen_inverse(M), # :-(
+  EigenR = Eigen_inverse(M), 
   times = 500L
 )
 ## Unit: microseconds
-##    expr      min       lq     mean   median       uq       max neval
-##    base 1262.400 1393.401 1696.938 1543.051 1857.151 11106.500   500
-##  EigenR  976.101 1099.951 1408.154 1212.501 1680.851  3836.901   500
+##    expr      min       lq     mean   median       uq      max neval
+##    base 1256.502 1367.601 1655.012 1508.351 1828.051 6815.901   500
+##  EigenR  977.302 1089.050 1378.164 1195.901 1563.450 3187.401   500
 ```
 
 ## Cholesky decomposition
@@ -76,13 +76,13 @@ M <- matrix(rpois(10000L, 25), 100L, 100L)
 A <- crossprod(M)
 microbenchmark(
   base   = chol(A),
-  EigenR = Eigen_chol(A), # :-(
+  EigenR = Eigen_chol(A), 
   times = 1000L
 )
 ## Unit: microseconds
 ##    expr     min       lq     mean   median      uq      max neval
-##    base 173.501 185.1010 246.3900 215.9515 291.451  782.501  1000
-##  EigenR 118.702 131.7515 212.9907 167.4505 245.001 5333.601  1000
+##    base 173.101 191.5515 257.3574 224.1005 297.651 4097.900  1000
+##  EigenR 119.802 135.5010 209.8055 171.2510 251.251 3122.201  1000
 ```
 
 Cholesky decomposition of complex matrices is supported.
@@ -100,9 +100,9 @@ microbenchmark(
   times = 1000L
 )
 ## Unit: microseconds
-##    expr      min       lq     mean   median       uq     max neval
-##    base 1441.801 1658.901 2139.929 1940.301 2394.202 11157.9  1000
-##  EigenR  653.102 1014.701 1506.732 1388.051 1820.851 14772.8  1000
+##    expr      min        lq     mean   median       uq      max neval
+##    base 1436.701 1606.3010 1901.581 1763.101 2021.552 8589.702  1000
+##  EigenR  644.301  926.9015 1320.769 1266.552 1513.551 6806.600  1000
 ```
 
 Pivoted Cholesky decomposition of complex matrices is supported.
@@ -122,10 +122,10 @@ microbenchmark(
   times = 100L
 )
 ## Unit: milliseconds
-##        expr      min       lq     mean   median        uq       max neval
-##        MASS 7.888201 8.646801 9.705527 9.257001 10.013302 19.889201   100
-##   EigenR_LU 1.810100 2.235001 2.857512 2.587801  3.381900  5.337701   100
-##  EigenR_COD 4.645302 5.082600 6.320570 5.709651  7.366052 16.115100   100
+##        expr      min       lq     mean   median        uq     max neval
+##        MASS 7.910201 8.544351 9.530592 9.133401 10.167551 17.1191   100
+##   EigenR_LU 1.779500 2.155702 2.663815 2.447001  2.946551  5.0123   100
+##  EigenR_COD 4.861101 5.432752 6.466603 5.972050  7.240001 20.5207   100
 ```
 
 ## Linear least-squares problems
@@ -142,8 +142,8 @@ microbenchmark(
 )
 ## Unit: milliseconds
 ##     expr     min       lq     mean   median       uq     max neval
-##    stats 31.1994 31.68015 34.07953 33.11745 35.75225 41.8597    20
-##  Eigen_R 64.6860 69.21850 71.62660 70.56360 74.16900 80.3629    20
+##    stats 27.6975 28.28305 30.30363 29.18565 33.06465 36.5224    20
+##  Eigen_R 52.6666 53.52400 58.19708 55.06110 60.92345 84.8454    20
 ```
 
 Complex matrices `A` and `b` are supported.
@@ -152,24 +152,24 @@ Complex matrices `A` and `b` are supported.
 
 ``` r
 set.seed(666L)
-M <- matrix(rnorm(30L*30L, mean = 1), 30L, 30L)
+M <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
 microbenchmark(
   expm   = expm::expm(M),
   EigenR = Eigen_exp(M), # :-)
   times = 500L
 )
 ## Unit: microseconds
-##    expr     min       lq      mean    median       uq      max neval
-##    expm 555.900 998.7005 1185.3213 1123.3515 1250.501 8260.901   500
-##  EigenR 122.001 215.5015  276.7422  263.8005  295.801 4423.201   500
+##    expr      min       lq      mean    median       uq      max neval
+##    expm 1002.701 1071.901 1330.1628 1143.9000 1427.502 5827.901   500
+##  EigenR  213.101  236.601  302.2438  265.3015  329.351 1399.101   500
 ```
 
 Exponential of complex matrices is supported:
 
 ``` r
 set.seed(666L)
-Mr <- matrix(rnorm(30L*30L, mean = 1), 30L, 30L)
-Mi <- matrix(rnorm(30L*30L, mean = 1), 30L, 30L)
+Mr <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
+Mi <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
 M <- Mr + 1i * Mi
 library(complexplus)
 microbenchmark(
@@ -177,8 +177,8 @@ microbenchmark(
   complexplus = matexp(M), 
   times = 500L
 )
-## Unit: microseconds
-##         expr      min       lq      mean    median       uq       max neval
-##       EigenR  575.201  678.850  933.5834  823.7505 1192.001  2036.401   500
-##  complexplus 2650.301 3016.001 4003.7130 3660.4015 4802.751 10809.201   500
+## Unit: milliseconds
+##         expr      min       lq     mean   median       uq       max neval
+##       EigenR 1.281301 1.419850 1.775880 1.606201 2.043300  3.442001   500
+##  complexplus 6.515601 7.076051 8.320601 7.755651 9.039451 16.800501   500
 ```
