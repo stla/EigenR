@@ -15,3 +15,9 @@ The matrix hyperbolic cosine of \code{M}.
 \description{
 Matrix hyperbolic cosine of a real or complex square matrix.
 }
+\examples{
+library(EigenR)
+M <- toeplitz(c(1,2,3))
+Eigen_cosh(M)
+(Eigen_exp(M) + Eigen_exp(-M)) / 2 # identical
+}

@@ -15,3 +15,9 @@ The matrix hyperbolic sine of \code{M}.
 \description{
 Matrix hyperbolic sine of a real or complex square matrix.
 }
+\examples{
+library(EigenR)
+M <- toeplitz(c(1,2,3))
+Eigen_sinh(M)
+(Eigen_exp(M) - Eigen_exp(-M)) / 2  # identical
+}

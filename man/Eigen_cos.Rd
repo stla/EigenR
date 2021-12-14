@@ -15,3 +15,10 @@ The matrix cosine of \code{M}.
 \description{
 Matrix cosine of a real or complex square matrix.
 }
+\examples{
+library(EigenR)
+M <- toeplitz(c(1,2,3))
+cosM <- Eigen_cos(M) 
+sinM <- Eigen_sin(M)
+cosM \%*\% cosM + sinM \%*\% sinM # identity matrix
+}

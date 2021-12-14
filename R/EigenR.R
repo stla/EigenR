@@ -345,6 +345,11 @@ Eigen_log <- function(M){
 #'
 #' @return The matrix cosine of \code{M}.
 #' @export
+#' @examples library(EigenR)
+#' M <- toeplitz(c(1,2,3))
+#' cosM <- Eigen_cos(M) 
+#' sinM <- Eigen_sin(M)
+#' cosM %*% cosM + sinM %*% sinM # identity matrix
 Eigen_cos <- function(M){
   stopifnot(isSquareMatrix(M))
   stopifnot(isRealOrComplex(M))
@@ -385,6 +390,10 @@ Eigen_sin <- function(M){
 #'
 #' @return The matrix hyperbolic cosine of \code{M}.
 #' @export
+#' @examples library(EigenR)
+#' M <- toeplitz(c(1,2,3))
+#' Eigen_cosh(M)
+#' (Eigen_exp(M) + Eigen_exp(-M)) / 2 # identical
 Eigen_cosh <- function(M){
   stopifnot(isSquareMatrix(M))
   stopifnot(isRealOrComplex(M))
@@ -405,6 +414,10 @@ Eigen_cosh <- function(M){
 #'
 #' @return The matrix hyperbolic sine of \code{M}.
 #' @export
+#' @examples library(EigenR)
+#' M <- toeplitz(c(1,2,3))
+#' Eigen_sinh(M)
+#' (Eigen_exp(M) - Eigen_exp(-M)) / 2  # identical
 Eigen_sinh <- function(M){
   stopifnot(isSquareMatrix(M))
   stopifnot(isRealOrComplex(M))
@@ -412,7 +425,7 @@ Eigen_sinh <- function(M){
     parts <- EigenR_sinh_cplx(Re(M), Im(M))
     Msinh <- parts[["real"]] + 1i * parts[["imag"]]
   }else{
-    Msinh <- EigenR_sin_real(M)
+    Msinh <- EigenR_sinh_real(M)
   }
   Msinh
 }
