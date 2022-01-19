@@ -16,6 +16,9 @@ The logarithm of the absolute value of the determinant of \code{M}.
 Logarithm of the absolute value of the determinant of a real 
   matrix.
 }
+\note{
+`Eigen_logabsdet(M)` is not faster than `log(abs(Eigen_det(M)))`.
+}
 \examples{
 set.seed(666L)
 M <- matrix(rpois(25L, 1), 5L, 5L)

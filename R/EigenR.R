@@ -52,6 +52,8 @@ Eigen_det <- function(M){
 #' @return The absolute value of the determinant of \code{M}.
 #' @export
 #' 
+#' @note `Eigen_absdet(M)` is not faster than `abs(Eigen_det(M))`.
+#' 
 #' @examples set.seed(666L)
 #' M <- matrix(rpois(25L, 1), 5L, 5L)
 #' Eigen_absdet(M)
@@ -69,6 +71,8 @@ Eigen_absdet <- function(M){
 #'
 #' @return The logarithm of the absolute value of the determinant of \code{M}.
 #' @export
+#' 
+#' @note `Eigen_logabsdet(M)` is not faster than `log(abs(Eigen_det(M)))`.
 #' 
 #' @examples set.seed(666L)
 #' M <- matrix(rpois(25L, 1), 5L, 5L)

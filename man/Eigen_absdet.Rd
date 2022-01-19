@@ -15,6 +15,9 @@ The absolute value of the determinant of \code{M}.
 \description{
 Absolute value of the determinant of a real matrix.
 }
+\note{
+`Eigen_absdet(M)` is not faster than `abs(Eigen_det(M))`.
+}
 \examples{
 set.seed(666L)
 M <- matrix(rpois(25L, 1), 5L, 5L)

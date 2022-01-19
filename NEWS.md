@@ -11,6 +11,12 @@ matrix.
 - `Eigen_logabsdet` returns the logarithm of the absolute value of the 
 determinant of a real square matrix.
 
+- `Eigen_isInjective`, `Eigen_isSurjective`, `Eigen_isInvertible` return a Boolean value.
+
+- `Eigen_kernelDimension` returns the dimension of the kernel of a matrix.
+
+- New method for `Eigen_lsSolve`.
+
 
 # EigenR 1.1.0
 
