@@ -66,14 +66,14 @@ microbenchmark(
 
 ```{r pseudoinverse_benchmark}
 set.seed(666L)
-M <- matrix(rnorm(100L*50L), 100L, 50L)
+M <- matrix(rnorm(100L*70L), 100L, 70L)
 library(MASS)
 library(pracma)
 microbenchmark(
   MASS   = ginv(M),
-  pracma = pinv(M)
-  EigenR = Eigen_pinverse(M), 
-  times = 5L
+  pracma = pinv(M),
+  EigenR = Eigen_pinverse(M), # :-)
+  times = 500L
 )
 ```
 

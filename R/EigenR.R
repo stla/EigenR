@@ -83,10 +83,26 @@ Eigen_inverse <- function(M){
 #' @description Pseudo-inverse of a real or complex matrix 
 #'   (Moore-Penrose generalized inverse).
 #'
-#' @param M a matrix, real or complex
+#' @param M a matrix, real or complex, not necessarily square
 #'
 #' @return The pseudo-inverse matrix of \code{M}.
 #' @export
+#' 
+#' @examples library(EigenR)
+#' M <- rbind(
+#'   toeplitz(c(3, 2, 1)), 
+#'   toeplitz(c(4, 5, 6))
+#' )
+#' Mplus <- Eigen_pinverse(M)
+#' all.equal(M, M %*% Mplus %*% M)
+#' all.equal(Mplus, Mplus %*% M %*% Mplus)
+#' #' a complex matrix
+#' A <- M + 1i * M[, c(3L, 2L, 1L)]
+#' Aplus <- Eigen_pinverse(A)
+#' AAplus <- A %*% Aplus
+#' all.equal(AAplus, t(Conj(AAplus))) #' `A %*% Aplus` is Hermitian
+#' AplusA <- Aplus %*% A
+#' all.equal(AplusA, t(Conj(AplusA))) #' `Aplus %*% A` is Hermitian
 Eigen_pinverse <- function(M){
   stopifnot(isRealOrComplex(M))
   if(is.complex(M)){
