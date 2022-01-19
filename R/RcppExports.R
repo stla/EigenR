@@ -25,6 +25,30 @@ EigenR_logabsdet <- function(M) {
     .Call('_EigenR_EigenR_logabsdet', PACKAGE = 'EigenR', M)
 }
 
+EigenR_isInjective_real <- function(M) {
+    .Call('_EigenR_EigenR_isInjective_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_isInjective_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_isInjective_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
+EigenR_isSurjective_real <- function(M) {
+    .Call('_EigenR_EigenR_isSurjective_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_isSurjective_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_isSurjective_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
+EigenR_isInvertible_real <- function(M) {
+    .Call('_EigenR_EigenR_isInvertible_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_isInvertible_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_isInvertible_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
 EigenR_rank_real <- function(M) {
     .Call('_EigenR_EigenR_rank_real', PACKAGE = 'EigenR', M)
 }

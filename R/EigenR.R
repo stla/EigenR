@@ -79,6 +79,73 @@ Eigen_logabsdet <- function(M){
   EigenR_logabsdet(M)
 }
 
+#' Check injectivity
+#' @description Checks whether a matrix represents an injective linear map 
+#'   (i.e. has trivial kernel).
+#' 
+#' @param M a matrix, real or complex
+#'
+#' @return A Boolean value indicating whether \code{M} represents an injective 
+#'   linear map.
+#' @export
+#' 
+#' @examples set.seed(666L)
+#' M <- matrix(rpois(35L, 1), 5L, 7L)
+#' Eigen_isInjective(M)
+Eigen_isInjective <- function(M){
+  stopifnot(is.matrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    EigenR_isInjective_cplx(Re(M), Im(M))
+  }else{
+    EigenR_isInjective_real(M)
+  }
+}
+
+#' Check surjectivity
+#' @description Checks whether a matrix represents a surjective linear map.
+#' 
+#' @param M a matrix, real or complex
+#'
+#' @return A Boolean value indicating whether \code{M} represents a surjective 
+#'   linear map.
+#' @export
+#' 
+#' @examples set.seed(666L)
+#' M <- matrix(rpois(35L, 1), 7L, 5L)
+#' Eigen_isSurjective(M)
+Eigen_isSurjective <- function(M){
+  stopifnot(is.matrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    EigenR_isSurjective_cplx(Re(M), Im(M))
+  }else{
+    EigenR_isSurjective_real(M)
+  }
+}
+
+#' Check invertibility
+#' @description Checks whether a matrix is invertible.
+#' 
+#' @param M a matrix, real or complex
+#'
+#' @return A Boolean value indicating whether \code{M} is invertible.
+#' @export
+#' 
+#' @examples set.seed(666L)
+#' M <- matrix(rpois(25L, 1), 5L, 5L)
+#' Eigen_isInvertible(M)
+Eigen_isInvertible <- function(M){
+  stopifnot(is.matrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    EigenR_isInvertible_cplx(Re(M), Im(M))
+  }else{
+    EigenR_isInvertible_real(M)
+  }
+}
+
+
 #' Rank of a matrix
 #' @description Rank of a real or complex matrix.
 #'

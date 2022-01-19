@@ -8,13 +8,13 @@
 /* -------------------------------------------------------------------------- */
 Eigen::MatrixXcd matricesToMatrixXcd(const Eigen::MatrixXd& Re,
                                      const Eigen::MatrixXd& Im) {
-  const std::complex<double> I_ {0.0, 1.0};
+  const std::complex<double> I_{0.0, 1.0};
   return Re.cast<std::complex<double>>() + I_ * Im.cast<std::complex<double>>();
 }
 
 Eigen::VectorXcd vectorsToVectorXcd(const Eigen::VectorXd& Re,
                                     const Eigen::VectorXd& Im) {
-  const std::complex<double> I_ {0.0, 1.0};
+  const std::complex<double> I_{0.0, 1.0};
   return Re.cast<std::complex<double>>() + I_ * Im.cast<std::complex<double>>();
 }
 
@@ -54,7 +54,9 @@ Rcpp::ComplexVector cplxMatrixToRcpp(const Eigen::MatrixXcd& M) {
   Rcpp::NumericMatrix outImag(MimagS);
   Rcpp::ComplexMatrix outRealCplx(outReal);
   Rcpp::ComplexMatrix outImagCplx(outImag);
-  Rcomplex I; I.r = 0.0; I.i = 1.0;
+  Rcomplex I;
+  I.r = 0.0;
+  I.i = 1.0;
   Rcpp::ComplexVector out = outRealCplx + I * outImagCplx;
   out.attr("dim") = Rcpp::Dimension(M.rows(), M.cols());
   return out;
@@ -159,6 +161,70 @@ double EigenR_logabsdet(const Eigen::MatrixXd& M) {
   return cod.logAbsDeterminant();
 }
 
+/* injective, surjective, invertible ---------------------------------------- */
+template <typename Number>
+bool isInjective(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  Eigen::CompleteOrthogonalDecomposition<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(M);
+  return cod.isInjective();
+}
+
+// [[Rcpp::export]]
+bool EigenR_isInjective_real(const Eigen::MatrixXd& M) {
+  return isInjective<double>(M);
+}
+
+// [[Rcpp::export]]
+bool EigenR_isInjective_cplx(const Eigen::MatrixXd& Re,
+                             const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  return isInjective<std::complex<double>>(M);
+}
+
+template <typename Number>
+bool isSurjective(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  Eigen::CompleteOrthogonalDecomposition<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(M);
+  return cod.isSurjective();
+}
+
+// [[Rcpp::export]]
+bool EigenR_isSurjective_real(const Eigen::MatrixXd& M) {
+  return isSurjective<double>(M);
+}
+
+// [[Rcpp::export]]
+bool EigenR_isSurjective_cplx(const Eigen::MatrixXd& Re,
+                              const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  return isSurjective<std::complex<double>>(M);
+}
+
+template <typename Number>
+bool isInvertible(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  Eigen::CompleteOrthogonalDecomposition<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(M);
+  return cod.isInvertible();
+}
+
+// [[Rcpp::export]]
+bool EigenR_isInvertible_real(const Eigen::MatrixXd& M) {
+  return isInvertible<double>(M);
+}
+
+// [[Rcpp::export]]
+bool EigenR_isInvertible_cplx(const Eigen::MatrixXd& Re,
+                              const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  return isInvertible<std::complex<double>>(M);
+}
+
 /* rank --------------------------------------------------------------------- */
 template <typename Number>
 unsigned rank(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
@@ -181,8 +247,8 @@ unsigned EigenR_rank_cplx(const Eigen::MatrixXd& Re,
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> inverse(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
-  const Eigen::FullPivLU<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>> 
-    lu(M);
+  const Eigen::FullPivLU<Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      lu(M);
   if(lu.isInvertible()) {
     return lu.inverse();
   } else {
@@ -208,8 +274,8 @@ template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> pseudoInverse(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
   Eigen::CompleteOrthogonalDecomposition<
-    Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
-    cod(M);
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(M);
   return cod.pseudoInverse();
 }
 
@@ -220,12 +286,11 @@ Eigen::MatrixXd EigenR_pseudoInverse_real(const Eigen::MatrixXd& M) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_pseudoInverse_cplx(const Eigen::MatrixXd& Re,
-                                  const Eigen::MatrixXd& Im) {
+                                     const Eigen::MatrixXd& Im) {
   const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   const Eigen::MatrixXcd pinvM = pseudoInverse<std::complex<double>>(M);
   return cplxMatrixToList(pinvM);
 }
-
 
 /* kernel COD --------------------------------------------------------------- */
 template <typename Number>
@@ -396,8 +461,8 @@ Cholesky<Number> chol(
   if(lltOfM.info() != Eigen::Success) {
     throw Rcpp::exception("The matrix is not positive definite.");
   }
-  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> 
-    U = lltOfM.matrixU();
+  const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> U =
+      lltOfM.matrixU();
   Cholesky<Number> out;
   out.U = U;
   out.determinant = pow(U.diagonal().prod(), 2);
@@ -678,7 +743,7 @@ Eigen::MatrixXd EigenR_exp_real(const Eigen::MatrixXd& M) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_exp_cplx(const Eigen::MatrixXd& Re,
-                               const Eigen::MatrixXd& Im) {
+                           const Eigen::MatrixXd& Im) {
   const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   const Eigen::MatrixXcd Mexp = expm<std::complex<double>>(M);
   return cplxMatrixToList(Mexp);
@@ -758,7 +823,7 @@ Eigen::MatrixXd EigenR_cosh_real(const Eigen::MatrixXd& M) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_cosh_cplx(const Eigen::MatrixXd& Re,
-                           const Eigen::MatrixXd& Im) {
+                            const Eigen::MatrixXd& Im) {
   const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   const Eigen::MatrixXcd Mcosh = coshm<std::complex<double>>(M);
   return cplxMatrixToList(Mcosh);
@@ -787,7 +852,7 @@ Rcpp::List EigenR_sinh_cplx(const Eigen::MatrixXd& Re,
 /* power -------------------------------------------------------------------- */
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> powm(
-    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M, 
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M,
     const Number& p) {
   return M.pow(p);
 }
@@ -799,8 +864,8 @@ Eigen::MatrixXd EigenR_pow_real(const Eigen::MatrixXd& M, const double& p) {
 
 // [[Rcpp::export]]
 Rcpp::List EigenR_pow_cplx(const Eigen::MatrixXd& Re,
-                            const Eigen::MatrixXd& Im,
-                            const std::complex<double>& p) {
+                           const Eigen::MatrixXd& Im,
+                           const std::complex<double>& p) {
   const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
   const Eigen::MatrixXcd Mpow = powm<std::complex<double>>(M, p);
   return cplxMatrixToList(Mpow);
@@ -825,4 +890,3 @@ Rcpp::List EigenR_sqrt_cplx(const Eigen::MatrixXd& Re,
   const Eigen::MatrixXcd Msqrt = sqrtm<std::complex<double>>(M);
   return cplxMatrixToList(Msqrt);
 }
-

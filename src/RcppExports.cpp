@@ -86,6 +86,75 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EigenR_isInjective_real
+bool EigenR_isInjective_real(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_isInjective_real(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_isInjective_real(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_isInjective_cplx
+bool EigenR_isInjective_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
+RcppExport SEXP _EigenR_EigenR_isInjective_cplx(SEXP ReSEXP, SEXP ImSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Re(ReSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Im(ImSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_isInjective_cplx(Re, Im));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_isSurjective_real
+bool EigenR_isSurjective_real(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_isSurjective_real(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_isSurjective_real(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_isSurjective_cplx
+bool EigenR_isSurjective_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
+RcppExport SEXP _EigenR_EigenR_isSurjective_cplx(SEXP ReSEXP, SEXP ImSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Re(ReSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Im(ImSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_isSurjective_cplx(Re, Im));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_isInvertible_real
+bool EigenR_isInvertible_real(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_isInvertible_real(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_isInvertible_real(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_isInvertible_cplx
+bool EigenR_isInvertible_cplx(const Eigen::MatrixXd& Re, const Eigen::MatrixXd& Im);
+RcppExport SEXP _EigenR_EigenR_isInvertible_cplx(SEXP ReSEXP, SEXP ImSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Re(ReSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type Im(ImSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_isInvertible_cplx(Re, Im));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EigenR_rank_real
 unsigned EigenR_rank_real(const Eigen::MatrixXd& M);
 RcppExport SEXP _EigenR_EigenR_rank_real(SEXP MSEXP) {
@@ -589,6 +658,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_det_sparse_cplx", (DL_FUNC) &_EigenR_EigenR_det_sparse_cplx, 5},
     {"_EigenR_EigenR_absdet", (DL_FUNC) &_EigenR_EigenR_absdet, 1},
     {"_EigenR_EigenR_logabsdet", (DL_FUNC) &_EigenR_EigenR_logabsdet, 1},
+    {"_EigenR_EigenR_isInjective_real", (DL_FUNC) &_EigenR_EigenR_isInjective_real, 1},
+    {"_EigenR_EigenR_isInjective_cplx", (DL_FUNC) &_EigenR_EigenR_isInjective_cplx, 2},
+    {"_EigenR_EigenR_isSurjective_real", (DL_FUNC) &_EigenR_EigenR_isSurjective_real, 1},
+    {"_EigenR_EigenR_isSurjective_cplx", (DL_FUNC) &_EigenR_EigenR_isSurjective_cplx, 2},
+    {"_EigenR_EigenR_isInvertible_real", (DL_FUNC) &_EigenR_EigenR_isInvertible_real, 1},
+    {"_EigenR_EigenR_isInvertible_cplx", (DL_FUNC) &_EigenR_EigenR_isInvertible_cplx, 2},
     {"_EigenR_EigenR_rank_real", (DL_FUNC) &_EigenR_EigenR_rank_real, 1},
     {"_EigenR_EigenR_rank_cplx", (DL_FUNC) &_EigenR_EigenR_rank_cplx, 2},
     {"_EigenR_EigenR_inverse_real", (DL_FUNC) &_EigenR_EigenR_inverse_real, 1},

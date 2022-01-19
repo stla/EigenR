@@ -7,3 +7,5 @@
 ^CRAN-RELEASE$
 ^\.Rprofile$
 ^\.github$
+^src/EigenR\.dev$
+^src/EigenR\.layout$
