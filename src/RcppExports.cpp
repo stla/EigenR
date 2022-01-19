@@ -64,6 +64,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// EigenR_absdet
+double EigenR_absdet(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_absdet(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_absdet(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EigenR_logabsdet
+double EigenR_logabsdet(const Eigen::MatrixXd& M);
+RcppExport SEXP _EigenR_EigenR_logabsdet(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(EigenR_logabsdet(M));
+    return rcpp_result_gen;
+END_RCPP
+}
 // EigenR_rank_real
 unsigned EigenR_rank_real(const Eigen::MatrixXd& M);
 RcppExport SEXP _EigenR_EigenR_rank_real(SEXP MSEXP) {
@@ -565,6 +587,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_det_cplx", (DL_FUNC) &_EigenR_EigenR_det_cplx, 2},
     {"_EigenR_EigenR_det_sparse_real", (DL_FUNC) &_EigenR_EigenR_det_sparse_real, 5},
     {"_EigenR_EigenR_det_sparse_cplx", (DL_FUNC) &_EigenR_EigenR_det_sparse_cplx, 5},
+    {"_EigenR_EigenR_absdet", (DL_FUNC) &_EigenR_EigenR_absdet, 1},
+    {"_EigenR_EigenR_logabsdet", (DL_FUNC) &_EigenR_EigenR_logabsdet, 1},
     {"_EigenR_EigenR_rank_real", (DL_FUNC) &_EigenR_EigenR_rank_real, 1},
     {"_EigenR_EigenR_rank_cplx", (DL_FUNC) &_EigenR_EigenR_rank_cplx, 2},
     {"_EigenR_EigenR_inverse_real", (DL_FUNC) &_EigenR_EigenR_inverse_real, 1},

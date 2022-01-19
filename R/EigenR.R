@@ -1,8 +1,10 @@
 #' @useDynLib EigenR
 #' @importFrom Rcpp evalCpp
+#' @noRd
 NULL
 
 #' Determinant of a matrix
+#' 
 #' @description Determinant of a real or complex matrix.
 #' 
 #' @param M a square matrix or \code{\link{SparseMatrix}}, real or complex
@@ -39,6 +41,42 @@ Eigen_det <- function(M){
       EigenR_det_real(M)
     }
   }
+}
+
+#' Absolute value of the determinant
+#' 
+#' @description Absolute value of the determinant of a real matrix.
+#' 
+#' @param M a \emph{real} square matrix
+#'
+#' @return The absolute value of the determinant of \code{M}.
+#' @export
+#' 
+#' @examples set.seed(666L)
+#' M <- matrix(rpois(25L, 1), 5L, 5L)
+#' Eigen_absdet(M)
+Eigen_absdet <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isReal(M))
+  EigenR_absdet(M)
+}
+
+#' Logarithm of the absolute value of the determinant
+#' @description Logarithm of the absolute value of the determinant of a real 
+#'   matrix.
+#' 
+#' @param M a \emph{real} square matrix
+#'
+#' @return The logarithm of the absolute value of the determinant of \code{M}.
+#' @export
+#' 
+#' @examples set.seed(666L)
+#' M <- matrix(rpois(25L, 1), 5L, 5L)
+#' Eigen_logabsdet(M)
+Eigen_logabsdet <- function(M){
+  stopifnot(isSquareMatrix(M))
+  stopifnot(isReal(M))
+  EigenR_logabsdet(M)
 }
 
 #' Rank of a matrix

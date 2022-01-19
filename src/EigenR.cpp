@@ -147,6 +147,18 @@ std::complex<double> EigenR_det_sparse_cplx(
   return determinant_sparse<std::complex<double>>(M);
 }
 
+// [[Rcpp::export]]
+double EigenR_absdet(const Eigen::MatrixXd& M) {
+  Eigen::CompleteOrthogonalDecomposition<Eigen::MatrixXd> cod(M);
+  return cod.absDeterminant();
+}
+
+// [[Rcpp::export]]
+double EigenR_logabsdet(const Eigen::MatrixXd& M) {
+  Eigen::CompleteOrthogonalDecomposition<Eigen::MatrixXd> cod(M);
+  return cod.logAbsDeterminant();
+}
+
 /* rank --------------------------------------------------------------------- */
 template <typename Number>
 unsigned rank(const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {

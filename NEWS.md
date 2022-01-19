@@ -5,6 +5,11 @@ New functions:
 - `Eigen_pinverse` returns the pseudo-inverse (Moore-Penrose generalized 
 inverse) of a matrix.
 
+- `Eigen_absdet` returns the absolute value of the determinant of a real square 
+matrix.
+
+- `Eigen_logabsdet` returns the logarithm of the absolute value of the 
+determinant of a real square matrix.
 
 
 # EigenR 1.1.0

@@ -17,6 +17,14 @@ EigenR_det_sparse_cplx <- function(i, j, Mij, nrows, ncols) {
     .Call('_EigenR_EigenR_det_sparse_cplx', PACKAGE = 'EigenR', i, j, Mij, nrows, ncols)
 }
 
+EigenR_absdet <- function(M) {
+    .Call('_EigenR_EigenR_absdet', PACKAGE = 'EigenR', M)
+}
+
+EigenR_logabsdet <- function(M) {
+    .Call('_EigenR_EigenR_logabsdet', PACKAGE = 'EigenR', M)
+}
+
 EigenR_rank_real <- function(M) {
     .Call('_EigenR_EigenR_rank_real', PACKAGE = 'EigenR', M)
 }
