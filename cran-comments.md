@@ -1,3 +1,7 @@
+The CRAN checks report an error on the Windows platform. I think this is a 
+either a transient problem, or this is a problem which is fixed by the flags 
+I added in the Makevars file.
+
 
 ## Test environments
 
