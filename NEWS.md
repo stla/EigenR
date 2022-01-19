@@ -15,7 +15,7 @@ determinant of a real square matrix.
 
 - `Eigen_kernelDimension` returns the dimension of the kernel of a matrix.
 
-- New method for `Eigen_lsSolve`.
+- New method for `Eigen_lsSolve`, faster.
 
 
 # EigenR 1.1.0
