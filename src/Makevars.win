@@ -6,4 +6,4 @@
 ## enable compilation with C++11 (or even C++14) where available
 CXX_STD = CXX11
 
-PKG_CXXFLAGS = -Wl,-allow-multiple-definition -fuse-linker-plugin
+PKG_CXXFLAGS = -Wl,-allow-multiple-definition #-fuse-linker-plugin
