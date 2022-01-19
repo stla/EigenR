@@ -136,9 +136,10 @@ n <- 700L; p <- 200L
 A <- matrix(rnorm(n * p), n, p)
 b <- rnorm(n)
 microbenchmark(
-  stats   = lm.fit(A, b),
-  Eigen_R = Eigen_lsSolve(A, b), # :-(
-  times = 20L
+  stats       = lm.fit(A, b),
+  EigenR_svd  = Eigen_lsSolve(A, b, method = "svd"), #  :-(
+  EigenR_cod  = Eigen_lsSolve(A, b, method = "cod"), #  :-)
+  times = 100L
 )
 ```
 

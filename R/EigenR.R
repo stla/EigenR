@@ -258,6 +258,8 @@ Eigen_kernelDimension <- function(M){
 #' @return A basis of the kernel of \code{M}. With \code{method = "COD"}, the 
 #'   basis is orthonormal, while it is not with \code{method = "LU"}.
 #' @export
+#' 
+#' @seealso \code{\link{Eigen_kernelDimension}}.
 #'
 #' @examples set.seed(666)
 #' M <- matrix(rgamma(30L, 12, 1), 10L, 3L)
@@ -269,16 +271,16 @@ Eigen_kernelDimension <- function(M){
 Eigen_kernel <- function(M, method = "COD"){
   stopifnot(is.matrix(M))
   stopifnot(isRealOrComplex(M))
-  method <- match.arg(method, c("COD", "LU"))
+  method <- match.arg(tolower(method), c("cod", "lu"))
   if(is.complex(M)){
-    if(method == "COD"){
+    if(method == "cod"){
       parts <- EigenR_kernel_COD_cplx(Re(M), Im(M))
     }else{
       parts <- EigenR_kernel_LU_cplx(Re(M), Im(M))
     }
     parts[["real"]] + 1i * parts[["imag"]]
   }else{
-    if(method == "COD"){
+    if(method == "cod"){
       EigenR_kernel_COD_real(M)
     }else{
       EigenR_kernel_LU_real(M)
@@ -301,20 +303,20 @@ Eigen_kernel <- function(M, method = "COD"){
 Eigen_range <- function(M, method = "QR"){
   stopifnot(is.matrix(M))
   stopifnot(isRealOrComplex(M))
-  method <- match.arg(method, c("LU", "QR", "COD"))
+  method <- match.arg(tolower(method), c("lu", "qr", "cod"))
   if(is.complex(M)){
-    if(method == "QR"){
+    if(method == "qr"){
       parts <- EigenR_image_QR_cplx(Re(M), Im(M))
-    }else if(method == "LU"){
+    }else if(method == "lu"){
       parts <- EigenR_image_LU_cplx(Re(M), Im(M))
     }else{
       parts <- EigenR_image_COD_cplx(Re(M), Im(M))
     }
     parts[["real"]] + 1i * parts[["imag"]]
   }else{
-    if(method == "QR"){
+    if(method == "qr"){
       EigenR_image_QR_real(M)
-    }else if(method == "LU"){
+    }else if(method == "lu"){
       EigenR_image_LU_real(M)
     }else{
       EigenR_image_COD_real(M)
@@ -452,7 +454,7 @@ Eigen_UtDU <- function(M){
 #' b <- rnorm(n)
 #' lsfit <- Eigen_lsSolve(A, b)
 #' b - A %*% lsfit # residuals
-Eigen_lsSolve <- function(A, b, method = "svd"){
+Eigen_lsSolve <- function(A, b, method = "cod"){
   method <- match.arg(tolower(method), c("svd", "cod"))
   stopifnot(is.matrix(A)) 
   stopifnot(is.atomic(b))
