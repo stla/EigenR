@@ -4,7 +4,7 @@
 \alias{Eigen_lsSolve}
 \title{Linear least-squares problems}
 \usage{
-Eigen_lsSolve(A, b, method = "svd")
+Eigen_lsSolve(A, b, method = "cod")
 }
 \arguments{
 \item{A}{a \code{n*p} matrix, real or complex}
