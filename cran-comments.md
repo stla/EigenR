@@ -1,12 +1,10 @@
-## Release summary
-
-In this release I added some matrix functions (see NEWS.md).
-
 
 ## Test environments
 
-* Windows 10, R 4.1.2
+* Windows 10, R-4.1.2
 * win-builder (devel)
+* Ubuntu 18, R-3.6.3
+* Ubuntu 20 via Github action
 
 
 ## R CMD check results

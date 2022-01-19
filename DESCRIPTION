@@ -1,10 +1,10 @@
 Package: EigenR
 Type: Package
 Title: Complex Matrix Algebra with 'Eigen'
-Version: 1.1.0.9000
+Version: 1.2.0
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
-Description: Matrix algebra using the 'Eigen' C++ library: determinant, rank, inversion, kernel and image, QR decomposition, Cholesky decomposition, linear least-squares problems. Also provides matrix functions such as exponential, logarithm, power, sine and cosine. Complex matrices are supported.
+Description: Matrix algebra using the 'Eigen' C++ library: determinant, rank, inverse, pseudo-inverse, kernel and image, QR decomposition, Cholesky decomposition, linear least-squares problems. Also provides matrix functions such as exponential, logarithm, power, sine and cosine. Complex matrices are supported.
 License: GPL-3
 Imports: Rcpp (>= 1.0.5)
 LinkingTo: Rcpp, RcppEigen

@@ -1,4 +1,4 @@
-# EigenR 1.1.0.9000
+# EigenR 1.2.0
 
 New functions:
 
