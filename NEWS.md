@@ -1,3 +1,12 @@
+# EigenR 1.1.0.9000
+
+New functions:
+
+- `Eigen_pinverse` returns the pseudo-inverse (Moore-Penrose generalized 
+inverse) of a matrix.
+
+
+
 # EigenR 1.1.0
 
 New matricial functions have been included: exponential, logarithm, cosine, 

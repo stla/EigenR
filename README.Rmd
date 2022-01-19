@@ -5,6 +5,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/stla/EigenR/workflows/R-CMD-check/badge.svg)](https://github.com/stla/EigenR/actions)
+<!-- badges: end -->
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
 ```

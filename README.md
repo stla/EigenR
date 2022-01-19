@@ -1,6 +1,11 @@
 EigenR
 ================
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/stla/EigenR/workflows/R-CMD-check/badge.svg)](https://github.com/stla/EigenR/actions)
+<!-- badges: end -->
+
 Originally, I entitled this package *Fast Matrix Algebra with ‘Eigen’*,
 because I expected it to be faster than R base. But this is not the
 case. So I entitled it *Complex Matrix Algebra with ‘Eigen’*, because it
@@ -27,10 +32,10 @@ microbenchmark(
   times = 200L
 )
 ## Unit: milliseconds
-##           expr      min       lq      mean    median      uq     max neval
-##           base 7.678000 9.133401 11.930930 11.023601 13.8092 57.2875   200
-##         EigenR 3.385101 4.051051  5.470443  5.264401  6.2005 27.8239   200
-##  EigenR_sparse 5.841101 6.773851  8.705014  8.288101 10.1530 21.0749   200
+##           expr    min      lq      mean  median       uq     max neval
+##           base 7.7281 8.67860 11.096060 10.5468 13.28665 25.6797   200
+##         EigenR 3.3535 3.90675  4.933978  4.8636  5.73430  8.0125   200
+##  EigenR_sparse 6.0182 6.92185  8.341857  8.2838  9.69950 12.9405   200
 ```
 
 Determinants of complex matrices are supported:
@@ -47,9 +52,9 @@ microbenchmark(
   times = 30L
 )
 ## Unit: milliseconds
-##         expr       min        lq      mean   median        uq       max neval
-##       EigenR  1.500201  1.698701  2.091281  2.16685  2.422002  2.614001    30
-##  complexplus 16.929602 17.893801 20.250934 19.15265 21.995201 26.774302    30
+##         expr     min      lq     mean   median      uq     max neval
+##       EigenR  1.3335  1.4878  1.87118  1.72875  2.2763  2.8158    30
+##  complexplus 17.0684 19.4424 21.05672 21.03340 22.3398 30.0007    30
 ```
 
 ## Inverse matrix
@@ -63,9 +68,29 @@ microbenchmark(
   times = 500L
 )
 ## Unit: microseconds
-##    expr      min       lq     mean   median       uq      max neval
-##    base 1256.502 1367.601 1655.012 1508.351 1828.051 6815.901   500
-##  EigenR  977.302 1089.050 1378.164 1195.901 1563.450 3187.401   500
+##    expr    min     lq     mean  median     uq    max neval
+##    base 1221.1 1327.8 1532.809 1410.25 1624.8 4418.2   500
+##  EigenR  987.4 1065.1 1224.727 1119.85 1263.0 2621.8   500
+```
+
+## Pseudo-inverse matrix
+
+``` r
+set.seed(666L)
+M <- matrix(rnorm(100L*70L), 100L, 70L)
+library(MASS)
+library(pracma)
+microbenchmark(
+  MASS   = ginv(M),
+  pracma = pinv(M),
+  EigenR = Eigen_pinverse(M), # :-)
+  times = 500L
+)
+## Unit: microseconds
+##    expr    min      lq      mean  median      uq     max neval
+##    MASS 3175.2 3414.70 3977.1486 3666.55 4217.90 14669.1   500
+##  pracma 3173.6 3380.85 4002.3044 3710.35 4282.25  9449.8   500
+##  EigenR  679.3  793.65  951.0248  838.10 1005.55  9904.9   500
 ```
 
 ## Cholesky decomposition
@@ -80,9 +105,9 @@ microbenchmark(
   times = 1000L
 )
 ## Unit: microseconds
-##    expr     min       lq     mean   median      uq      max neval
-##    base 173.101 191.5515 257.3574 224.1005 297.651 4097.900  1000
-##  EigenR 119.802 135.5010 209.8055 171.2510 251.251 3122.201  1000
+##    expr   min    lq     mean median    uq     max neval
+##    base 173.6 216.0 275.4291  230.7 272.4 11841.5  1000
+##  EigenR 121.9 164.8 211.8479  178.0 217.1 11746.6  1000
 ```
 
 Cholesky decomposition of complex matrices is supported.
@@ -100,9 +125,9 @@ microbenchmark(
   times = 1000L
 )
 ## Unit: microseconds
-##    expr      min        lq     mean   median       uq      max neval
-##    base 1436.701 1606.3010 1901.581 1763.101 2021.552 8589.702  1000
-##  EigenR  644.301  926.9015 1320.769 1266.552 1513.551 6806.600  1000
+##    expr    min     lq     mean  median     uq     max neval
+##    base 1518.0 1671.9 2008.952 1764.35 2071.6 15535.5  1000
+##  EigenR  765.8 1203.1 1498.988 1403.10 1599.5 12758.5  1000
 ```
 
 Pivoted Cholesky decomposition of complex matrices is supported.
@@ -122,10 +147,10 @@ microbenchmark(
   times = 100L
 )
 ## Unit: milliseconds
-##        expr      min       lq     mean   median        uq     max neval
-##        MASS 7.910201 8.544351 9.530592 9.133401 10.167551 17.1191   100
-##   EigenR_LU 1.779500 2.155702 2.663815 2.447001  2.946551  5.0123   100
-##  EigenR_COD 4.861101 5.432752 6.466603 5.972050  7.240001 20.5207   100
+##        expr    min      lq     mean  median     uq     max neval
+##        MASS 7.8542 8.38020 9.410370 9.15620 9.8947 16.4025   100
+##   EigenR_LU 1.7730 2.01270 2.475684 2.28625 2.6359  7.6111   100
+##  EigenR_COD 4.7002 5.18835 5.977337 5.49445 6.1066 18.9573   100
 ```
 
 ## Linear least-squares problems
@@ -141,9 +166,9 @@ microbenchmark(
   times = 20L
 )
 ## Unit: milliseconds
-##     expr     min       lq     mean   median       uq     max neval
-##    stats 27.6975 28.28305 30.30363 29.18565 33.06465 36.5224    20
-##  Eigen_R 52.6666 53.52400 58.19708 55.06110 60.92345 84.8454    20
+##     expr     min      lq     mean   median       uq     max neval
+##    stats 27.6842 28.2868 29.78608 28.89755 31.57220 34.6231    20
+##  Eigen_R 52.2499 53.8344 58.25450 54.93255 61.64995 76.3218    20
 ```
 
 Complex matrices `A` and `b` are supported.
@@ -159,9 +184,9 @@ microbenchmark(
   times = 500L
 )
 ## Unit: microseconds
-##    expr      min       lq      mean    median       uq      max neval
-##    expm 1002.701 1071.901 1330.1628 1143.9000 1427.502 5827.901   500
-##  EigenR  213.101  236.601  302.2438  265.3015  329.351 1399.101   500
+##    expr    min      lq      mean  median      uq    max neval
+##    expm 1009.1 1090.95 1452.7794 1234.05 1752.85 7207.2   500
+##  EigenR  221.0  247.10  343.4398  283.80  455.40 1022.9   500
 ```
 
 Exponential of complex matrices is supported:
@@ -178,7 +203,7 @@ microbenchmark(
   times = 500L
 )
 ## Unit: milliseconds
-##         expr      min       lq     mean   median       uq       max neval
-##       EigenR 1.281301 1.419850 1.775880 1.606201 2.043300  3.442001   500
-##  complexplus 6.515601 7.076051 8.320601 7.755651 9.039451 16.800501   500
+##         expr    min     lq     mean  median     uq      max neval
+##       EigenR 1.2758 1.4008 1.639416 1.47615 1.7298   5.5131   500
+##  complexplus 6.4326 6.9897 8.076339 7.36210 8.2665 124.0744   500
 ```
