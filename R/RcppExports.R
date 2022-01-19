@@ -33,6 +33,14 @@ EigenR_inverse_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_inverse_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_pseudoInverse_real <- function(M) {
+    .Call('_EigenR_EigenR_pseudoInverse_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_pseudoInverse_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_pseudoInverse_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
 EigenR_kernel_COD_real <- function(M) {
     .Call('_EigenR_EigenR_kernel_COD_real', PACKAGE = 'EigenR', M)
 }

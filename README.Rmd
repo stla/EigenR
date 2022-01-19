@@ -62,6 +62,21 @@ microbenchmark(
 )
 ```
 
+## Pseudo-inverse matrix
+
+```{r pseudoinverse_benchmark}
+set.seed(666L)
+M <- matrix(rnorm(100L*50L), 100L, 50L)
+library(MASS)
+library(pracma)
+microbenchmark(
+  MASS   = ginv(M),
+  pracma = pinv(M)
+  EigenR = Eigen_pinverse(M), 
+  times = 5L
+)
+```
+
 ## Cholesky decomposition
 
 ```{r chol_benchmark}

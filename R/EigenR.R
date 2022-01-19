@@ -78,6 +78,26 @@ Eigen_inverse <- function(M){
   Minv
 }
 
+#' Pseudo-inverse of a matrix
+#' 
+#' @description Pseudo-inverse of a real or complex matrix 
+#'   (Moore-Penrose generalized inverse).
+#'
+#' @param M a matrix, real or complex
+#'
+#' @return The pseudo-inverse matrix of \code{M}.
+#' @export
+Eigen_pinverse <- function(M){
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    parts <- EigenR_pseudoInverse_cplx(Re(M), Im(M))
+    Mpinv <- parts[["real"]] + 1i * parts[["imag"]]
+  }else{
+    Mpinv <- EigenR_pseudoInverse_real(M)
+  }
+  Mpinv
+}
+
 #' Kernel of a matrix
 #' 
 #' @description Kernel (null-space) of a real or complex matrix.

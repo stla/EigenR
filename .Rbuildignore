@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^inst/benchmarks$
+^inst/essais$
 ^README\.Rmd$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
