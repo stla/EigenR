@@ -89,6 +89,14 @@ EigenR_kernel_LU_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_kernel_LU_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_kernelDimension_real <- function(M) {
+    .Call('_EigenR_EigenR_kernelDimension_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_kernelDimension_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_kernelDimension_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
 EigenR_image_LU_real <- function(M) {
     .Call('_EigenR_EigenR_image_LU_real', PACKAGE = 'EigenR', M)
 }
@@ -151,6 +159,14 @@ EigenR_lsSolve_real <- function(A, b) {
 
 EigenR_lsSolve_cplx <- function(ReA, ImA, Reb, Imb) {
     .Call('_EigenR_EigenR_lsSolve_cplx', PACKAGE = 'EigenR', ReA, ImA, Reb, Imb)
+}
+
+EigenR_lsSolve_cod_real <- function(A, b) {
+    .Call('_EigenR_EigenR_lsSolve_cod_real', PACKAGE = 'EigenR', A, b)
+}
+
+EigenR_lsSolve_cod_cplx <- function(ReA, ImA, Reb, Imb) {
+    .Call('_EigenR_EigenR_lsSolve_cod_cplx', PACKAGE = 'EigenR', ReA, ImA, Reb, Imb)
 }
 
 EigenR_exp_real <- function(M) {
