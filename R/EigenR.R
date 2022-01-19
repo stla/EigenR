@@ -223,6 +223,30 @@ Eigen_pinverse <- function(M){
   Mpinv
 }
 
+#' Dimension of kernel
+#' 
+#' @description Dimension of the kernel of a matrix.
+#' 
+#' @param M a matrix, real or complex
+#'
+#' @return An integer, the dimension of the kernel of \code{M}.
+#' @export
+#'
+#' @seealso \code{\link{Eigen_isInjective}}, \code{\link{Eigen_kernel}}.
+#' 
+#' @examples set.seed(666L)
+#' M <- matrix(rpois(35L, 1), 5L, 7L)
+#' Eigen_kernelDimension(M)
+Eigen_kernelDimension <- function(M){
+  stopifnot(is.matrix(M))
+  stopifnot(isRealOrComplex(M))
+  if(is.complex(M)){
+    EigenR_kernelDimension_cplx(Re(M), Im(M))
+  }else{
+    EigenR_kernelDimension_real(M)
+  }
+}
+
 #' Kernel of a matrix
 #' 
 #' @description Kernel (null-space) of a real or complex matrix.
@@ -413,6 +437,9 @@ Eigen_UtDU <- function(M){
 #' @param A a \code{n*p} matrix, real or complex
 #' @param b a vector of length \code{n} or a matrix with \code{n} rows, 
 #'   real or complex
+#' @param method the method used to solve the problem, either \code{"svd"} 
+#'   (based on the SVD decomposition) or \code{"cod"} (based on the 
+#'   complete orthogonal decomposition)
 #'
 #' @return The solution \code{X} of the least-squares problem \code{AX ~= b} 
 #'   (similar to \code{lm.fit(A, b)$coefficients}). This is a matrix if 
@@ -425,18 +452,28 @@ Eigen_UtDU <- function(M){
 #' b <- rnorm(n)
 #' lsfit <- Eigen_lsSolve(A, b)
 #' b - A %*% lsfit # residuals
-Eigen_lsSolve <- function(A, b){
+Eigen_lsSolve <- function(A, b, method = "svd"){
+  method <- match.arg(tolower(method), c("svd", "cod"))
   stopifnot(is.matrix(A)) 
   stopifnot(is.atomic(b))
   b <- cbind(b)
   stopifnot(nrow(A) == nrow(b))
   stopifnot(is.numeric(A) || is.complex(A))
   stopifnot(is.numeric(b) || is.complex(b))
-  if(is.complex(A) || is.complex(b)){
-    parts <- EigenR_lsSolve_cplx(Re(A), Im(A), Re(b), Im(b))
-    parts[["real"]][,] + 1i * parts[["imag"]][,]
+  if(method == "svd"){
+    if(is.complex(A) || is.complex(b)){
+      parts <- EigenR_lsSolve_cplx(Re(A), Im(A), Re(b), Im(b))
+      parts[["real"]][,] + 1i * parts[["imag"]][,]
+    }else{
+      EigenR_lsSolve_real(A, b)[,]
+    }
   }else{
-    EigenR_lsSolve_real(A, b)[,]
+    if(is.complex(A) || is.complex(b)){
+      parts <- EigenR_lsSolve_cod_cplx(Re(A), Im(A), Re(b), Im(b))
+      parts[["real"]][,] + 1i * parts[["imag"]][,]
+    }else{
+      EigenR_lsSolve_cod_real(A, b)[,]
+    }  	
   }
 }
 

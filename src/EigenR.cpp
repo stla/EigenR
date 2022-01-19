@@ -344,6 +344,28 @@ Rcpp::List EigenR_kernel_LU_cplx(const Eigen::MatrixXd& Re,
   return cplxMatrixToList(Kernel);
 }
 
+/* kernel dimension --------------------------------------------------------- */
+template <typename Number>
+unsigned kernelDimension(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& M) {
+  Eigen::CompleteOrthogonalDecomposition<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(M);
+  return cod.dimensionOfKernel();
+}
+
+// [[Rcpp::export]]
+unsigned EigenR_kernelDimension_real(const Eigen::MatrixXd& M) {
+  return kernelDimension<double>(M);
+}
+
+// [[Rcpp::export]]
+unsigned EigenR_kernelDimension_cplx(const Eigen::MatrixXd& Re,
+                                     const Eigen::MatrixXd& Im) {
+  const Eigen::MatrixXcd M = matricesToMatrixXcd(Re, Im);
+  return kernelDimension<std::complex<double>>(M);
+}
+
 /* image LU ----------------------------------------------------------------- */
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> image_LU(
@@ -704,7 +726,7 @@ Rcpp::List EigenR_UtDU_sparse_cplx(const std::vector<size_t>& i,
 }
 */
 
-/* Least-squares ------------------------------------------------------------ */
+/* Least-squares SVD -------------------------------------------------------- */
 template <typename Number>
 Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> lsSolve(
     const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A,
@@ -726,6 +748,34 @@ Rcpp::List EigenR_lsSolve_cplx(const Eigen::MatrixXd& ReA,
   const Eigen::MatrixXcd A = matricesToMatrixXcd(ReA, ImA);
   const Eigen::MatrixXcd b = matricesToMatrixXcd(Reb, Imb);
   const Eigen::MatrixXcd X = lsSolve<std::complex<double>>(A, b);
+  return cplxMatrixToList(X);
+}
+
+/* Least-squares COD -------------------------------------------------------- */
+template <typename Number>
+Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic> lsSolve_cod(
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& A,
+    const Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>& b) {
+  Eigen::CompleteOrthogonalDecomposition<
+      Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>>
+      cod(A);
+  return cod.solve(b);
+}
+
+// [[Rcpp::export]]
+Eigen::MatrixXd EigenR_lsSolve_cod_real(const Eigen::MatrixXd& A,
+                                        const Eigen::MatrixXd& b) {
+  return lsSolve_cod<double>(A, b);
+}
+
+// [[Rcpp::export]]
+Rcpp::List EigenR_lsSolve_cod_cplx(const Eigen::MatrixXd& ReA,
+                                   const Eigen::MatrixXd& ImA,
+                                   const Eigen::MatrixXd& Reb,
+                                   const Eigen::MatrixXd& Imb) {
+  const Eigen::MatrixXcd A = matricesToMatrixXcd(ReA, ImA);
+  const Eigen::MatrixXcd b = matricesToMatrixXcd(Reb, Imb);
+  const Eigen::MatrixXcd X = lsSolve_cod<std::complex<double>>(A, b);
   return cplxMatrixToList(X);
 }
 
