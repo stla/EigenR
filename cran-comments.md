@@ -1,6 +1,5 @@
-The CRAN checks report an error on the Windows platform. I think this is a 
-either a transient problem, or this is a problem which is fixed by the flags 
-I added in the Makevars file.
+This is a resubmission. I removed the non-portable flag in the Makevars files, 
+pointed out by Brian Ripley.
 
 
 ## Test environments

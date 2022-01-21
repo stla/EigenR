@@ -1,3 +1,8 @@
+# EigenR 1.2.1
+
+No change for the user.
+
+
 # EigenR 1.2.0
 
 New functions:

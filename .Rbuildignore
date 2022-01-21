@@ -9,3 +9,4 @@
 ^\.github$
 ^src/EigenR\.dev$
 ^src/EigenR\.layout$
+^CRAN-SUBMISSION$
