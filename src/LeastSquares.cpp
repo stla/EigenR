@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* Least-squares SVD -------------------------------------------------------- */
 template <typename Number>

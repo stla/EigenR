@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* -------------------------------------------------------------------------- */
 Eigen::MatrixXcd matricesToMatrixXcd(const Eigen::MatrixXd& Re,

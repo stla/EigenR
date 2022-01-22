@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* kernel COD --------------------------------------------------------------- */
 template <typename Number>

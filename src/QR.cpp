@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* QR ----------------------------------------------------------------------- */
 template <typename Number>

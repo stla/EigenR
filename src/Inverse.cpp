@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* inverse ------------------------------------------------------------------ */
 template <typename Number>

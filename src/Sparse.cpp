@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* Sparse stuff ------------------------------------------------------------- */
 Eigen::SparseMatrix<double> realSparseMatrix(const std::vector<size_t>& i,

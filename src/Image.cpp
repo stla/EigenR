@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* image LU ----------------------------------------------------------------- */
 template <typename Number>

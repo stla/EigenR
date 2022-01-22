@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* injective, surjective, invertible ---------------------------------------- */
 template <typename Number>

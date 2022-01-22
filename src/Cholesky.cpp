@@ -1,4 +1,4 @@
-#include "EigenR.hpp"
+#include "EigenR.h"
 
 /* Cholesky ----------------------------------------------------------------- */
 template <typename Number>
