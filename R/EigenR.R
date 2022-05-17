@@ -426,9 +426,12 @@ Eigen_UtDU <- function(M){
     utdu <- EigenR_UtDU_cplx(Re(M), Im(M))
     utdu[["U"]] <- utdu[["U"]][["real"]] + 1i * utdu[["U"]][["imag"]]
     utdu[["D"]] <- utdu[["D"]][["real"]] + 1i * utdu[["D"]][["imag"]]
+    utdu[["perm"]] <- 1L + utdu[["perm"]]
     utdu
   }else{
-    EigenR_UtDU_real(M)
+    utdu <- EigenR_UtDU_real(M)
+    utdu[["perm"]] <- 1L + utdu[["perm"]]
+    utdu
   }
 }
 

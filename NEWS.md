@@ -1,3 +1,7 @@
+# EigenR 1.2.3
+
+Fixed a mistake in `Eigen_UtDU`.
+
 # EigenR 1.2.2
 
 No change for the user.
