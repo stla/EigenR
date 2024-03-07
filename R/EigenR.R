@@ -673,3 +673,76 @@ Eigen_sqrt <- function(M){
   }
   Msqrt
 }
+
+#' Real QZ decomposition
+#' @description Real QZ decomposition of a pair of square matrices.
+#'
+#' @param A,B real square matrices with the same size
+#'
+#' @return A list with the \code{Q}, \code{Z}, \code{S} and \code{T} matrices.
+#' @export
+#'
+#' @examples
+#' library(EigenR)
+#' A <- toeplitz(c(1, 2, 3))
+#' B <- cbind(c(3, 2, 3), c(1, 1, 1), c(5, 0, -2))
+#' qz <- Eigen_realQZ(A, B)
+#' Q <- qz$Q
+#' Z <- qz$Z
+#' S <- qz$S
+#' T <- qz$T
+#' # check decomposition:
+#' A - Q %*% S %*% Z # should be zero matrix
+#' B - Q %*% T %*% Z # should be zero matrix
+#' # check orthogonality of Q and Z:
+#' tcrossprod(Q) # should be identity matrix
+#' tcrossprod(Z) # should be identity matrix
+Eigen_realQZ <- function(A, B) {
+  stopifnot(isSquareMatrix(A), isSquareMatrix(B))
+  stopifnot(isReal(A), isReal(B))
+  if(nrow(A) != nrow(B)) {
+    stop("The matrices `A` and `B` must have the same size.")
+  }
+  EigenR_realQZ(A, B)
+}
+
+#' Real Schur decomposition
+#' @description Real Schur decomposition of a square matrix.
+#'
+#' @param M real square matrix
+#'
+#' @return A list with the \code{T} and \code{U} matrices.
+#' @export
+#'
+#' @examples
+#' library(EigenR)
+#' M <- cbind(c(3, 2, 3), c(1, 1, 1), c(5, 0, -2))
+#' schur <- Eigen_realSchur(M)
+Eigen_realSchur <- function(M) {
+  stopifnot(isSquareMatrix(M), isReal(M))
+  EigenR_realSchur(M)
+}
+
+
+#' Complex Schur decomposition
+#' @description Complex Schur decomposition of a square matrix.
+#'
+#' @param M real or complex square matrix
+#'
+#' @return A list with the \code{T} and \code{U} matrices.
+#' @export
+#'
+#' @examples
+#' library(EigenR)
+#' M <- cbind(c(3, 2i, 1+3i), c(1, 1i, 1), c(5, 0, -2i))
+#' schur <- Eigen_complexSchur(M)
+Eigen_complexSchur <- function(M) {
+  stopifnot(isSquareMatrix(M), isRealOrComplex(M))
+  schur <- EigenR_complexSchur(Re(M), Im(M))
+  T <- schur[["T"]]
+  U <- schur[["U"]]
+  list(
+    "T" = T[["real"]] + 1i * T[["imag"]],
+    "U" = U[["real"]] + 1i * U[["imag"]]
+  )
+}

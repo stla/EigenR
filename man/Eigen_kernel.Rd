@@ -28,3 +28,6 @@ Eigen_kernel(M, method = "LU")
 # orthonormal basis of the kernel of `M`:
 Eigen_kernel(M, method = "COD")
 }
+\seealso{
+\code{\link{Eigen_kernelDimension}}.
+}
