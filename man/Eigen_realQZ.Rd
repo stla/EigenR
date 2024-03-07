@@ -15,10 +15,13 @@ A list with the \code{Q}, \code{Z}, \code{S} and \code{T} matrices.
 \description{
 Real QZ decomposition of a pair of square matrices.
 }
+\details{
+See \href{https://eigen.tuxfamily.org/dox/classEigen_1_1RealQZ.html}{Eigen::RealQZ}.
+}
 \examples{
 library(EigenR)
 A <- toeplitz(c(1, 2, 3))
-B <- toeplitz(c(3, 2, 1))
+B <- cbind(c(3, 2, 3), c(1, 1, 1), c(5, 0, -2))
 qz <- Eigen_realQZ(A, B)
 Q <- qz$Q
 Z <- qz$Z
@@ -27,7 +30,7 @@ T <- qz$T
 # check decomposition:
 A - Q \%*\% S \%*\% Z # should be zero matrix
 B - Q \%*\% T \%*\% Z # should be zero matrix
-# check orthogonality of S and T:
-tcrossprod(S) # should be identity matrix
-tcrossprod(T) # should be identity matrix
+# check orthogonality of Q and Z:
+tcrossprod(Q) # should be identity matrix
+tcrossprod(Z) # should be identity matrix
 }

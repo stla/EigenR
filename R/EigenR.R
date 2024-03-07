@@ -681,6 +681,7 @@ Eigen_sqrt <- function(M){
 #'
 #' @return A list with the \code{Q}, \code{Z}, \code{S} and \code{T} matrices.
 #' @export
+#' @details See \href{https://eigen.tuxfamily.org/dox/classEigen_1_1RealQZ.html}{Eigen::RealQZ}.
 #'
 #' @examples
 #' library(EigenR)
@@ -713,11 +714,15 @@ Eigen_realQZ <- function(A, B) {
 #'
 #' @return A list with the \code{T} and \code{U} matrices.
 #' @export
+#' @details See \href{https://eigen.tuxfamily.org/dox/classEigen_1_1RealSchur.html}{Eigen::RealSchur}.
 #'
 #' @examples
 #' library(EigenR)
 #' M <- cbind(c(3, 2, 3), c(1, 1, 1), c(5, 0, -2))
 #' schur <- Eigen_realSchur(M)
+#' T <- schur$T
+#' U <- schur$U
+#' M - U %*% T %*% t(U)
 Eigen_realSchur <- function(M) {
   stopifnot(isSquareMatrix(M), isReal(M))
   EigenR_realSchur(M)
@@ -731,11 +736,15 @@ Eigen_realSchur <- function(M) {
 #'
 #' @return A list with the \code{T} and \code{U} matrices.
 #' @export
+#' @details See \href{https://eigen.tuxfamily.org/dox/classEigen_1_1ComplexSchur.html}{Eigen::ComplexSchur}.
 #'
 #' @examples
 #' library(EigenR)
 #' M <- cbind(c(3, 2i, 1+3i), c(1, 1i, 1), c(5, 0, -2i))
 #' schur <- Eigen_complexSchur(M)
+#' T <- schur$T
+#' U <- schur$U
+#' M - U %*% T %*% t(Conj(U))
 Eigen_complexSchur <- function(M) {
   stopifnot(isSquareMatrix(M), isRealOrComplex(M))
   schur <- EigenR_complexSchur(Re(M), Im(M))

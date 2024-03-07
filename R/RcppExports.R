@@ -209,6 +209,18 @@ EigenR_rank_cplx <- function(Re, Im) {
     .Call('_EigenR_EigenR_rank_cplx', PACKAGE = 'EigenR', Re, Im)
 }
 
+EigenR_realQZ <- function(A, B) {
+    .Call('_EigenR_EigenR_realQZ', PACKAGE = 'EigenR', A, B)
+}
+
+EigenR_realSchur <- function(M) {
+    .Call('_EigenR_EigenR_realSchur', PACKAGE = 'EigenR', M)
+}
+
+EigenR_complexSchur <- function(Re, Im) {
+    .Call('_EigenR_EigenR_complexSchur', PACKAGE = 'EigenR', Re, Im)
+}
+
 EigenR_isInjective_real <- function(M) {
     .Call('_EigenR_EigenR_isInjective_real', PACKAGE = 'EigenR', M)
 }
