@@ -2,8 +2,7 @@ EigenR
 ================
 
 <!-- badges: start -->
-
-[![R-CMD-check](https://github.com/stla/EigenR/workflows/R-CMD-check/badge.svg)](https://github.com/stla/EigenR/actions)
+[![R-CMD-check](https://github.com/stla/EigenR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stla/EigenR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Originally, I entitled this package *Fast Matrix Algebra with ‘Eigen’*,
