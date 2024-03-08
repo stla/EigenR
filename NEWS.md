@@ -1,6 +1,7 @@
 # EigenR 1.3.0
 
-New features: Schur decomposition, QZ decomposition (only for real matrices).
+New features: Schur decomposition, QZ decomposition (only for real matrices), 
+Hessenberg decomposition.
 
 
 # EigenR 1.2.3

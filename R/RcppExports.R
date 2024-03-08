@@ -49,6 +49,14 @@ EigenR_logabsdet <- function(M) {
     .Call('_EigenR_EigenR_logabsdet', PACKAGE = 'EigenR', M)
 }
 
+EigenR_Hessenberg_real <- function(M) {
+    .Call('_EigenR_EigenR_Hessenberg_real', PACKAGE = 'EigenR', M)
+}
+
+EigenR_Hessenberg_cplx <- function(Re, Im) {
+    .Call('_EigenR_EigenR_Hessenberg_cplx', PACKAGE = 'EigenR', Re, Im)
+}
+
 EigenR_image_LU_real <- function(M) {
     .Call('_EigenR_EigenR_image_LU_real', PACKAGE = 'EigenR', M)
 }

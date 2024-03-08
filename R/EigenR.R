@@ -755,3 +755,31 @@ Eigen_complexSchur <- function(M) {
     "U" = U[["real"]] + 1i * U[["imag"]]
   )
 }
+
+#' Hessenberg decomposition
+#' @description Hessenberg decomposition of a square matrix.
+#'
+#' @param M real or complex square matrix
+#'
+#' @return A list with the \code{H} and \code{Q} matrices.
+#' @export
+#' @details See \href{https://eigen.tuxfamily.org/dox/classEigen_1_1HessenbergDecomposition.html}{Eigen::HessenbergDecomposition}.
+#'
+#' @examples
+#' library(EigenR)
+#' M <- cbind(c(3, 2i, 1+3i), c(1, 1i, 1), c(5, 0, -2i))
+#' Eigen_Hessenberg(M)
+Eigen_Hessenberg <- function(M) {
+  stopifnot(isSquareMatrix(M), isRealOrComplex(M))
+  if(isReal(M)) {
+    EigenR_Hessenberg_real(M)
+  } else {
+    hd <- EigenR_Hessenberg_cplx(Re(M), Im(M))
+    H <- hd[["H"]]
+    Q <- hd[["Q"]]
+    list(
+      "H" = H[["real"]] + 1i * H[["imag"]],
+      "Q" = Q[["real"]] + 1i * Q[["imag"]]
+    )
+  }
+}
