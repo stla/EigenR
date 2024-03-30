@@ -10,7 +10,9 @@ editor_options:
 <!-- badges: end -->
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE, collapse = TRUE, warning = FALSE, message = FALSE
+)
 ```
 
 Originally, I entitled this package *Fast Matrix Algebra with 'Eigen'*, because 
@@ -61,7 +63,7 @@ set.seed(666L)
 M <- matrix(rnorm(100L*100L), 100L, 100L)
 microbenchmark(
   base   = solve(M),
-  EigenR = Eigen_inverse(M), 
+  EigenR = Eigen_inverse(M), # :-)
   times = 500L
 )
 ```
@@ -105,7 +107,7 @@ M <- cbind(M, M[, 1L] + 3*M[, 2L])
 A <- crossprod(M)
 microbenchmark(
   base   = chol(A, pivot = TRUE),
-  EigenR = Eigen_UtDU(A), # :-(
+  EigenR = Eigen_UtDU(A), # :-)
   times = 1000L
 )
 ```
@@ -166,9 +168,35 @@ Mi <- matrix(rnorm(40L*40L, mean = 1), 40L, 40L)
 M <- Mr + 1i * Mi
 library(complexplus)
 microbenchmark(
-  EigenR      = Eigen_exp(M), # :-)
   complexplus = matexp(M), 
+  EigenR      = Eigen_exp(M), # :-)
   times = 500L
 )
 ```
 
+## Schur decomposition
+
+```{r schur_real}
+set.seed(666L)
+M <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
+library(Matrix)
+microbenchmark(
+  Matrix = Schur(M), 
+  EigenR = Eigen_realSchur(M), # :-)
+  times = 50L
+)
+```
+
+## QZ decomposition (only for real matrices)
+
+```{r QZ_real}
+set.seed(666L)
+A <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
+B <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
+library(QZ)
+microbenchmark(
+  QZ     = qz(A, B, only.values = TRUE), 
+  EigenR = Eigen_realQZ(A, B), # :-(
+  times = 50L
+)
+```
