@@ -227,20 +227,4 @@ microbenchmark(
 ##  EigenR 69.7336 74.0251  87.22316  78.9152  92.7015 139.6560    50   b
 ```
 
-## QZ decomposition (only for real matrices)
-
-``` r
-set.seed(666L)
-A <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
-B <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
-library(QZ)
-microbenchmark(
-  QZ     = qz(A, B, only.values = TRUE), 
-  EigenR = Eigen_realQZ(A, B), # :-(
-  times = 50L
-)
-## Unit: milliseconds
-##    expr      min       lq      mean    median       uq      max neval cld
-##      QZ  63.2415  65.3992  72.84337  71.79295  78.5032  90.0903    50  a 
-##  EigenR 229.3206 250.6274 292.58022 280.05990 328.7913 450.3320    50   b
-```
+Use `Eigen_complexSchur` for the complex Schur decomposition.

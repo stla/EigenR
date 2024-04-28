@@ -187,16 +187,4 @@ microbenchmark(
 )
 ```
 
-## QZ decomposition (only for real matrices)
-
-```{r QZ_real}
-set.seed(666L)
-A <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
-B <- matrix(rnorm(200L*200L, mean = 1), 200L, 200L)
-library(QZ)
-microbenchmark(
-  QZ     = qz(A, B, only.values = TRUE), 
-  EigenR = Eigen_realQZ(A, B), # :-(
-  times = 50L
-)
-```
+Use `Eigen_complexSchur` for the complex Schur decomposition.

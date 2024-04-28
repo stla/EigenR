@@ -653,18 +653,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// EigenR_realQZ
-Rcpp::List EigenR_realQZ(const Eigen::MatrixXd& A, const Eigen::MatrixXd& B);
-RcppExport SEXP _EigenR_EigenR_realQZ(SEXP ASEXP, SEXP BSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type A(ASEXP);
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type B(BSEXP);
-    rcpp_result_gen = Rcpp::wrap(EigenR_realQZ(A, B));
-    return rcpp_result_gen;
-END_RCPP
-}
 // EigenR_realSchur
 Rcpp::List EigenR_realSchur(const Eigen::MatrixXd& M);
 RcppExport SEXP _EigenR_EigenR_realSchur(SEXP MSEXP) {
@@ -813,7 +801,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_EigenR_EigenR_QR_cplx", (DL_FUNC) &_EigenR_EigenR_QR_cplx, 2},
     {"_EigenR_EigenR_rank_real", (DL_FUNC) &_EigenR_EigenR_rank_real, 1},
     {"_EigenR_EigenR_rank_cplx", (DL_FUNC) &_EigenR_EigenR_rank_cplx, 2},
-    {"_EigenR_EigenR_realQZ", (DL_FUNC) &_EigenR_EigenR_realQZ, 2},
     {"_EigenR_EigenR_realSchur", (DL_FUNC) &_EigenR_EigenR_realSchur, 1},
     {"_EigenR_EigenR_complexSchur", (DL_FUNC) &_EigenR_EigenR_complexSchur, 2},
     {"_EigenR_EigenR_isInjective_real", (DL_FUNC) &_EigenR_EigenR_isInjective_real, 1},
